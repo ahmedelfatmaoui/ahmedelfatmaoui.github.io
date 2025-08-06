@@ -6,9 +6,6 @@ theme: PaperMod
 enableInlineShortcodes: true 
 enableRobotsTXT: true  
 
-social:
-    twitter: sara
-
 taxonomies:
     tag: tags
 
@@ -21,7 +18,7 @@ menu:
             url: /papers/
             weight: 2
           - name: CV
-            url: /cv.pdf
+            url: / resume (2).pdf
             weight: 3
         #   # weight: 1
         # - name: Design
@@ -88,7 +85,7 @@ params:
                 url: /papers/
                 weight: 2
               - name: CV
-                url: /cv.pdf
+                url: / resume (2).pdf
                 weight: 3
               # - name: Design
               #   url: /design/
@@ -96,21 +93,19 @@ params:
             #   url: https://pmichaillat.substack.com
     socialIcons:
         - name: CV
-          url: /cv.pdf
+          url: / resume (2).pdf
         - name: Email
-          url: mailto:aelfatmaoui@ou.edu
+          url: mailto:sara.asgari@ou.edu
         - name: Location
           url: /location/
         # - name: Office Hours
         #   url: /officehours/
-        - name: Google Scholar
-          url: https://scholar.google.com/citations?user=EdHxr3EAAAAJ&hl=en
         - name: GitHub
-          url: https://github.com/ahmedelfatmaoui?tab=repositories
+          url: https://github.com/saraasgarigouraj?tab=repositories
         - name: Linkedin
           url: https://www.linkedin.com/in/ahmed-el-fatmaoui-75114b330/
         - name: Twitter
-          url: https://x.com/ahmedelfatmaoui
+          url: https://x.com/saraasgari10
 
     assets:
         disableHLJS: true
