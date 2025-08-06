@@ -105,7 +105,7 @@ params:
         - name: Linkedin
           url: https://www.linkedin.com/in/ahmed-el-fatmaoui-75114b330/
         - name: Twitter
-          url: https://x.com/saraasgari10
+          url: https://x.com/sara_asgari10
 
     assets:
         disableHLJS: true
@@ -114,7 +114,7 @@ params:
         hiddenInList: true # Set to true to hide cover images in paper
         hiddenInSingle: true
     label:
-      text: "Ahmed El Fatmaoui"
+      text: "Sara Asgari"
       icon: /favicon.ico
       iconHeight: 18
 
