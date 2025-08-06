@@ -78,7 +78,7 @@ params:
           #imageHeight: 300
           imageWidth: 245
           imageHeight: 250
-          imageTitle: Ahmed El Fatmaoui
+          imageTitle: Sara Asgari
           #imageTitle: "<span style='font-size: 12.5px;'>Ahmed El Fatmaoui</span>"
           buttons:
               - name: Teaching
