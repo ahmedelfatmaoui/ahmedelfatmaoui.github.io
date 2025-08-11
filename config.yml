@@ -1,10 +1,13 @@
-baseURL: "https://saraasgarigouraj.github.io/" 
-title: Sara Asgari
+baseURL: "https://ahmedelfatmaoui.github.io/" 
+title: Ahmed El Fatmaoui
 paginate: 14
 theme: PaperMod
 
 enableInlineShortcodes: true 
 enableRobotsTXT: true  
+
+social:
+    twitter: aelfatmaoui
 
 taxonomies:
     tag: tags
@@ -18,7 +21,7 @@ menu:
             url: /papers/
             weight: 2
           - name: CV
-            url: / resume (2).pdf
+            url: /cv.pdf
             weight: 3
         #   # weight: 1
         # - name: Design
@@ -38,7 +41,7 @@ params:
         I am a Ph.D. Economics candidate at the University of Oklahoma - Norman. This fall, I will join the University of Wisconsin-La Crosse Department of Economics as an Assistant Professor of Economics.
 
         I am an applied microeconomist specializing in labor economics, economics of education, and health economics. My research examines how institutional policies and resources affect student outcomes in higher education, focusing on college costs, sports, and amenities. Additionally, I study public health policies, particularly investigating vaccination programs' impacts on maternal and infant health outcomes, and the relationship between substance legalization and healthcare decisions. My work has been recognized through multiple awards including the Southern Economic Association Graduate Student Award and the Dodge Family College of Arts and Sciences Dissertation Fellowship.
-    author: Sara Asgari
+    author: Ahmed El Fatmaoui
     googleAnalyticsID: "G-WHEYZ77X40"
     DateFormat: "January 2024"
     defaultTheme: light
@@ -61,7 +64,7 @@ params:
     math: true
     profileMode:
           enabled: true 
-          title: "<span style='font-size: 26px;'>Sara Asgari</span>"
+          title: "<span style='font-size: 26px;'>Ahmed El Fatmaoui</span>"
           subtitle: |
                 <div style="margin-bottom: 0.2cm;"></div>
                 Welcome! 
@@ -70,13 +73,13 @@ params:
                 <div style="margin-bottom: 0.5cm;"></div>
                 I am an applied microeconomist specializing in labor economics, economics of education, and health economics. My research examines how institutional policies and resources affect student outcomes in higher education, focusing on college costs, sports, and amenities. Additionally, I study public health policies, particularly investigating vaccination programs' impacts on maternal and infant health outcomes. 
                 <div style="margin-bottom: 0.5cm;"></div>
-          imageUrl: "/IMG_5881 (1).jpeg"
+          imageUrl: "/picture.jpeg"
           #imageWidth: 280
           #imageHeight: 300
           imageWidth: 245
           imageHeight: 250
-          imageTitle: Sara Asgari
-          #imageTitle: "<span style='font-size: 12.5px;'>Sara Asgari</span>"
+          imageTitle: Ahmed El Fatmaoui
+          #imageTitle: "<span style='font-size: 12.5px;'>Ahmed El Fatmaoui</span>"
           buttons:
               - name: Teaching
                 url: /courses/
@@ -85,7 +88,7 @@ params:
                 url: /papers/
                 weight: 2
               - name: CV
-                url: / resume (2).pdf
+                url: /cv.pdf
                 weight: 3
               # - name: Design
               #   url: /design/
@@ -93,19 +96,21 @@ params:
             #   url: https://pmichaillat.substack.com
     socialIcons:
         - name: CV
-          url: / resume (2).pdf
+          url: /cv.pdf
         - name: Email
-          url: mailto:sara.asgari@ou.edu
+          url: mailto:aelfatmaoui@ou.edu
         - name: Location
           url: /location/
         # - name: Office Hours
         #   url: /officehours/
+        - name: Google Scholar
+          url: https://scholar.google.com/citations?user=EdHxr3EAAAAJ&hl=en
         - name: GitHub
-          url: https://github.com/saraasgarigouraj?tab=repositories
+          url: https://github.com/ahmedelfatmaoui?tab=repositories
         - name: Linkedin
           url: https://www.linkedin.com/in/ahmed-el-fatmaoui-75114b330/
         - name: Twitter
-          url: https://x.com/sara_asgari10
+          url: https://x.com/ahmedelfatmaoui
 
     assets:
         disableHLJS: true
@@ -114,7 +119,7 @@ params:
         hiddenInList: true # Set to true to hide cover images in paper
         hiddenInSingle: true
     label:
-      text: "Sara Asgari"
+      text: "Ahmed El Fatmaoui"
       icon: /favicon.ico
       iconHeight: 18
 
@@ -134,4 +139,3 @@ markup:
 # * title: 70
 # * description: 120–155
 # * summary: 265
-
