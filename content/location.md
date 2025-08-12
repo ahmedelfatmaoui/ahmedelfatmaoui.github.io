@@ -10,8 +10,10 @@ description: "My mailing and office addresses at the University of Wisconsin-La 
 
 #### Office address
 
-Room 2114 (2nd floor)\\
-1700 Pine St\\
+Room 2114 (2nd floor)
+<br>
+1700 Pine St
+<br>
 La Crosse, WI 54601
 
 
