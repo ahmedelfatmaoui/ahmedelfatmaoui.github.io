@@ -1,7 +1,7 @@
 ---
 title: ""
 aliases: /code/
-description: "R packages, APIs, and computational tools for economics research and data analysis."
+description: "R packages, APIs, computational tools, and educational resources for economics research and data analysis."
 ---
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -136,6 +136,48 @@ font-style: italic;
 <button class="accordion">Package Description</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
 <p>The education-data-package-r provides R users with access to the Urban Institute's Education Data Portal API, containing comprehensive U.S. education datasets. Essential for education researchers, policy analysts, and anyone studying trends in American education systems.</p>
+</div>
+
+<div class="section-heading">Educational Resources and References</div>
+
+<p style="margin:0"> 
+<a style="margin:0; font-size:100%; font-weight:bold">Causal Inference: The Mixtape</a> <br>
+<i>Scott Cunningham's comprehensive guide to causal inference methods</i> <br>
+<strong>Online Version:</strong> <a href="https://mixtape.scunning.com/" target="_blank">mixtape.scunning.com</a> <br>
+
+<button class="accordion">Resource Description</button>
+<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
+<p>A comprehensive online textbook covering causal inference methods for social scientists. Includes practical applications using both R and Stata, covering topics like regression discontinuity, instrumental variables, difference-in-differences, and synthetic controls. Essential reading for applied economists working with observational data.</p>
+</div>
+
+<p style="margin:0"> 
+<a style="margin:0; font-size:100%; font-weight:bold">An Introduction to Statistical Learning</a> <br>
+<i>Statistical learning methods with applications in R and Python</i> <br>
+<strong>Online Version:</strong> <a href="https://www.statlearning.com/" target="_blank">statlearning.com</a> <br>
+
+<button class="accordion">Resource Description</button>
+<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
+<p>A foundational text for statistical learning and machine learning methods, available in both R and Python versions. Covers regression, classification, resampling methods, tree-based methods, and more. Particularly useful for economists interested in modern data science techniques and predictive modeling.</p>
+</div>
+
+<p style="margin:0"> 
+<a style="margin:0; font-size:100%; font-weight:bold">Python Data Science Handbook</a> <br>
+<i>Essential tools for working with data in Python</i> <br>
+<strong>Online Version:</strong> <a href="https://jakevdp.github.io/PythonDataScienceHandbook/" target="_blank">jakevdp.github.io/PythonDataScienceHandbook</a> <br>
+
+<button class="accordion">Resource Description</button>
+<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
+<p>A comprehensive guide to Python's data science ecosystem, covering NumPy, Pandas, Matplotlib, and Scikit-Learn. Excellent resource for economists looking to expand their computational toolkit beyond R, with practical examples and applications relevant to economic data analysis.</p>
+</div>
+
+<p style="margin:0"> 
+<a style="margin:0; font-size:100%; font-weight:bold">Posit Cheatsheets</a> <br>
+<i>Quick reference guides for R packages and data science tools</i> <br>
+<strong>Website:</strong> <a href="https://rstudio.github.io/cheatsheets/" target="_blank">rstudio.github.io/cheatsheets</a> <br>
+
+<button class="accordion">Resource Description</button>
+<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
+<p>A collection of concise reference sheets for popular R packages including ggplot2, dplyr, tidyr, and many others. Invaluable for quick syntax lookup and discovering new functions. Available in multiple languages and regularly updated to reflect the latest package versions.</p>
 </div>
 
 <br>
