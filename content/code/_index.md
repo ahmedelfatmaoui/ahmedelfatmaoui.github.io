@@ -79,7 +79,7 @@ font-style: italic;
 <div class="section-heading">R Packages and Data APIs</div>
 
 <p style="margin:0"> 
-<a style="margin:0; font-size:100%; font-weight:bold">rscorecard</a> <br>
+<a style="margin:0; font-size:100%; font-weight:bold">rscorecard</a> | <strong>GitHub Repository:</strong> <a href="https://github.com/btskinner/rscorecard" target="_blank">btskinner/rscorecard</a> <br>
 <i>R Wrapper for the U.S. Department of Education College Scorecard API</i> <br>
 
 <button class="accordion">Package Description</button>
@@ -87,16 +87,10 @@ font-style: italic;
 <p>The rscorecard package is an R wrapper for the U.S. Department of Education College Scorecard API. It allows users to select and filter Scorecard variables with piped commands using dplyr syntax, making it easy to access comprehensive college and university data for higher education research.</p>
 </div>
 
-<p style="margin:0">
-<button class="accordion">Links</button>
-<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
-<div class="link-item"><span class="link-label">GitHub Repository:</span> <a href="https://github.com/btskinner/rscorecard" target="_blank">btskinner/rscorecard</a></div>
-</div>
-
 <br>
 
 <p style="margin:0"> 
-<a style="margin:0; font-size:100%; font-weight:bold">econocharts</a> <br>
+<a style="margin:0; font-size:100%; font-weight:bold">econocharts</a> | <strong>GitHub Repository:</strong> <a href="https://github.com/ahmedelfatmaoui/econocharts" target="_blank">ahmedelfatmaoui/econocharts</a> <br>
 <i>Microeconomics and Macroeconomics Charts Made with ggplot2</i> <br>
 
 <button class="accordion">Package Description</button>
@@ -104,16 +98,10 @@ font-style: italic;
 <p>The econocharts package allows creating microeconomics or macroeconomics charts in R with simple functions. This package is inspired by reconPlots by Andrew Heiss and provides an easy way to generate professional economic visualizations including supply and demand curves, indifference curves, production possibility frontiers, and tax impact analysis.</p>
 </div>
 
-<p style="margin:0">
-<button class="accordion">Links</button>
-<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
-<div class="link-item"><span class="link-label">GitHub Repository:</span> <a href="https://github.com/ahmedelfatmaoui/econocharts" target="_blank">ahmedelfatmaoui/econocharts</a></div>
-</div>
-
 <br>
 
 <p style="margin:0"> 
-<a style="margin:0; font-size:100%; font-weight:bold">blsAPI</a> <br>
+<a style="margin:0; font-size:100%; font-weight:bold">blsAPI</a> | <strong>GitHub Repository:</strong> <a href="https://github.com/ahmedelfatmaoui/blsAPI" target="_blank">ahmedelfatmaoui/blsAPI</a> <br>
 <i>U.S. Bureau of Labor Statistics Data for R</i> <br>
 
 <button class="accordion">Package Description</button>
@@ -121,16 +109,10 @@ font-style: italic;
 <p>The blsAPI package allows R users to request data for one or multiple series through the U.S. Bureau of Labor Statistics (BLS) Application Programming Interface (API). The BLS API provides public access to economic data from all BLS programs including employment, unemployment, and labor market statistics.</p>
 </div>
 
-<p style="margin:0">
-<button class="accordion">Links</button>
-<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
-<div class="link-item"><span class="link-label">GitHub Repository:</span> <a href="https://github.com/ahmedelfatmaoui/blsAPI" target="_blank">ahmedelfatmaoui/blsAPI</a></div>
-</div>
-
 <br>
 
 <p style="margin:0"> 
-<a style="margin:0; font-size:100%; font-weight:bold">bea.R</a> <br>
+<a style="margin:0; font-size:100%; font-weight:bold">bea.R</a> | <strong>GitHub Repository:</strong> <a href="https://github.com/ahmedelfatmaoui/bea.R" target="_blank">ahmedelfatmaoui/bea.R</a> <br>
 <i>Bureau of Economic Analysis API Access for R</i> <br>
 
 <button class="accordion">Package Description</button>
@@ -138,16 +120,10 @@ font-style: italic;
 <p>The bea.R package provides programmatic access to U.S. Bureau of Economic Analysis data through their API. This package enables researchers to easily retrieve and analyze national and regional economic statistics including GDP, national accounts, and comprehensive economic indicators.</p>
 </div>
 
-<p style="margin:0">
-<button class="accordion">Links</button>
-<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
-<div class="link-item"><span class="link-label">GitHub Repository:</span> <a href="https://github.com/ahmedelfatmaoui/bea.R" target="_blank">ahmedelfatmaoui/bea.R</a></div>
-</div>
-
 <br>
 
 <p style="margin:0"> 
-<a style="margin:0; font-size:100%; font-weight:bold">urbnmapr</a> <br>
+<a style="margin:0; font-size:100%; font-weight:bold">urbnmapr</a> | <strong>GitHub Repository:</strong> <a href="https://github.com/ahmedelfatmaoui/urbnmapr" target="_blank">ahmedelfatmaoui/urbnmapr</a> <br>
 <i>State and County Maps with Alaska and Hawaii</i> <br>
 
 <button class="accordion">Package Description</button>
@@ -155,27 +131,15 @@ font-style: italic;
 <p>The urbnmapr package provides state and county maps for the United States with Alaska and Hawaii repositioned for better visualization. This package makes it easy to create appealing and informative choropleth maps with pre-formatted spatial data optimized for data visualization.</p>
 </div>
 
-<p style="margin:0">
-<button class="accordion">Links</button>
-<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
-<div class="link-item"><span class="link-label">GitHub Repository:</span> <a href="https://github.com/ahmedelfatmaoui/urbnmapr" target="_blank">ahmedelfatmaoui/urbnmapr</a></div>
-</div>
-
 <br>
 
 <p style="margin:0"> 
-<a style="margin:0; font-size:100%; font-weight:bold">education-data-package-r</a> <br>
+<a style="margin:0; font-size:100%; font-weight:bold">education-data-package-r</a> | <strong>GitHub Repository:</strong> <a href="https://github.com/ahmedelfatmaoui/education-data-package-r" target="_blank">ahmedelfatmaoui/education-data-package-r</a> <br>
 <i>Urban Institute Education Data Portal API for R</i> <br>
 
 <button class="accordion">Package Description</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
 <p>The education-data-package-r provides R users with access to the Urban Institute's Education Data Portal API, containing comprehensive U.S. education datasets. Essential for education researchers, policy analysts, and anyone studying trends in American education systems.</p>
-</div>
-
-<p style="margin:0">
-<button class="accordion">Links</button>
-<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
-<div class="link-item"><span class="link-label">GitHub Repository:</span> <a href="https://github.com/ahmedelfatmaoui/education-data-package-r" target="_blank">ahmedelfatmaoui/education-data-package-r</a></div>
 </div>
 
 <br>
