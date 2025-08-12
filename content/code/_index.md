@@ -79,8 +79,9 @@ font-style: italic;
 <div class="section-heading">R Packages and Data APIs</div>
 
 <p style="margin:0"> 
-<a style="margin:0; font-size:100%; font-weight:bold">rscorecard</a> | <strong>GitHub Repository:</strong> <a href="https://github.com/btskinner/rscorecard" target="_blank">btskinner/rscorecard</a> <br>
+<a style="margin:0; font-size:100%; font-weight:bold">rscorecard</a> <br>
 <i>R Wrapper for the U.S. Department of Education College Scorecard API</i> <br>
+<strong>GitHub Repository:</strong> <a href="https://github.com/btskinner/rscorecard" target="_blank">btskinner/rscorecard</a> <br>
 
 <button class="accordion">Package Description</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
@@ -90,8 +91,9 @@ font-style: italic;
 <br>
 
 <p style="margin:0"> 
-<a style="margin:0; font-size:100%; font-weight:bold">econocharts</a> | <strong>GitHub Repository:</strong> <a href="https://github.com/ahmedelfatmaoui/econocharts" target="_blank">ahmedelfatmaoui/econocharts</a> <br>
+<a style="margin:0; font-size:100%; font-weight:bold">econocharts</a> <br>
 <i>Microeconomics and Macroeconomics Charts Made with ggplot2</i> <br>
+<strong>GitHub Repository:</strong> <a href="https://github.com/ahmedelfatmaoui/econocharts" target="_blank">ahmedelfatmaoui/econocharts</a> <br>
 
 <button class="accordion">Package Description</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
@@ -101,8 +103,9 @@ font-style: italic;
 <br>
 
 <p style="margin:0"> 
-<a style="margin:0; font-size:100%; font-weight:bold">blsAPI</a> | <strong>GitHub Repository:</strong> <a href="https://github.com/ahmedelfatmaoui/blsAPI" target="_blank">ahmedelfatmaoui/blsAPI</a> <br>
+<a style="margin:0; font-size:100%; font-weight:bold">blsAPI</a> <br>
 <i>U.S. Bureau of Labor Statistics Data for R</i> <br>
+<strong>GitHub Repository:</strong> <a href="https://github.com/ahmedelfatmaoui/blsAPI" target="_blank">ahmedelfatmaoui/blsAPI</a> <br>
 
 <button class="accordion">Package Description</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
@@ -112,8 +115,9 @@ font-style: italic;
 <br>
 
 <p style="margin:0"> 
-<a style="margin:0; font-size:100%; font-weight:bold">bea.R</a> | <strong>GitHub Repository:</strong> <a href="https://github.com/ahmedelfatmaoui/bea.R" target="_blank">ahmedelfatmaoui/bea.R</a> <br>
+<a style="margin:0; font-size:100%; font-weight:bold">bea.R</a> <br>
 <i>Bureau of Economic Analysis API Access for R</i> <br>
+<strong>GitHub Repository:</strong> <a href="https://github.com/ahmedelfatmaoui/bea.R" target="_blank">ahmedelfatmaoui/bea.R</a> <br>
 
 <button class="accordion">Package Description</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
@@ -123,8 +127,9 @@ font-style: italic;
 <br>
 
 <p style="margin:0"> 
-<a style="margin:0; font-size:100%; font-weight:bold">urbnmapr</a> | <strong>GitHub Repository:</strong> <a href="https://github.com/ahmedelfatmaoui/urbnmapr" target="_blank">ahmedelfatmaoui/urbnmapr</a> <br>
+<a style="margin:0; font-size:100%; font-weight:bold">urbnmapr</a> <br>
 <i>State and County Maps with Alaska and Hawaii</i> <br>
+<strong>GitHub Repository:</strong> <a href="https://github.com/ahmedelfatmaoui/urbnmapr" target="_blank">ahmedelfatmaoui/urbnmapr</a> <br>
 
 <button class="accordion">Package Description</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
@@ -134,8 +139,9 @@ font-style: italic;
 <br>
 
 <p style="margin:0"> 
-<a style="margin:0; font-size:100%; font-weight:bold">education-data-package-r</a> | <strong>GitHub Repository:</strong> <a href="https://github.com/ahmedelfatmaoui/education-data-package-r" target="_blank">ahmedelfatmaoui/education-data-package-r</a> <br>
+<a style="margin:0; font-size:100%; font-weight:bold">education-data-package-r</a> <br>
 <i>Urban Institute Education Data Portal API for R</i> <br>
+<strong>GitHub Repository:</strong> <a href="https://github.com/ahmedelfatmaoui/education-data-package-r" target="_blank">ahmedelfatmaoui/education-data-package-r</a> <br>
 
 <button class="accordion">Package Description</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
