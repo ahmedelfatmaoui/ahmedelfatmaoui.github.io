@@ -147,7 +147,7 @@ font-style: italic;
 
 <button class="accordion">Resource Description</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
-<p>A comprehensive online textbook covering causal inference methods for social scientists. Includes practical applications using both R and Stata, covering topics like regression discontinuity, instrumental variables, difference-in-differences, and synthetic controls. Essential reading for applied economists working with observational data.</p>
+<p>A comprehensive online textbook covering causal inference methods for social scientists. Includes practical applications using both R, Python and Stata, covering topics like regression discontinuity, instrumental variables, difference-in-differences, and synthetic controls. Essential reading for applied economists working with observational data.</p>
 </div>
 
 <p style="margin:0"> 
