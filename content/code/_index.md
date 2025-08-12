@@ -76,10 +76,6 @@ font-style: italic;
 }
 </style>
 
-<div class="note-box">
-<strong>Note:</strong> For additional computational tools and codes in Julia, Matlab, and LaTeX, visit <a href="https://tyleransom.github.io/code.html" target="_blank">Tyler Ransom's code page</a>, which contains a wealth of interesting programming resources for economics research.
-</div>
-
 <div class="section-heading">R Packages and Data APIs</div>
 
 <p style="margin:0"> 
@@ -92,16 +88,8 @@ font-style: italic;
 </div>
 
 <p style="margin:0">
-<button class="accordion">Key Features</button>
-<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
-<p>Provides seamless access to College Scorecard data including institutional characteristics, student demographics, costs, financial aid, completion rates, earnings, and debt information. The package integrates with dplyr for intuitive data manipulation and filtering, making it ideal for higher education policy research and institutional analysis.</p>
-</div>
-
-<p style="margin:0">
 <button class="accordion">Links</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
-<div class="link-item"><span class="link-label">Package Website:</span> <a href="https://btskinner.io/rscorecard/" target="_blank">btskinner.io/rscorecard</a></div>
-<div class="link-item"><span class="link-label">CRAN Package:</span> <a href="https://cran.r-project.org/package=rscorecard" target="_blank">rscorecard on CRAN</a></div>
 <div class="link-item"><span class="link-label">GitHub Repository:</span> <a href="https://github.com/btskinner/rscorecard" target="_blank">btskinner/rscorecard</a></div>
 </div>
 
@@ -117,16 +105,9 @@ font-style: italic;
 </div>
 
 <p style="margin:0">
-<button class="accordion">Key Features</button>
-<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
-<p>Features include supply(), demand(), and sdcurve() functions for market analysis; indifference() for consumer theory; ppf() for production possibility frontiers; tax_graph() for policy analysis; and curve_intersect() for custom economic models. All functions integrate seamlessly with ggplot2 for publication-ready visualizations.</p>
-</div>
-
-<p style="margin:0">
 <button class="accordion">Links</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
 <div class="link-item"><span class="link-label">GitHub Repository:</span> <a href="https://github.com/ahmedelfatmaoui/econocharts" target="_blank">ahmedelfatmaoui/econocharts</a></div>
-<div class="link-item"><span class="link-label">Original Package:</span> <a href="https://github.com/R-CoderDotCom/econocharts" target="_blank">R-CoderDotCom/econocharts</a></div>
 </div>
 
 <br>
@@ -141,16 +122,9 @@ font-style: italic;
 </div>
 
 <p style="margin:0">
-<button class="accordion">API Capabilities</button>
-<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
-<p>Supports both API Version 1.0 (25 daily queries, unregistered) and Version 2.0 (500 daily queries, registered). Version 2.0 offers additional features including net/percent changes, series descriptions, and higher query limits. Perfect for accessing official U.S. labor market data for research and analysis.</p>
-</div>
-
-<p style="margin:0">
 <button class="accordion">Links</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
 <div class="link-item"><span class="link-label">GitHub Repository:</span> <a href="https://github.com/ahmedelfatmaoui/blsAPI" target="_blank">ahmedelfatmaoui/blsAPI</a></div>
-<div class="link-item"><span class="link-label">Original Package:</span> <a href="https://github.com/mikeasilva/blsAPI" target="_blank">mikeasilva/blsAPI</a></div>
 </div>
 
 <br>
@@ -165,16 +139,9 @@ font-style: italic;
 </div>
 
 <p style="margin:0">
-<button class="accordion">Available Data</button>
-<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
-<p>Access Gross Domestic Product (GDP) statistics, National Income and Product Accounts (NIPA), regional economic accounts, international trade data, and industry-specific economic indicators. Essential for macroeconomic research, policy analysis, and any work requiring official U.S. economic statistics.</p>
-</div>
-
-<p style="margin:0">
 <button class="accordion">Links</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
 <div class="link-item"><span class="link-label">GitHub Repository:</span> <a href="https://github.com/ahmedelfatmaoui/bea.R" target="_blank">ahmedelfatmaoui/bea.R</a></div>
-<div class="link-item"><span class="link-label">Original Package:</span> <a href="https://github.com/us-bea/bea.R" target="_blank">us-bea/bea.R</a></div>
 </div>
 
 <br>
@@ -189,16 +156,9 @@ font-style: italic;
 </div>
 
 <p style="margin:0">
-<button class="accordion">Key Features</button>
-<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
-<p>Includes complete U.S. state and county boundary data, Alaska and Hawaii repositioned for compact visualization, and clean datasets ready for ggplot2 mapping. Perfect for economic indicator mapping, demographic visualization, and policy impact analysis across regions.</p>
-</div>
-
-<p style="margin:0">
 <button class="accordion">Links</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
 <div class="link-item"><span class="link-label">GitHub Repository:</span> <a href="https://github.com/ahmedelfatmaoui/urbnmapr" target="_blank">ahmedelfatmaoui/urbnmapr</a></div>
-<div class="link-item"><span class="link-label">Original Package:</span> <a href="https://github.com/UrbanInstitute/urbnmapr" target="_blank">UrbanInstitute/urbnmapr</a></div>
 </div>
 
 <br>
@@ -213,19 +173,16 @@ font-style: italic;
 </div>
 
 <p style="margin:0">
-<button class="accordion">Available Data</button>
-<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
-<p>Access school district financial information, student enrollment and demographics, educational attainment statistics, school performance indicators, higher education data, and early childhood education metrics. Enables educational equity analysis, policy impact evaluation, and comprehensive education research.</p>
-</div>
-
-<p style="margin:0">
 <button class="accordion">Links</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
 <div class="link-item"><span class="link-label">GitHub Repository:</span> <a href="https://github.com/ahmedelfatmaoui/education-data-package-r" target="_blank">ahmedelfatmaoui/education-data-package-r</a></div>
-<div class="link-item"><span class="link-label">Original Package:</span> <a href="https://github.com/UrbanInstitute/education-data-package-r" target="_blank">UrbanInstitute/education-data-package-r</a></div>
 </div>
 
 <br>
+
+<div class="note-box">
+<strong>Note:</strong> For additional computational tools and codes in Julia, Matlab, and LaTeX, visit <a href="https://tyleransom.github.io/code.html" target="_blank">Tyler Ransom's code page</a>, which contains a wealth of interesting programming resources for economics research.
+</div>
 
 <script>
 var acc = document.getElementsByClassName("accordion");
@@ -253,4 +210,3 @@ href="https://statcounter.com/" target="_blank"><img class="statcounter"
 src="https://c.statcounter.com/12988052/0/0346b3d7/1/" alt="Web Analytics"
 referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 <!-- End of Statcounter Code -->
-
