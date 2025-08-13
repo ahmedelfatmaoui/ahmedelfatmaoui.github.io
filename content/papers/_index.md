@@ -55,7 +55,7 @@ display: block !important;
 
 <p style="margin:0"> <a style="margin:0; font-size:100%; font-weight:bold" href="/stem_appr.pdf">Dollars and Degrees: The Asymmetric Impact of State Appropriations on STEM and Non-STEM Fields</a> <br> Ahmed El Fatmaoui (2024) <br><button class="accordion">Abstract</button><div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;"><p>This study examines the differential impact of state appropriations on STEM and non-STEM degree completion at U.S. public four-year institutions. Using a panel dataset from 2003 to 2019 and a Bartik-style instrumental variables approach, I find that state funding disproportionately affects STEM degree completion, with little to no impact on Non-STEM degrees. A 10% increase in state appropriations leads to a 3.4% increase in STEM degrees conferred, primarily four years after the funding change. This effect is concentrated among male students, science STEM majors, and non-selective institutions. Increased state support leads to higher institutional spending, and more STEM programs–factors that impact STEM degree completion more than non-STEM fields.</p></div><p style="margin:0"><button class="accordion">Download</button><div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;"><p><a href="/stem_appr.pdf">Paper</a></p></div><p style="margin:0"><button class="accordion">BibTeX citation</button><div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;"><p><pre><code>@article{elfatmaoui2024dollars,author = {Ahmed El Fatmaoui},title = {Dollars and Degrees: The Asymmetric Impact of State Appropriations on STEM and Non-STEM Fields},year = {2024},note = {Working Paper}}</code></pre></p></div><br>
 
-<p style="margin:0"> <a style="margin:0; font-size:100%; font-weight:bold">What is the Role of Sports at Elite Universities in the US?</a> <br> with Tyler Ransom <br><button class="accordion">Abstract</button><div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;"><p>Admissions at elite private universities in the United States are becoming increasingly competitive. As competition increases, seats become more and more scarce. This paper analyzes the population of athletes at all Division I NCAA institutions. Using publicly available data from the US Department of Education, the NCAA, and institutions' athletic rosters, we document several novel facts. First, elite institutions enroll more athletes and field more varsity teams than even the largest public institutions, despite having drastically smaller student bodies. To provide further context on the background of athletes at elite institutions, we supplement the institution-level analysis with individual-level data taken from publicly available athletic rosters. Finally, we analyze the effect of a hypothetical policy that would restrict student athletes at each universities to be less than a certain fraction of the overall student body.</p></div><p style="margin:0"><button class="accordion">BibTeX citation</button><div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;"><p><pre><code>@article{elfatmaoui_ransom2024sports,author = {Ahmed El Fatmaoui and Tyler Ransom},title = {What is the Role of Sports at Elite Universities in the US?},year = {2024},note = {Working Paper}}</code></pre></p></div><br>
+<p style="margin:0"> <a style="margin:0; font-size:100%; font-weight:bold">Do Universities Offer Specific Sports to Attract High-SES  Students? A Structural Analysis</a> <br> with Tyler Ransom <br><button class="accordion">Abstract</button><div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;"><p>This study investigates the extent to which U.S. universities strategically use athletic admissions to shape their socioeconomic composition. Using a novel dataset linking NCAA roster data to high school characteristics, we document substantial socioeconomic segregation patterns across sports and universities. More selective institutions, particularly elite private universities, allocate upwards of 30% of enrollment to athletes who typically come from higher-income backgrounds than their non-athlete peers. Estimates of our structural model of sports bundle choice reveal that universities do not strategically offer specific sports as a pathway to enroll students from higher socioeconomic backgrounds, mainly due to income homophily between athletes and institutions. Counterfactual analyses demonstrate that athletic enrollment caps would create additional seats for non-athletes but require complementary policies to meaningfully impact socioeconomic mobility.</p></div><p style="margin:0"><button class="accordion">BibTeX citation</button><div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;"><p><pre><code>@article{elfatmaoui_ransom2024sports,author = {Ahmed El Fatmaoui and Tyler Ransom},title = {Do Universities Offer Specific Sports to Attract High-SES  Students? A Structural Analysis},year = {2024},note = {Working Paper}}</code></pre></p></div><br>
 
 <hr>
 
@@ -78,18 +78,21 @@ for (i = 0; i < acc.length; i++) {
 }
 </script>
 
-<!-- Default Statcounter code for Personal Website
+<!-- Default Statcounter code for my personal web
 https://ahmedelfatmaoui.github.io/ -->
 <script type="text/javascript">
-var sc_project=12988052; 
+var sc_project=13158462; 
 var sc_invisible=1; 
-var sc_security="0346b3d7"; 
+var sc_security="62bc3333"; 
 </script>
 <script type="text/javascript"
-src="https://www.statcounter.com/counter/counter.js" async></script>
-<noscript><div class="statcounter"><a title="Web Analytics"
-href="https://statcounter.com/" target="_blank"><img class="statcounter"
-src="https://c.statcounter.com/12988052/0/0346b3d7/1/" alt="Web Analytics"
+src="https://www.statcounter.com/counter/counter.js"
+async></script>
+<noscript><div class="statcounter"><a title="Web Analytics
+Made Easy - Statcounter" href="https://statcounter.com/"
+target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/13158462/0/62bc3333/1/"
+alt="Web Analytics Made Easy - Statcounter"
 referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 <!-- End of Statcounter Code -->
 

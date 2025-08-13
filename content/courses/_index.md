@@ -128,18 +128,21 @@ for (i = 0; i < acc.length; i++) {
 }
 </script>
 
-<!-- Default Statcounter code for Personal Website
+<!-- Default Statcounter code for my personal web
 https://ahmedelfatmaoui.github.io/ -->
 <script type="text/javascript">
-var sc_project=12988052; 
+var sc_project=13158462; 
 var sc_invisible=1; 
-var sc_security="0346b3d7"; 
+var sc_security="62bc3333"; 
 </script>
 <script type="text/javascript"
-src="https://www.statcounter.com/counter/counter.js" async></script>
-<noscript><div class="statcounter"><a title="Web Analytics"
-href="https://statcounter.com/" target="_blank"><img class="statcounter"
-src="https://c.statcounter.com/12988052/0/0346b3d7/1/" alt="Web Analytics"
+src="https://www.statcounter.com/counter/counter.js"
+async></script>
+<noscript><div class="statcounter"><a title="Web Analytics
+Made Easy - Statcounter" href="https://statcounter.com/"
+target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/13158462/0/62bc3333/1/"
+alt="Web Analytics Made Easy - Statcounter"
 referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 <!-- End of Statcounter Code -->
 
