@@ -10,7 +10,7 @@ description: "My mailing and office addresses at the University of Wisconsin-La 
 
 #### Office address
 
-Room 2114 (2nd floor)
+Room 2110 (2nd floor)
 <br>
 1700 Pine St
 <br>
