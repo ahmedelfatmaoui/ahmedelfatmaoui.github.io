@@ -39,11 +39,13 @@ menu:
 
 params:
     description: |
-        Welcome! 
-        
-        I am a Ph.D. Economics candidate at the University of Oklahoma - Norman. This fall, I will join the University of Wisconsin-La Crosse Department of Economics as an Assistant Professor of Economics.
-
-        I am an applied microeconomist specializing in labor economics, economics of education, and health economics. My research examines how institutional policies and resources affect student outcomes in higher education, focusing on college costs, sports, and amenities. Additionally, I study public health policies, particularly investigating vaccination programs' impacts on maternal and infant health outcomes, and the relationship between substance legalization and healthcare decisions. My work has been recognized through multiple awards including the Southern Economic Association Graduate Student Award and the Dodge Family College of Arts and Sciences Dissertation Fellowship.
+               <div style="margin-bottom: 0.2cm;"></div>
+               Welcome! 
+               <div style="margin-bottom: 0.5cm;"></div>
+               I am an Assistant Professor of Economics at the University of Wisconsin-La Crosse Department of Economics.
+               <div style="margin-bottom: 0.5cm;"></div>
+               I am an applied microeconomist with interests in labor economics, economics of education, and health economics. My primary research interest examines how institutional policies and resources affect student outcomes in higher education, focusing on college costs, sports, and amenities. Additionally, I study public health policies, particularly investigating vaccination programs' impacts on maternal and infant health outcomes, and the relationship between substance legalization and healthcare decisions. I received my PhD in Economics from the University of Oklahoma-Norman.
+               <div style="margin-bottom: 0.5cm;"></div>    
     author: Ahmed El Fatmaoui
     DateFormat: "January 2024"
     defaultTheme: light
@@ -68,13 +70,13 @@ params:
           enabled: true 
           title: "<span style='font-size: 26px;'>Ahmed El Fatmaoui</span>"
           subtitle: |
-                <div style="margin-bottom: 0.2cm;"></div>
-                Welcome! 
-                <div style="margin-bottom: 0.5cm;"></div>
-                I am a Ph.D. Economics candidate at the University of Oklahoma - Norman. This fall, I will join the University of Wisconsin-La Crosse Department of Economics as an Assistant Professor of Economics.
-                <div style="margin-bottom: 0.5cm;"></div>
-                I am an applied microeconomist specializing in labor economics, economics of education, and health economics. My research examines how institutional policies and resources affect student outcomes in higher education, focusing on college costs, sports, and amenities. Additionally, I study public health policies, particularly investigating vaccination programs' impacts on maternal and infant health outcomes. 
-                <div style="margin-bottom: 0.5cm;"></div>
+               <div style="margin-bottom: 0.2cm;"></div>
+               Welcome! 
+               <div style="margin-bottom: 0.5cm;"></div>
+               I am an Assistant Professor of Economics at the University of Wisconsin-La Crosse Department of Economics.
+               <div style="margin-bottom: 0.5cm;"></div>
+               I am an applied microeconomist with interests in labor economics, economics of education, and health economics. My primary research interest examines how institutional policies and resources affect student outcomes in higher education, focusing on college costs, sports, and amenities. Additionally, I study public health policies, particularly investigating vaccination programs' impacts on maternal and infant health outcomes, and the relationship between substance legalization and healthcare decisions. I received my PhD in Economics from the University of Oklahoma-Norman.
+               <div style="margin-bottom: 0.5cm;"></div>
           imageUrl: "/picture.jpeg"
           #imageWidth: 280
           #imageHeight: 300
