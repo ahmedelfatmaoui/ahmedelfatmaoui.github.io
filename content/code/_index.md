@@ -86,13 +86,16 @@ font-style: italic;
   border-radius: 6px;
   margin-bottom: 20px;
 ">
+  🔒 Access Restricted—ECO 230 Students Only  
+  <br>
   <a href="https://posit.cloud/spaces/695951/content/10960883" target="_blank" style="
     color: white;
-    text-decoration: none;
+    text-decoration: underline;
   ">
-    🔗 Access: <span style="text-decoration: underline;">Lab – Statistics in the Tidyverse (Part 1)</span>
+    Open Lab – Statistics in the Tidyverse (Part 1)
   </a>
 </div>
+
 
 
 <div class="section-heading">R Packages and Data APIs</div>
