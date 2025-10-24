@@ -76,24 +76,6 @@ font-style: italic;
 }
 </style>
 
-<div style="
-  background-color: #1976d2;
-  color: white;
-  text-align: center;
-  padding: 12px 0;
-  font-size: 110%;
-  font-weight: bold;
-  border-radius: 6px;
-  margin-bottom: 20px;
-">
-  <a href="https://posit.cloud/spaces/695951/content/10960883" target="_blank" style="
-    color: white;
-    text-decoration: none;
-  ">
-    🔗 Access (ECO 230 Students Only): <span style="text-decoration: underline;">Lab – Statistics in the Tidyverse (Part 1)</span>
-  </a>
-</div>
-
 
 <div class="section-heading">R Packages and Data APIs</div>
 
