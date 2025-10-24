@@ -76,7 +76,6 @@ font-style: italic;
 }
 </style>
 
-
 <div class="section-heading">R Packages and Data APIs</div>
 
 <p style="margin:0"> 
