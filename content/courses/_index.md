@@ -51,7 +51,7 @@ color: #1976d2;
 </style>
 
 <p style="margin:0"> 
-<a style="margin:0; font-size:100%; font-weight:bold">Data Analysis for Business (ECO 230)</a> <br> 
+<a style="margin:0; font-size:100%; font-weight:bold">Data Analysis for Business Applications (ECO 230)</a> <br> 
 <i>University of Wisconsin-La Crosse | Fall 2025</i> <br>
 <button class="accordion">Course Description</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
