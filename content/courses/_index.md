@@ -57,6 +57,11 @@ color: #1976d2;
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
 <p>Study of the use of resources in health care and the application of economic methods to issues of public health. Topics include organization of health care delivery, relationships between health care and health status, and the economic evaluation of health care services. The U.S. system is compared with those of other nations, focusing on the roles of the consumers and providers in health care markets, and on the roles of government in shaping demand, supply, and utilization.</p>
 </div>
+<p style="margin:0">
+<button class="accordion">Course Materials</button>
+<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
+<div class="semester-item"><span class="semester-label">Fall 2026:</span> <a href="/ECO_350_Fall_2026_Syllabus.pdf">Syllabus</a></div>
+</div>
 <br>
 
 <p style="margin:0"> 
