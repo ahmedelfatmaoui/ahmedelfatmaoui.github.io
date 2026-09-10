@@ -1,7 +1,7 @@
 ---
 title: ""
 aliases: /courses/
-description: "Courses on statistics, microeconomics, macroeconomics, and data analysis. For undergraduate students."
+description: "Courses on health economics, statistics, microeconomics, macroeconomics, and data analysis. For undergraduate students."
 ---
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -50,9 +50,18 @@ color: #1976d2;
 }
 </style>
 
+<p style="margin:0">
+<a style="margin:0; font-size:100%; font-weight:bold">Health Economics (ECO 350)</a> <br>
+<i>University of Wisconsin-La Crosse | Fall 2026</i> <br>
+<button class="accordion">Course Description</button>
+<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
+<p>Study of the use of resources in health care and the application of economic methods to issues of public health. Topics include organization of health care delivery, relationships between health care and health status, and the economic evaluation of health care services. The U.S. system is compared with those of other nations, focusing on the roles of the consumers and providers in health care markets, and on the roles of government in shaping demand, supply, and utilization.</p>
+</div>
+<br>
+
 <p style="margin:0"> 
 <a style="margin:0; font-size:100%; font-weight:bold">Data Analysis for Business Applications (ECO 230)</a> <br> 
-<i>University of Wisconsin-La Crosse | Fall 2025</i> <br>
+<i>University of Wisconsin-La Crosse | Fall 2026, Spring 2026, Fall 2025</i> <br>
 <button class="accordion">Course Description</button>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
 <p>Building on the foundation in Statistics acquired in STAT 145, students continue to develop and apply skills in data analysis to aid in business decision making. These skills include data collection, data summarization, data visualization, statistical inference, and communication of data in business contexts. Students learn and apply best practices for research design and analysis using industry-standard tools including Excel for data manipulation, Tableau for interactive data visualization, and R for statistical programming and advanced analytics.</p>
