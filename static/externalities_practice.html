@@ -325,7 +325,8 @@
       g += text(X(9.6) + 8, ly, sym, 'fill:' + color, null).replace('<text', '<text class="lab"');
 
       var qa = 2.5, extName = s.sign === 'positive' ? 'MEB' : 'MEC';
-      g += seg(X(qa), Y(privFn(qa)), X(qa), Y(socialFn(qa)), 'stroke:var(--ink);stroke-width:1.2', ' marker-start="url(#ar)" marker-end="url(#ar)"');
+      var ya = Y(privFn(qa)), yb = Y(socialFn(qa)), ins = yb > ya ? 1.5 : -1.5;
+      g += seg(X(qa), ya + ins, X(qa), yb - ins, 'stroke:var(--ink);stroke-width:1.2', ' marker-start="url(#ar)" marker-end="url(#ar)"');
       g += text(X(qa) + 7, (Y(privFn(qa)) + Y(socialFn(qa))) / 2 + 4, extName, 'fill:var(--ink)', null);
 
       var po = m.SB(m.qo);
@@ -335,12 +336,14 @@
     }
 
     if (stage >= 3) {
-      var privAtQo = (cons ? MPB : MPC)(m.qo), socAtQo = (cons ? m.SB : m.SC)(m.qo);
+      var right = m.qo > QM;
+      var qArrow = m.qo + (right ? 0.45 : -0.45);
+      var yPriv = Y((cons ? MPB : MPC)(qArrow)), ySoc = Y((cons ? m.SB : m.SC)(qArrow));
+      var inset = ySoc > yPriv ? 1.5 : -1.5;
       var policyName = s.sign === 'negative' ? 'Tax' : 'Subsidy';
-      var qx = m.qo > QM ? X(m.qo) + 14 : X(m.qo) - 14;
-      g += seg(qx, Y(privAtQo), qx, Y(socAtQo), 'stroke:var(--good);stroke-width:1.6', ' marker-start="url(#ar)" marker-end="url(#ar)"');
-      g += text(m.qo > QM ? qx + 8 : qx - 8, (Y(privAtQo) + Y(socAtQo)) / 2 + 4,
-        policyName, 'fill:var(--good);font-weight:600', m.qo > QM ? null : 'end');
+      var qx = X(qArrow);
+      g += seg(qx, yPriv + inset, qx, ySoc - inset, 'stroke:var(--good);stroke-width:1.6', ' marker-start="url(#ar)" marker-end="url(#ar)"');
+      g += text(right ? qx + 8 : qx - 8, (yPriv + ySoc) / 2 + 4, policyName, 'fill:var(--good);font-weight:600', right ? null : 'end');
     }
 
     g += dot(QM, pm, 'var(--ink)');
