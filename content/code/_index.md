@@ -76,7 +76,7 @@ font-style: italic;
 }
 </style>
 
-<div class="section-heading">Economics in Scenarios</div>
+<div class="section-heading">Interactive Economics</div>
 
 <p style="margin:0">
 <a style="margin:0; font-size:100%; font-weight:bold" href="/externalities_practice.html" target="_blank" rel="noopener noreferrer">Externalities Practice</a> <br>
