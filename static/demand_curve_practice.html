@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deriving the Demand Curve: Practice</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --panel: #f6f5f3;
+    --ink: #1f1f1f;
+    --ink-2: #555350;
+    --ink-3: #8a8782;
+    --rule: #d9d6d0;
+    --crimson: #7a1c24;
+    --accent: #7a1c24;
+    --budget: #7a1c24;
+    --ic: #1f6f8b;
+    --good: #1d7a55;
+    --good-bg: #e8f4ee;
+    --bad: #a3261c;
+    --bad-bg: #fbeceb;
+    --ring: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161616;
+      --panel: #222221;
+      --ink: #eeeeec;
+      --ink-2: #bdbbb5;
+      --ink-3: #8a8782;
+      --rule: #3a3936;
+      --accent: #e0707a;
+      --budget: #e0707a;
+      --ic: #5fb4d3;
+      --good: #6fd0a3;
+      --good-bg: #1c2f27;
+      --bad: #f08a80;
+      --bad-bg: #3a2220;
+      --ring: #161616;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", "Helvetica Neue", Arial, system-ui, sans-serif; line-height: 1.55; }
+  header { background: var(--crimson); color: #fff; padding: 18px 24px; }
+  header h1 { margin: 0; font-size: 26px; font-weight: 500; }
+  header p { margin: 4px 0 0; font-size: 15px; opacity: 0.9; }
+  main { max-width: 1180px; margin: 0 auto; padding: 18px 24px 40px; }
+  .topbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 14px; font-size: 14px; color: var(--ink-2); }
+  .topbar strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+  .scenario { background: var(--panel); border-left: 5px solid var(--crimson); border-radius: 6px; padding: 14px 18px; margin-bottom: 18px; }
+  .scenario .tag { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); font-weight: 600; }
+  .scenario p { margin: 4px 0 0; font-size: 16px; }
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+  .figbox { position: sticky; top: 10px; border: 1px solid var(--rule); border-radius: 8px; padding: 10px 12px; }
+  @media (max-width: 900px) { .figbox { position: static; } }
+  svg.fig { width: 100%; height: auto; display: block; }
+  svg.fig text { font-family: inherit; font-size: 13px; fill: var(--ink-2); }
+  .caption { font-size: 14px; margin: 6px 2px 2px; color: var(--ink); }
+  .step { border: 1px solid var(--rule); border-radius: 8px; padding: 14px 18px; margin-bottom: 14px; }
+  .step h3 { margin: 0 0 10px; font-size: 16px; font-weight: 600; }
+  .step h3 span { color: var(--accent); margin-right: 6px; }
+  .choices { display: flex; flex-direction: column; gap: 8px; }
+  button {
+    font: inherit; font-size: 15px; color: var(--ink); background: transparent; text-align: left;
+    border: 1px solid var(--rule); border-radius: 6px; padding: 7px 14px; cursor: pointer;
+  }
+  button:hover:not(:disabled) { background: var(--panel); }
+  button:disabled { cursor: default; opacity: 0.55; }
+  button.primary { background: var(--crimson); border-color: var(--crimson); color: #fff; text-align: center; }
+  button.primary:hover:not(:disabled) { background: #5e141b; }
+  button.right { border-color: var(--good); color: var(--good); opacity: 1; font-weight: 600; }
+  button.wrong { border-color: var(--bad); color: var(--bad); text-decoration: line-through; }
+  button:focus-visible { outline: 2px solid var(--ic); outline-offset: 2px; }
+  .feedback { margin-top: 10px; padding: 9px 12px; border-radius: 6px; font-size: 15px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.good { background: var(--good-bg); color: var(--good); }
+  .feedback.bad { background: var(--bad-bg); color: var(--bad); }
+  .hidden { display: none; }
+  .explore { margin-top: 10px; border-top: 1px solid var(--rule); padding-top: 10px; }
+  .explore .row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 8px; font-size: 14px; }
+  .explore label { font-weight: 600; }
+  .explore input[type=range] { flex: 1; min-width: 160px; accent-color: var(--crimson); }
+  .explore .out { font-size: 18px; font-weight: 600; min-width: 60px; text-align: right; font-variant-numeric: tabular-nums; }
+  .explore button { text-align: center; padding: 4px 12px; font-size: 14px; }
+  .explore button.on { border-color: var(--crimson); color: var(--accent); font-weight: 600; }
+  .explore .read { font-size: 14px; color: var(--ink-2); }
+  .explore .read b { color: var(--ink); font-variant-numeric: tabular-nums; }
+  .nav { display: flex; justify-content: flex-end; margin-top: 6px; }
+  .done { text-align: center; padding: 28px 10px; }
+  .done h2 { font-size: 24px; margin: 0 0 8px; }
+  footer { margin-top: 22px; font-size: 12px; color: var(--ink-3); border-top: 1px solid var(--rule); padding-top: 10px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .fade { animation: fadeIn 0.45s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Deriving the Demand Curve: Practice</h1>
+  <p>Three random consumers. Answer one step at a time; wrong answers get a hint so you can try again.</p>
+</header>
+<main>
+  <div class="topbar">
+    <div>Scenario <strong id="num">1</strong> of <strong id="total">3</strong></div>
+    <div>Correct on the first try: <strong id="score">0</strong> / <strong id="asked">0</strong></div>
+    <button type="button" id="b-new">New random set</button>
+  </div>
+
+  <div id="quiz">
+    <div class="scenario">
+      <div class="tag">Scenario</div>
+      <p id="s-text"></p>
+    </div>
+    <div class="layout">
+      <div class="figbox">
+        <svg class="fig" id="fig" viewBox="0 0 700 610" role="img" aria-label="Top graph: indifference curves and budget lines. Bottom graph: the demand curve."></svg>
+        <p class="caption" id="caption"></p>
+        <div class="explore hidden fade" id="explore">
+          <div class="row">
+            <label for="ex-p" id="ex-label">Price</label>
+            <input type="range" id="ex-p">
+            <span class="out" id="ex-out"></span>
+          </div>
+          <div class="row" id="ex-jumps">Jump to</div>
+          <div class="read" id="ex-read"></div>
+        </div>
+      </div>
+      <div>
+        <div id="steps"></div>
+        <div class="nav"><button type="button" class="primary hidden" id="b-next">Next scenario</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="done hidden" id="done">
+    <h2>Set complete</h2>
+    <p id="final"></p>
+    <p>The big idea: <b>every point on a demand curve is a best choice</b>. Changing the good's own price moves the consumer along the curve.
+      Changing income, other prices, or tastes shifts the whole curve.</p>
+    <button type="button" class="primary" id="b-restart">Practice a new random set</button>
+  </div>
+
+  <footer>Notation: MRS is the marginal rate of substitution (the slope of the indifference curve); P<sub>X</sub> and P<sub>Y</sub> are the prices of the horizontal- and vertical-axis goods.</footer>
+</main>
+
+<script>
+(function () {
+  var POOL = [
+    { name: 'Kathy', X: 'chicken', Y: 'beef', xu: 'lb', yu: 'lb', I: 30, py: 2, ps: [2, 1, 0.5], per: 'week' },
+    { name: 'Jordan', X: 'movie tickets', Y: 'restaurant meals', xu: 'tickets', yu: 'meals', I: 60, py: 10, ps: [15, 10, 6], per: 'month' },
+    { name: 'Priya', X: 'yoga classes', Y: 'restaurant meals', xu: 'classes', yu: 'meals', I: 120, py: 15, ps: [20, 12, 8], per: 'month' },
+    { name: 'Sam', X: 'coffee', Y: 'snacks', xu: 'cups', yu: 'snacks', I: 24, py: 2, ps: [4, 3, 2], per: 'week' },
+    { name: 'Lee', X: 'bus rides', Y: 'lunches', xu: 'rides', yu: 'lunches', I: 40, py: 5, ps: [4, 2, 1.25], per: 'week' },
+    { name: 'Ana', X: 'fresh fruit', Y: 'bread', xu: 'lb', yu: 'loaves', I: 36, py: 3, ps: [3, 2, 1.5], per: 'week' }
+  ];
+  var SET_SIZE = 3;
+  var A_SHARE = 0.4;
+
+  var el = function (id) { return document.getElementById(id); };
+  var money = function (v) { return '$' + (Math.abs(v - Math.round(v)) < 1e-9 ? String(Math.round(v)) : v.toFixed(2)); };
+  var r1 = function (v) { return String(Math.round(v * 10) / 10); };
+  var r2 = function (v) { return String(Math.round(v * 100) / 100); };
+  var f = function (v) { return v.toFixed(1); };
+
+  var order, idx, score, asked, cur, M, stage, stepIdx, firstTry;
+  var exploreP = null, timer = null;
+
+  function shuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function buildModel(s) {
+    var x0 = 0.25 * s.I / s.ps[0];
+    var xs = function (p, I) { I = I || s.I; return x0 + A_SHARE * (I - p * x0) / p; };
+    var ys = function (p, I) { I = I || s.I; return (1 - A_SHARE) * (I - p * x0) / s.py; };
+    var util = function (x, y) { return Math.pow(x - x0, A_SHARE) * Math.pow(y, 1 - A_SHARE); };
+    var icY = function (u, x) { return Math.pow(u / Math.pow(x - x0, A_SHARE), 1 / (1 - A_SHARE)); };
+    var pts = s.ps.map(function (p) { var x = xs(p), y = ys(p); return { p: p, x: x, y: y, u: util(x, y) }; });
+    return {
+      x0: x0, xs: xs, ys: ys, icY: icY, pts: pts,
+      yint: s.I / s.py,
+      xint: s.ps.map(function (p) { return s.I / p; }),
+      Xmax: s.I / s.ps[2] * 1.06,
+      Ymax: s.I / s.py * 1.4,
+      Pmax: s.ps[0] * 1.3
+    };
+  }
+
+  function fill(str) {
+    var s = cur, m = M;
+    var map = {
+      name: s.name, X: s.X, Y: s.Y, xu: s.xu, yu: s.yu, I: money(s.I), py: money(s.py),
+      p1: money(s.ps[0]), p2: money(s.ps[1]), p3: money(s.ps[2]),
+      yint: r1(m.yint), x2int: r1(m.xint[1]), ratio: r2(s.ps[1] / s.py),
+      x1: r1(m.pts[0].x), x3: r1(m.pts[2].x)
+    };
+    return str.replace(/\{(\w+)\}/g, function (all, k) { return k in map ? map[k] : all; });
+  }
+
+  function X(q) { return 80 + q / M.Xmax * 540; }
+  function Y1(y) { return 290 - y / M.Ymax * 260; }
+  function Y2(p) { return 560 - p / M.Pmax * 190; }
+
+  function path(pts, style) {
+    var d = '', on = false;
+    pts.forEach(function (pt) {
+      if (pt === null) { on = false; return; }
+      d += (on ? 'L' : 'M') + f(pt[0]) + ',' + f(pt[1]); on = true;
+    });
+    return '<path d="' + d + '" fill="none" style="' + style + '"/>';
+  }
+  function seg(x1, y1, x2, y2, style) {
+    return '<line x1="' + f(x1) + '" y1="' + f(y1) + '" x2="' + f(x2) + '" y2="' + f(y2) + '" style="' + style + '"/>';
+  }
+  function txt(x, y, s, style, anchor) {
+    return '<text x="' + f(x) + '" y="' + f(y) + '"' + (anchor ? ' text-anchor="' + anchor + '"' : '') +
+      (style ? ' style="' + style + '"' : '') + '>' + s + '</text>';
+  }
+  function dot(x, y, color) {
+    return '<circle cx="' + f(x) + '" cy="' + f(y) + '" r="5.5" style="fill:' + color + ';stroke:var(--ring);stroke-width:2"/>';
+  }
+
+  function icPath(u) {
+    var pts = [], lastLabel = null;
+    for (var i = 0; i <= 120; i++) {
+      var x = M.x0 + 0.02 + (M.Xmax - M.x0 - 0.02) * Math.pow(i / 120, 1.6);
+      var y = M.icY(u, x);
+      if (y > M.Ymax) { pts.push(null); continue; }
+      pts.push([X(x), Y1(y)]);
+      lastLabel = [X(x), Y1(y)];
+    }
+    return { d: path(pts, 'stroke:var(--ic);stroke-width:2.2'), end: lastLabel };
+  }
+
+  function draw() {
+    var s = cur, m = M, g = '';
+    var dash = 'stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3';
+    var faint = 'stroke:var(--budget);stroke-width:1.4;opacity:0.45';
+
+    g += '<path d="M80 30V290H630" fill="none" style="stroke:var(--ink-3);stroke-width:1.2"/>';
+    g += txt(88, 22, cap(s.Y) + ' (' + s.yu + ')', 'fill:var(--ink)');
+    g += txt(630, 326, cap(s.X) + ' (' + s.xu + ')', 'fill:var(--ink)', 'end');
+    g += txt(72, Y1(m.yint) + 4, r1(m.yint), '', 'end');
+
+    var nBudget = stage >= 4 ? 3 : stage >= 1 ? 2 : 1;
+    for (var k = 0; k < nBudget; k++) {
+      var cur_ = exploreP === null && ((k === 0 && stage === 0) || (k === 1 && stage >= 1 && stage < 4) || (k === 2));
+      g += seg(X(0), Y1(m.yint), X(m.xint[k]), Y1(0), cur_ ? 'stroke:var(--budget);stroke-width:2.6' : faint);
+      if (k === 0 || (k === 1 && stage >= 2) || k === 2) {
+        g += txt(X(m.xint[k]), 308, r1(m.xint[k]), 'fill:var(--budget)', 'middle');
+      }
+    }
+
+    var nIC = stage >= 4 ? 3 : stage >= 3 ? 2 : 1;
+    var labels = ['A', 'B', 'C'];
+    var ends = [];
+    for (var j = 0; j < nIC; j++) {
+      var ic = icPath(m.pts[j].u);
+      g += ic.d;
+      if (ic.end) ends.push({ x: ic.end[0], y: ic.end[1] + 4, lab: 'U' + (j + 1) });
+    }
+    ends.sort(function (a, b) { return b.y - a.y; });
+    for (var e = 1; e < ends.length; e++) {
+      if (ends[e - 1].y - ends[e].y < 14) ends[e].y = ends[e - 1].y - 14;
+    }
+    ends.forEach(function (en) { g += txt(en.x + 6, en.y, en.lab, 'fill:var(--ic);font-weight:600'); });
+
+    if (stage >= 5) {
+      var pc = [];
+      for (var i = 0; i <= 40; i++) {
+        var p = s.ps[2] + (s.ps[0] - s.ps[2]) * i / 40;
+        pc.push([X(m.xs(p)), Y1(m.ys(p))]);
+      }
+      g += path(pc, 'stroke:var(--ink);stroke-width:1.8;stroke-dasharray:7 4');
+      var pe = pc[0];
+      g += txt(pe[0] + 10, pe[1] - 10, 'Price-offer curve', 'fill:var(--ink);font-weight:600');
+    }
+
+    for (j = 0; j < nIC; j++) {
+      var pt = m.pts[j];
+      g += dot(X(pt.x), Y1(pt.y), 'var(--ink)');
+      g += txt(X(pt.x) - 8, Y1(pt.y) - 9, labels[j], 'fill:var(--ink);font-weight:700', 'end');
+    }
+
+    if (stage < 6) {
+      g += '<rect x="80" y="370" width="550" height="190" rx="6" style="fill:none;stroke:var(--rule);stroke-dasharray:5 4"/>';
+      g += txt(355, 470, 'The demand graph appears in Step 6', 'fill:var(--ink-3)', 'middle');
+    } else {
+      g += '<path d="M80 370V560H630" fill="none" style="stroke:var(--ink-3);stroke-width:1.2"/>';
+      g += txt(88, 362, 'Price of ' + s.X + ' ($)', 'fill:var(--ink)');
+      g += txt(630, 598, cap(s.X) + ' (' + s.xu + ')', 'fill:var(--ink)', 'end');
+
+      if (stage >= 7) {
+        var dc = [];
+        for (i = 0; i <= 50; i++) {
+          var pp = s.ps[2] * 0.85 + (s.ps[0] * 1.15 - s.ps[2] * 0.85) * i / 50;
+          dc.push([X(m.xs(pp)), Y2(pp)]);
+        }
+        g += path(dc, 'stroke:var(--ink);stroke-width:2.6');
+        g += txt(dc[0][0] + 8, dc[0][1] + 4, 'D', 'fill:var(--ink);font-weight:700');
+      }
+      if (stage >= 8) {
+        var d2 = [];
+        for (i = 0; i <= 50; i++) {
+          var p2 = s.ps[2] * 0.85 + (s.ps[0] * 1.15 - s.ps[2] * 0.85) * i / 50;
+          d2.push([X(m.xs(p2, s.I * 1.35)), Y2(p2)]);
+        }
+        g += path(d2, 'stroke:var(--good);stroke-width:2.2;stroke-dasharray:7 4');
+        g += txt(d2[0][0] + 8, d2[0][1] + 4, 'D after income rises', 'fill:var(--good);font-weight:600');
+      }
+
+      for (j = 0; j < 3; j++) {
+        var q = m.pts[j];
+        var x = X(q.x), yb = Y2(q.p);
+        g += seg(x, Y1(q.y), x, 290, dash);
+        g += seg(x, 364, x, 560, dash);
+        g += seg(80, yb, x, yb, dash);
+        g += txt(72, yb + 4, money(q.p), '', 'end');
+        g += txt(x, 578, r1(q.x), '', 'middle');
+        g += dot(x, yb, 'var(--ink)');
+        g += txt(x + 8, yb - 8, labels[j] + '\u2032', 'fill:var(--ink);font-weight:700');
+      }
+    }
+
+    if (exploreP !== null) {
+      var ep = exploreP, ex = m.xs(ep), ey = m.ys(ep), xe = X(ex);
+      var hot = 'var(--accent)';
+      g += seg(X(0), Y1(m.yint), X(s.I / ep), Y1(0), 'stroke:var(--budget);stroke-width:3');
+      var eic = icPath(Math.pow(ex - m.x0, A_SHARE) * Math.pow(ey, 1 - A_SHARE));
+      g += eic.d.replace('stroke:var(--ic);stroke-width:2.2', 'stroke:var(--ic);stroke-width:3.2');
+      g += seg(xe, Y1(ey), xe, 290, 'stroke:' + hot + ';stroke-width:1.4;stroke-dasharray:4 3');
+      g += seg(xe, 364, xe, Y2(ep), 'stroke:' + hot + ';stroke-width:1.4;stroke-dasharray:4 3');
+      g += seg(80, Y2(ep), xe, Y2(ep), 'stroke:' + hot + ';stroke-width:1.4;stroke-dasharray:4 3');
+      g += '<circle cx="' + f(xe) + '" cy="' + f(Y1(ey)) + '" r="7.5" style="fill:' + hot + ';stroke:var(--ring);stroke-width:2"/>';
+      g += '<circle cx="' + f(xe) + '" cy="' + f(Y2(ep)) + '" r="7.5" style="fill:' + hot + ';stroke:var(--ring);stroke-width:2"/>';
+    }
+    el('fig').innerHTML = g;
+    if (exploreP === null) el('caption').innerHTML = fill(CAPTIONS[Math.min(stage, CAPTIONS.length - 1)]);
+  }
+
+  function cap(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
+
+  var CAPTIONS = [
+    'Start: at {p1} per {xu}, {name}\u2019s best bundle is point A, where the budget line touches indifference curve U1.',
+    'The new budget line (bold) swings out from the same vertical intercept. The old line is faded.',
+    'At {p2}, all of {name}\u2019s money buys {x2int} {xu} of {X}.',
+    'Point B: the new budget line is tangent to U2, a higher indifference curve.',
+    'The same steps at a third price, {p3}, give point C on U3.',
+    'The dashed curve through A, B, and C is the price-offer curve.',
+    'Each best bundle drops to the lower graph, where the vertical axis is the price of {X}: points A\u2032, B\u2032, C\u2032.',
+    'Connecting A\u2032, B\u2032, and C\u2032 gives {name}\u2019s demand curve for {X}.',
+    'With more income, {name} buys more {X} at every price, so the whole demand curve shifts right.'
+  ];
+
+  var STEPS = [
+    {
+      q: 'The price of {X} falls from {p1} to {p2}. What happens to {name}\u2019s budget line?',
+      opts: {
+        pivot: 'It pivots outward, keeping the same vertical intercept',
+        parallel: 'It shifts outward, parallel to the old line',
+        pivotY: 'It pivots outward, keeping the same horizontal intercept',
+        none: 'It does not move'
+      },
+      right: 'pivot',
+      hints: {
+        parallel: 'A parallel shift happens when income changes. Here only one price changed, so the slope must change.',
+        pivotY: 'The vertical intercept is income \u00F7 the price of {Y}, and neither of those changed. Which end has to move?',
+        none: 'A lower price means the same money buys more {X}. Can the line stay where it is?'
+      },
+      yes: 'Buying only {Y} costs the same as before, so the vertical intercept stays at {yint} {yu}. Cheaper {X} swings the line out along the horizontal axis.'
+    },
+    {
+      q: 'Where does the new budget line meet the horizontal axis?',
+      numeric: true,
+      yes: 'Spending all {I} on {X} at {p2} each buys {I} \u00F7 {p2} = {x2int} {xu}.'
+    },
+    {
+      q: 'Where is {name}\u2019s new best bundle?',
+      opts: {
+        tangent: 'Where the new budget line just touches a higher indifference curve',
+        cross: 'Where the new budget line crosses U1, the old indifference curve',
+        corner: 'At the end of the new budget line, buying only {X}',
+        old: 'At the old bundle, point A'
+      },
+      right: 'tangent',
+      hints: {
+        cross: 'Those crossing points are affordable, but part of the new line lies above U1. Look for a higher curve the line can still reach.',
+        corner: 'Buying only {X} is affordable, but the indifference curve through that point is low. Mixing in some {Y} does better.',
+        old: 'A is still affordable, but it now leaves money unspent. {name} can reach a higher indifference curve.'
+      },
+      yes: 'Point B is where the new budget line is tangent to U2, the highest curve {name} can afford.'
+    },
+    {
+      q: 'What must be true at point B?',
+      opts: {
+        mrs: 'MRS = P<sub>X</sub> \u00F7 P<sub>Y</sub>',
+        inv: 'MRS = P<sub>Y</sub> \u00F7 P<sub>X</sub>',
+        mu: 'The marginal utility of {X} equals the marginal utility of {Y}',
+        one: 'MRS = 1'
+      },
+      right: 'mrs',
+      hints: {
+        inv: 'Check which price goes on top. The budget line\u2019s slope is the price of the horizontal-axis good over the price of the vertical-axis good.',
+        mu: 'Marginal utilities are compared per dollar, not directly: MU<sub>X</sub>/P<sub>X</sub> = MU<sub>Y</sub>/P<sub>Y</sub>. Which answer says the same thing with the MRS?',
+        one: 'MRS equals 1 only if the two prices happen to be equal. What sets the slope of the budget line?'
+      },
+      yes: 'At a tangency, the rate {name} is willing to trade (MRS) equals the rate the market allows: {p2} \u00F7 {py} = {ratio}. The graph now repeats the same steps at {p3} to find point C.'
+    },
+    {
+      q: 'The dashed curve connects A, B, and C. What is it called?',
+      opts: {
+        pcc: 'The price-offer (price-consumption) curve',
+        demand: 'The demand curve',
+        ic: 'An indifference curve',
+        budget: 'A budget line'
+      },
+      right: 'pcc',
+      hints: {
+        demand: 'Not yet. A demand curve has a price on its vertical axis, but this graph has quantities on both axes.',
+        ic: 'A, B, and C sit on different indifference curves, so they give different levels of utility.',
+        budget: 'A, B, and C each sit on a different budget line.'
+      },
+      yes: 'The price-offer curve traces {name}\u2019s best bundle as the price of {X} changes.'
+    },
+    {
+      q: 'To build the demand curve, what goes on the vertical axis of the new graph?',
+      opts: {
+        price: 'The price of {X}',
+        qy: 'The quantity of {Y}',
+        util: 'Utility',
+        income: 'Income'
+      },
+      right: 'price',
+      hints: {
+        qy: 'That is the top graph. A demand curve links the price of a good to the quantity of that same good.',
+        util: 'Utility is never on a demand curve. What changed as we moved from A to B to C?',
+        income: 'Income was held fixed the whole time. What did change?'
+      },
+      yes: 'The lower graph keeps {X} on the horizontal axis and puts its price on the vertical axis. Each best bundle becomes one point: A\u2032, B\u2032, and C\u2032.'
+    },
+    {
+      q: 'Connect A\u2032, B\u2032, and C\u2032. Which way does the demand curve slope?',
+      opts: {
+        down: 'Downward: a lower price means more {X}',
+        up: 'Upward: a lower price means less {X}',
+        vertical: 'Vertical: the quantity does not change'
+      },
+      right: 'down',
+      hints: {
+        up: 'Read the points: as the price fell from {p1} to {p3}, the quantity went from {x1} to {x3}.',
+        vertical: 'Read the points: as the price fell from {p1} to {p3}, the quantity went from {x1} to {x3}.'
+      },
+      yes: 'Each lower price led {name} to buy more {X}, so the demand curve slopes down. Every point on it is one of {name}\u2019s best choices.'
+    },
+    {
+      q: 'Which change would <b>shift</b> this whole demand curve, instead of moving {name} along it?',
+      opts: {
+        income: '{name}\u2019s income rises',
+        own: 'The price of {X} falls again',
+        qty: '{name} decides to buy more {X}',
+        none: 'Nothing can shift a demand curve'
+      },
+      right: 'income',
+      hints: {
+        own: 'A change in the good\u2019s own price moves {name} along the curve. That is exactly how we just built it.',
+        qty: 'Buying more is a result, not a cause. What was held fixed while we built the curve?',
+        none: 'The curve was built holding income, the price of {Y}, and tastes fixed. What happens if one of those changes?'
+      },
+      yes: 'Income was held fixed. More income moves every budget line out, so {name} buys more {X} at every price, and the demand curve shifts right (dashed green).'
+    }
+  ];
+
+  function numericOptions() {
+    var s = cur, right = s.I / s.ps[1];
+    var cands = [
+      ['old', s.I / s.ps[0], 'That was the intercept at the old price, {p1}. Use the new price.'],
+      ['yint', M.yint, 'That is the vertical intercept. The horizontal intercept is what {I} buys if spent only on {X}.'],
+      ['mult', s.I * s.ps[1], 'Multiplying gives the wrong units. How many {xu} does {I} buy at {p2} each?'],
+      ['half', right / 2, 'Close, but that only spends half the money. Spend all {I} on {X}.'],
+      ['double', right * 2, 'Too many. At {p2} each, how many {xu} can {I} buy?']
+    ];
+    var out = { right: r1(right), list: [['right', r1(right)]], hints: {} };
+    var seen = {}; seen[r1(right)] = true;
+    for (var i = 0; i < cands.length && out.list.length < 4; i++) {
+      var v = r1(cands[i][1]);
+      if (seen[v]) continue;
+      seen[v] = true;
+      out.list.push([cands[i][0], v]);
+      out.hints[cands[i][0]] = cands[i][2];
+    }
+    return out;
+  }
+
+  function renderStep(i) {
+    var st = STEPS[i];
+    var card = document.createElement('div');
+    card.className = 'step fade';
+    var html = '<h3><span>Step ' + (i + 1) + '</span>' + fill(st.q) + '</h3><div class="choices">';
+    var opts, hints, right;
+    if (st.numeric) {
+      var n = numericOptions();
+      opts = n.list.map(function (o) { return [o[0], o[1] + ' ' + cur.xu]; });
+      hints = n.hints; right = 'right';
+    } else {
+      opts = Object.keys(st.opts).map(function (k) { return [k, st.opts[k]]; });
+      hints = st.hints; right = st.right;
+    }
+    shuffle(opts).forEach(function (o) {
+      html += '<button type="button" data-a="' + o[0] + '">' + fill(o[1]) + '</button>';
+    });
+    html += '</div><div class="feedback"></div>';
+    card.innerHTML = html;
+    el('steps').appendChild(card);
+
+    var fb = card.querySelector('.feedback');
+    var btns = Array.prototype.slice.call(card.querySelectorAll('button'));
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (b.dataset.a === right) {
+          if (firstTry) score++;
+          asked++;
+          updateScore();
+          btns.forEach(function (x) { x.disabled = true; });
+          b.classList.add('right');
+          fb.className = 'feedback good show';
+          fb.innerHTML = '<b>Correct.</b> ' + fill(st.yes);
+          stage = i + 1;
+          draw();
+          if (i + 1 < STEPS.length) {
+            firstTry = true;
+            renderStep(i + 1);
+          } else {
+            openExplore();
+            var nb = el('b-next');
+            nb.textContent = idx === order.length - 1 ? 'See results' : 'Next scenario';
+            nb.classList.remove('hidden');
+            nb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        } else {
+          firstTry = false;
+          b.classList.add('wrong');
+          b.disabled = true;
+          fb.className = 'feedback bad show';
+          fb.innerHTML = '<b>Not quite.</b> ' + fill(hints[b.dataset.a] || 'Look at the graph again.') + ' Try again.';
+        }
+      });
+    });
+    if (i > 0) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function stopAnim() {
+    if (timer) { clearInterval(timer); timer = null; }
+    var ab = document.getElementById('ex-anim');
+    if (ab) ab.textContent = 'Animate price drop';
+  }
+
+  function setExplore(p) {
+    var s = cur;
+    exploreP = Math.min(s.ps[0], Math.max(s.ps[2], p));
+    el('ex-p').value = exploreP;
+    el('ex-out').textContent = money(Math.round(exploreP * 100) / 100);
+    var x = M.xs(exploreP), y = M.ys(exploreP);
+    el('ex-read').innerHTML = cur.name + ' buys <b>' + r1(x) + ' ' + s.xu + '</b> of ' + s.X + ' and <b>' + r1(y) + ' ' + s.yu + '</b> of ' + s.Y +
+      '. MRS = P<sub>X</sub> \u00F7 P<sub>Y</sub> = <b>' + r2(exploreP / s.py) + '</b>.';
+    el('ex-jumps').querySelectorAll('button[data-p]').forEach(function (b) {
+      b.classList.toggle('on', Math.abs(parseFloat(b.dataset.p) - exploreP) < 1e-6);
+    });
+    draw();
+  }
+
+  function openExplore() {
+    var s = cur, box = el('explore');
+    var sl = el('ex-p');
+    sl.min = s.ps[2]; sl.max = s.ps[0]; sl.step = (s.ps[0] - s.ps[2]) / 200;
+    el('ex-label').textContent = 'Price of ' + s.X;
+    var jumps = el('ex-jumps');
+    jumps.innerHTML = 'Jump to';
+    s.ps.forEach(function (p) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.dataset.p = p; b.textContent = money(p);
+      b.addEventListener('click', function () { stopAnim(); setExplore(p); });
+      jumps.appendChild(b);
+    });
+    var ab = document.createElement('button');
+    ab.type = 'button'; ab.id = 'ex-anim'; ab.textContent = 'Animate price drop';
+    ab.addEventListener('click', function () {
+      if (timer) { stopAnim(); return; }
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) { setExplore(s.ps[2]); return; }
+      var p = s.ps[0], stepP = (s.ps[0] - s.ps[2]) / 90;
+      setExplore(p);
+      ab.textContent = 'Stop';
+      timer = setInterval(function () {
+        p -= stepP;
+        if (p <= s.ps[2] + 1e-9) { setExplore(s.ps[2]); stopAnim(); return; }
+        setExplore(p);
+      }, 50);
+    });
+    jumps.appendChild(ab);
+    box.classList.remove('hidden');
+    el('caption').innerHTML = fill('Now explore: drag the price of {X}, or press <b>Animate price drop</b>. Watch the budget line pivot, the best bundle slide along the price-offer curve, and the matching point slide down the demand curve.');
+    setExplore(s.ps[1]);
+    el('caption').innerHTML = fill('Now explore: drag the price of {X}, or press <b>Animate price drop</b>. Watch the budget line pivot, the best bundle slide along the price-offer curve, and the matching point slide down the demand curve.');
+  }
+
+  el('ex-p').addEventListener('input', function () { stopAnim(); setExplore(parseFloat(el('ex-p').value)); });
+
+  function load() {
+    stopAnim();
+    exploreP = null;
+    el('explore').classList.add('hidden');
+    cur = order[idx];
+    M = buildModel(cur);
+    stage = 0;
+    firstTry = true;
+    el('num').textContent = idx + 1;
+    el('total').textContent = order.length;
+    el('s-text').innerHTML = fill('<b>{name}</b> has <b>{I}</b> a ' + cur.per + ' to spend on {X} (horizontal axis) and {Y} (vertical axis, {py} each). ' +
+      'We will lower the price of {X} from <b>{p1}</b> to <b>{p2}</b> to <b>{p3}</b> and see how {name}\u2019s choices trace out a demand curve.');
+    el('steps').innerHTML = '';
+    el('b-next').classList.add('hidden');
+    draw();
+    renderStep(0);
+    window.scrollTo({ top: 0 });
+  }
+
+  function updateScore() {
+    el('score').textContent = score;
+    el('asked').textContent = asked;
+  }
+
+  function start() {
+    stopAnim();
+    exploreP = null;
+    el('explore').classList.add('hidden');
+    order = shuffle(POOL).slice(0, SET_SIZE);
+    idx = 0; score = 0; asked = 0;
+    updateScore();
+    el('done').classList.add('hidden');
+    el('quiz').classList.remove('hidden');
+    load();
+  }
+
+  el('b-next').addEventListener('click', function () {
+    stopAnim();
+    idx++;
+    if (idx >= order.length) {
+      el('quiz').classList.add('hidden');
+      el('done').classList.remove('hidden');
+      el('final').textContent = 'You answered ' + score + ' of ' + asked + ' questions correctly on the first try.';
+      window.scrollTo({ top: 0 });
+    } else {
+      load();
+    }
+  });
+  el('b-restart').addEventListener('click', start);
+  el('b-new').addEventListener('click', function () {
+    if (asked === 0 || confirm('Start a new random set? Your current score will reset.')) start();
+  });
+
+  start();
+})();
+</script>
+</body>
+</html>

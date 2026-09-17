@@ -88,6 +88,16 @@ font-style: italic;
 <p>Work through a random set of externality scenarios one step at a time. Identify who creates the spillover, whether it helps or harms third parties, how the social curve differs from the private curve, whether the market produces too much or too little, and which policy moves the market toward the social optimum.</p>
 </div>
 
+<p style="margin:0">
+<a style="margin:0; font-size:100%; font-weight:bold" href="/demand_curve_practice.html" target="_blank" rel="noopener noreferrer">Deriving the Demand Curve: Practice</a> <br>
+<i>Interactive practice connecting consumer choice, budget lines, indifference curves, and demand</i> <br>
+<strong>Practice:</strong> <a href="/demand_curve_practice.html" target="_blank" rel="noopener noreferrer">Launch Demand Curve Practice</a> <br>
+
+<button class="accordion">Practice Description</button>
+<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
+<p>Work through three random consumer scenarios to derive a demand curve from utility-maximizing choices. The exercise uses interactive graphs and guided questions to connect changes in a good's price with budget lines, optimal bundles, and movements along the demand curve.</p>
+</div>
+
 <div class="section-heading">R Packages and Data APIs</div>
 
 <p style="margin:0"> 
