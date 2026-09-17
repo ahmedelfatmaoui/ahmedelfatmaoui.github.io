@@ -76,6 +76,18 @@ font-style: italic;
 }
 </style>
 
+<div class="section-heading">Economics in Scenarios</div>
+
+<p style="margin:0">
+<a style="margin:0; font-size:100%; font-weight:bold" href="/externalities_practice.html" target="_blank" rel="noopener noreferrer">Externalities Practice</a> <br>
+<i>Interactive practice with positive and negative production and consumption externalities</i> <br>
+<strong>Practice:</strong> <a href="/externalities_practice.html" target="_blank" rel="noopener noreferrer">Launch Externalities Practice</a> <br>
+
+<button class="accordion">Practice Description</button>
+<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;">
+<p>Work through a random set of externality scenarios one step at a time. Identify who creates the spillover, whether it helps or harms third parties, how the social curve differs from the private curve, whether the market produces too much or too little, and which policy moves the market toward the social optimum.</p>
+</div>
+
 <div class="section-heading">R Packages and Data APIs</div>
 
 <p style="margin:0"> 

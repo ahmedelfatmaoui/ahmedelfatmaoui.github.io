@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Externalities Practice</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --panel: #f6f5f3;
+    --ink: #1f1f1f;
+    --ink-2: #555350;
+    --ink-3: #8a8782;
+    --rule: #d9d6d0;
+    --crimson: #7a1c24;
+    --accent: #7a1c24;
+    --benefit: #2a6fb5;
+    --cost: #c97a12;
+    --loss: #c0392b;
+    --good: #1d7a55;
+    --good-bg: #e8f4ee;
+    --bad: #a3261c;
+    --bad-bg: #fbeceb;
+    --ring: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161616;
+      --panel: #222221;
+      --ink: #eeeeec;
+      --ink-2: #bdbbb5;
+      --ink-3: #8a8782;
+      --rule: #3a3936;
+      --accent: #e0707a;
+      --benefit: #5fa3e6;
+      --cost: #e9a441;
+      --loss: #e5695c;
+      --good: #6fd0a3;
+      --good-bg: #1c2f27;
+      --bad: #f08a80;
+      --bad-bg: #3a2220;
+      --ring: #161616;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", "Helvetica Neue", Arial, system-ui, sans-serif; line-height: 1.55; }
+  header { background: var(--crimson); color: #fff; padding: 18px 24px; }
+  header h1 { margin: 0; font-size: 26px; font-weight: 500; }
+  header p { margin: 4px 0 0; font-size: 15px; opacity: 0.9; }
+  main { max-width: 860px; margin: 0 auto; padding: 18px 24px 40px; }
+  .topbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 14px; font-size: 14px; color: var(--ink-2); }
+  .topbar strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+  .scenario { background: var(--panel); border-left: 5px solid var(--crimson); border-radius: 6px; padding: 14px 18px; margin-bottom: 18px; }
+  .scenario .tag { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); font-weight: 600; }
+  .scenario h2 { margin: 2px 0 6px; font-size: 21px; font-weight: 600; }
+  .scenario p { margin: 0; font-size: 16px; }
+  .step { border: 1px solid var(--rule); border-radius: 8px; padding: 14px 18px; margin-bottom: 14px; }
+  .step h3 { margin: 0 0 10px; font-size: 16px; font-weight: 600; }
+  .step h3 span { color: var(--accent); margin-right: 6px; }
+  .choices { display: flex; flex-wrap: wrap; gap: 10px; }
+  button {
+    font: inherit; font-size: 15px; color: var(--ink); background: transparent;
+    border: 1px solid var(--rule); border-radius: 6px; padding: 7px 16px; cursor: pointer;
+  }
+  button:hover:not(:disabled) { background: var(--panel); }
+  button:disabled { cursor: default; opacity: 0.55; }
+  button.primary { background: var(--crimson); border-color: var(--crimson); color: #fff; }
+  button.primary:hover:not(:disabled) { background: #5e141b; }
+  button.right { border-color: var(--good); color: var(--good); opacity: 1; font-weight: 600; }
+  button.wrong { border-color: var(--bad); color: var(--bad); text-decoration: line-through; }
+  button:focus-visible { outline: 2px solid var(--benefit); outline-offset: 2px; }
+  .feedback { margin-top: 10px; padding: 9px 12px; border-radius: 6px; font-size: 15px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.good { background: var(--good-bg); color: var(--good); }
+  .feedback.bad { background: var(--bad-bg); color: var(--bad); }
+  .feedback b { font-weight: 600; }
+  .hidden { display: none; }
+  .graph-controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 4px 0 10px; }
+  svg.fig { width: 100%; height: auto; display: block; }
+  svg.fig text { font-family: inherit; font-size: 13px; fill: var(--ink-2); }
+  svg.fig .lab { font-size: 13px; font-weight: 600; }
+  .explain { font-size: 15px; margin: 8px 0 0; }
+  .nav { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+  .done { text-align: center; padding: 28px 10px; }
+  .done h2 { font-size: 24px; margin: 0 0 8px; }
+  footer { margin-top: 22px; font-size: 12px; color: var(--ink-3); border-top: 1px solid var(--rule); padding-top: 10px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .fade { animation: fadeIn 0.45s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Externalities Practice</h1>
+  <p>Four random scenarios, one of each type of externality. Answer one step at a time; wrong answers get a hint so you can try again.</p>
+</header>
+<main>
+  <div class="topbar">
+    <div>Scenario <strong id="num">1</strong> of <strong id="total">8</strong></div>
+    <div>Correct on the first try: <strong id="score">0</strong> / <strong id="asked">0</strong></div>
+    <button type="button" id="b-new">New random set</button>
+  </div>
+
+  <div id="quiz">
+    <div class="scenario">
+      <div class="tag">Scenario</div>
+      <h2 id="s-title"></h2>
+      <p id="s-text"></p>
+    </div>
+
+    <div class="step" id="step1">
+      <h3><span>Step 1</span>Whose decision creates the spillover?</h3>
+      <div class="choices" data-q="side">
+        <button type="button" data-a="consumption">Consumption (buyers or users)</button>
+        <button type="button" data-a="production">Production (firms or providers)</button>
+      </div>
+      <div class="feedback" id="fb-side"></div>
+    </div>
+
+    <div class="step hidden" id="step2">
+      <h3><span>Step 2</span>Does it help or harm third parties?</h3>
+      <div class="choices" data-q="sign">
+        <button type="button" data-a="positive">Positive externality (benefit)</button>
+        <button type="button" data-a="negative">Negative externality (cost)</button>
+      </div>
+      <div class="feedback" id="fb-sign"></div>
+    </div>
+
+    <div class="step hidden" id="graphbox">
+      <h3><span>Graph</span>The market for this scenario</h3>
+      <svg class="fig" id="fig" viewBox="0 0 700 430" role="img" aria-labelledby="fig-desc">
+        <desc id="fig-desc">Market graph for the current scenario.</desc>
+      </svg>
+      <p class="explain" id="g-explain"></p>
+    </div>
+
+    <div class="step hidden" id="step3">
+      <h3><span>Step 3</span>Which social curve belongs on this graph?</h3>
+      <div class="choices" data-q="curve">
+        <button type="button" data-a="b-above">MSB lies above MPB</button>
+        <button type="button" data-a="b-below">MSB lies below MPB</button>
+        <button type="button" data-a="c-above">MSC lies above MPC</button>
+        <button type="button" data-a="c-below">MSC lies below MPC</button>
+      </div>
+      <div class="feedback" id="fb-curve"></div>
+    </div>
+
+    <div class="step hidden" id="step4">
+      <h3><span>Step 4</span>Compare the market outcome with the social optimum.</h3>
+      <div class="choices" data-q="outcome">
+        <button type="button" data-a="over">Q<sub>m</sub> &gt; Q<sub>opt</sub>: the market does too much</button>
+        <button type="button" data-a="under">Q<sub>m</sub> &lt; Q<sub>opt</sub>: the market does too little</button>
+      </div>
+      <div class="feedback" id="fb-outcome"></div>
+    </div>
+
+    <div class="step hidden" id="step5">
+      <h3><span>Step 5</span>Which policy moves the market to the social optimum?</h3>
+      <div class="choices" data-q="policy">
+        <button type="button" data-a="tax">A per-unit tax</button>
+        <button type="button" data-a="subsidy">A per-unit subsidy</button>
+      </div>
+      <div class="feedback" id="fb-policy"></div>
+    </div>
+
+    <div class="nav">
+      <button type="button" class="primary hidden" id="b-next">Next scenario</button>
+    </div>
+  </div>
+
+  <div class="done hidden" id="done">
+    <h2>All scenarios complete</h2>
+    <p id="final"></p>
+    <p>Rule of thumb: <b>the sign decides the policy</b>. Negative externality: tax. Positive externality: subsidy.
+      The side decides which curve moves: consumption shifts the benefit curve, production shifts the cost curve.</p>
+    <button type="button" class="primary" id="b-restart">Practice a new random set</button>
+  </div>
+
+  <footer>Notation: MPB and MSB are marginal private and social benefit; MPC and MSC are marginal private and social cost;
+    MEB and MEC are marginal external benefit and cost; Q<sub>m</sub> is the market quantity; Q<sub>opt</sub> is the socially optimal quantity.</footer>
+</main>
+
+<script>
+(function () {
+  var SCENARIOS = [
+    { title: 'Secondhand smoke', good: 'Cigarettes smoked', side: 'consumption', sign: 'negative',
+      text: 'Smokers enjoy cigarettes, but the smoke they exhale harms people nearby, including children and coworkers, who never chose to smoke.',
+      sideWhy: 'The harm comes from smoking the cigarettes, which is a consumption decision. Making cigarettes is not what hurts bystanders.',
+      signWhy: 'Bystanders face higher health risks without being compensated, so this is an external cost.' },
+    { title: 'Measles vaccination', good: 'Vaccinations', side: 'consumption', sign: 'positive',
+      text: 'When a family vaccinates a child, the child is protected, and so are infants and people who cannot be vaccinated, because the disease spreads less.',
+      sideWhy: 'The spillover comes from getting vaccinated, which is a consumption decision by the family.',
+      signWhy: 'Others gain protection (herd immunity) without paying for it, so this is an external benefit.' },
+    { title: 'Chemical plant wastewater', good: 'Chemicals produced', side: 'production', sign: 'negative',
+      text: 'A chemical manufacturer discharges wastewater into a river, raising health costs for a community downstream.',
+      sideWhy: 'The harm comes from how the firm makes its product, which is a production decision.',
+      signWhy: 'The downstream community bears health costs the firm does not pay, so this is an external cost.' },
+    { title: 'Drug research spillovers', good: 'Research output', side: 'production', sign: 'positive',
+      text: 'A pharmaceutical company publishes findings from its research. Other firms and scientists use them to develop new treatments.',
+      sideWhy: 'The spillover comes from the firm\u2019s research and production activity, not from patients using a product.',
+      signWhy: 'Other researchers benefit without paying the firm, so this is an external benefit.' },
+    { title: 'Unneeded antibiotics', good: 'Antibiotic prescriptions filled', side: 'consumption', sign: 'negative',
+      text: 'Patients who take antibiotics for viral infections gain little, but every use helps bacteria evolve resistance that makes future infections harder to treat for everyone.',
+      sideWhy: 'The harm comes from taking the antibiotics, which is a consumption decision.',
+      signWhy: 'Future patients face drug-resistant infections they did nothing to cause, so this is an external cost.' },
+    { title: 'Honeybees and orchards', good: 'Honey produced', side: 'production', sign: 'positive',
+      text: 'A beekeeper keeps hives to produce honey. The bees also pollinate neighboring apple orchards, raising the farmers\u2019 harvests.',
+      sideWhy: 'The spillover comes from the beekeeper\u2019s production of honey.',
+      signWhy: 'Orchard owners gain bigger harvests without paying the beekeeper, so this is an external benefit.' },
+    { title: 'Drinking and driving', good: 'Alcohol consumed', side: 'consumption', sign: 'negative',
+      text: 'Some people drink and then drive. The risk of a crash falls not only on the driver but on other drivers, passengers, and pedestrians.',
+      sideWhy: 'The harm comes from drinking, which is a consumption decision.',
+      signWhy: 'Other people on the road face injury risk they did not choose, so this is an external cost.' },
+    { title: 'Hospital medical waste incinerator', good: 'Medical waste burned', side: 'production', sign: 'negative',
+      text: 'A hospital burns its medical waste in an on-site incinerator. The smoke carries pollutants that raise asthma and other health risks in the surrounding neighborhood.',
+      sideWhy: 'The harm comes from how the hospital disposes of waste as part of producing care, which is a production decision.',
+      signWhy: 'Neighbors breathe polluted air and bear health costs the hospital does not pay, so this is an external cost.' },
+    { title: 'Antibiotics on livestock farms', good: 'Meat produced', side: 'production', sign: 'negative',
+      text: 'Some livestock farms give animals antibiotics routinely to speed growth. This helps drug-resistant bacteria develop and spread to people.',
+      sideWhy: 'The harm comes from how the farm raises its animals, which is a production decision, not from people eating the meat.',
+      signWhy: 'Patients who later get resistant infections bear costs the farm does not pay, so this is an external cost.' },
+    { title: 'Training new doctors', good: 'Residents trained', side: 'production', sign: 'positive',
+      text: 'A teaching hospital trains medical residents. Many of them later practice at other hospitals and clinics, which benefit from their skills without paying for the training.',
+      sideWhy: 'The spillover comes from the hospital\u2019s training activity, which is part of how it produces care.',
+      signWhy: 'Other employers and their patients gain skilled doctors without paying the training hospital, so this is an external benefit.' },
+    { title: 'STI testing and treatment', good: 'Tests and treatments', side: 'consumption', sign: 'positive',
+      text: 'A person who gets tested and treated for a sexually transmitted infection protects their own health and also stops passing the infection to future partners.',
+      sideWhy: 'The spillover comes from the person\u2019s decision to get tested and treated, which is a consumption decision.',
+      signWhy: 'Future partners are protected from infection without paying for it, so this is an external benefit.' },
+    { title: 'Completing tuberculosis treatment', good: 'Completed treatment courses', side: 'consumption', sign: 'positive',
+      text: 'A patient who finishes the full course of tuberculosis treatment is cured and also stops spreading the disease to family, coworkers, and neighbors.',
+      sideWhy: 'The spillover comes from the patient\u2019s decision to use and finish the treatment.',
+      signWhy: 'The people around the patient are protected from infection without paying for it, so this is an external benefit.' }
+  ];
+
+  var X = function (q) { return 80 + q * 50; };
+  var Y = function (p) { return 380 - p * 34; };
+  var MPB = function (q) { return 8 - 0.6 * q; };
+  var MPC = function (q) { return 1 + 0.5 * q; };
+  var E = 1.8;
+  var QM = 7 / 1.1;
+
+  var el = function (id) { return document.getElementById(id); };
+  var order, idx, score, asked, cur, firstTry, stage;
+
+  function shuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function model(s) {
+    var eb = s.side === 'consumption' ? (s.sign === 'positive' ? E : -E) : 0;
+    var ec = s.side === 'production' ? (s.sign === 'negative' ? E : -E) : 0;
+    var SB = function (q) { return MPB(q) + eb; };
+    var SC = function (q) { return MPC(q) + ec; };
+    var qo = (7 + eb - ec) / 1.1;
+    return { eb: eb, ec: ec, SB: SB, SC: SC, qo: qo };
+  }
+
+  function f(v) { return v.toFixed(1); }
+  function line(fn, q0, q1, style) {
+    var d = '', started = false;
+    for (var i = 0; i <= 60; i++) {
+      var q = q0 + (q1 - q0) * i / 60, p = fn(q);
+      if (p < 0.15 || p > 10.2) { started = false; continue; }
+      d += (started ? 'L' : 'M') + f(X(q)) + ',' + f(Y(p));
+      started = true;
+    }
+    return '<path d="' + d + '" fill="none" style="' + style + '"/>';
+  }
+  function seg(x1, y1, x2, y2, style, extra) {
+    return '<line x1="' + f(x1) + '" y1="' + f(y1) + '" x2="' + f(x2) + '" y2="' + f(y2) + '" style="' + style + '"' + (extra || '') + '/>';
+  }
+  function text(x, y, s, style, anchor) {
+    return '<text x="' + f(x) + '" y="' + f(y) + '"' + (anchor ? ' text-anchor="' + anchor + '"' : '') + (style ? ' style="' + style + '"' : '') + '>' + s + '</text>';
+  }
+  function dot(q, p, color) {
+    return '<circle cx="' + f(X(q)) + '" cy="' + f(Y(p)) + '" r="6" style="fill:' + color + ';stroke:var(--ring);stroke-width:2"/>';
+  }
+
+  function draw() {
+    var s = cur, m = model(s), cons = s.side === 'consumption';
+    var g = '';
+    g += '<defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">' +
+         '<path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.6"/></marker></defs>';
+
+    if (stage >= 2) {
+      var a = [QM, m.SB(QM)], b = [QM, m.SC(QM)], c = [m.qo, m.SB(m.qo)];
+      g += '<polygon points="' + [a, b, c].map(function (pt) { return f(X(pt[0])) + ',' + f(Y(pt[1])); }).join(' ') +
+           '" style="fill:var(--loss);fill-opacity:' + (stage >= 3 ? 0.1 : 0.32) + '"/>';
+      var cx = X((a[0] + b[0] + c[0]) / 3), cy = Y((a[1] + b[1] + c[1]) / 3);
+      g += seg(cx, cy, 486, 66, 'stroke:var(--loss);stroke-width:1');
+      g += text(490, 62, stage >= 3 ? 'Welfare loss eliminated' : 'Welfare loss (deadweight loss)', 'fill:var(--loss);font-weight:600');
+    }
+
+    g += '<path d="M80 30V380H640" fill="none" style="stroke:var(--ink-3);stroke-width:1.2"/>';
+    g += text(88, 24, 'Price, benefit, cost ($)', '', null);
+    g += text(640, 424, s.good, '', 'end');
+
+    var pm = MPB(QM);
+    g += seg(X(QM), Y(pm), X(QM), 380, 'stroke:var(--ink-3);stroke-width:1;stroke-dasharray:4 3');
+    g += text(X(QM), 400, 'Q<tspan dy="4" font-size="10">m</tspan>', 'fill:var(--ink);font-weight:600', 'middle');
+
+    var benefitLab = cons ? 'D = MPB' : 'D = MPB = MSB';
+    var costLab = cons ? 'S = MPC = MSC' : 'S = MPC';
+    g += line(MPB, 0.3, 9.6, 'stroke:var(--benefit);stroke-width:2.8');
+    g += line(MPC, 0.3, 9.6, 'stroke:var(--cost);stroke-width:2.8');
+    g += text(X(9.6) + 8, Y(MPB(9.6)) + 4, benefitLab, 'fill:var(--benefit)', null).replace('<text', '<text class="lab"');
+    g += text(X(9.6) + 8, Y(MPC(9.6)) + 4, costLab, 'fill:var(--cost)', null).replace('<text', '<text class="lab"');
+
+    if (stage >= 1) {
+      var socialFn = cons ? m.SB : m.SC;
+      var color = cons ? 'var(--benefit)' : 'var(--cost)';
+      var privFn = cons ? MPB : MPC;
+      var sym = cons ? (s.sign === 'positive' ? 'MSB = MPB + MEB' : 'MSB = MPB \u2212 MEC')
+                     : (s.sign === 'negative' ? 'MSC = MPC + MEC' : 'MSC = MPC \u2212 MEB');
+      g += line(socialFn, 0.3, 9.6, 'stroke:' + color + ';stroke-width:2.8;stroke-dasharray:9 6');
+      var ly = Y(socialFn(9.6)) + 4;
+      g += text(X(9.6) + 8, ly, sym, 'fill:' + color, null).replace('<text', '<text class="lab"');
+
+      var qa = 2.5, extName = s.sign === 'positive' ? 'MEB' : 'MEC';
+      g += seg(X(qa), Y(privFn(qa)), X(qa), Y(socialFn(qa)), 'stroke:var(--ink);stroke-width:1.2', ' marker-start="url(#ar)" marker-end="url(#ar)"');
+      g += text(X(qa) + 7, (Y(privFn(qa)) + Y(socialFn(qa))) / 2 + 4, extName, 'fill:var(--ink)', null);
+
+      var po = m.SB(m.qo);
+      g += seg(X(m.qo), Y(po), X(m.qo), 380, 'stroke:var(--ink-3);stroke-width:1;stroke-dasharray:4 3');
+      g += text(X(m.qo), 400, 'Q<tspan dy="4" font-size="10">opt</tspan>', 'fill:var(--ink);font-weight:600', 'middle');
+      g += dot(m.qo, po, 'var(--good)');
+    }
+
+    if (stage >= 3) {
+      var privAtQo = (cons ? MPB : MPC)(m.qo), socAtQo = (cons ? m.SB : m.SC)(m.qo);
+      var policyName = s.sign === 'negative' ? 'Tax' : 'Subsidy';
+      var qx = m.qo > QM ? X(m.qo) + 14 : X(m.qo) - 14;
+      g += seg(qx, Y(privAtQo), qx, Y(socAtQo), 'stroke:var(--good);stroke-width:1.6', ' marker-start="url(#ar)" marker-end="url(#ar)"');
+      g += text(m.qo > QM ? qx + 8 : qx - 8, (Y(privAtQo) + Y(socAtQo)) / 2 + 4,
+        policyName, 'fill:var(--good);font-weight:600', m.qo > QM ? null : 'end');
+    }
+
+    g += dot(QM, pm, 'var(--ink)');
+    el('fig').innerHTML = '<desc id="fig-desc">Market graph for ' + s.title + '.</desc>' + g;
+
+    var over = m.qo < QM;
+    var msgs = [
+      'The market settles where private benefit meets private cost, at Q<sub>m</sub>. ' +
+        (cons ? 'Buyers' : 'Firms') + ' ignore the effect on third parties. Which social curve is missing?',
+      'Society\u2019s optimum is where MSB = MSC, at Q<sub>opt</sub>. How does it compare with Q<sub>m</sub>?',
+      'The shaded triangle is the welfare loss. ' +
+        (over ? 'Each unit between Q<sub>opt</sub> and Q<sub>m</sub> costs society more (MSC) than it is worth to society (MSB).'
+              : 'Each unit between Q<sub>m</sub> and Q<sub>opt</sub> is worth more to society (MSB) than it costs society (MSC), yet it never happens.'),
+      'A ' + (s.sign === 'negative' ? 'tax' : 'subsidy') + ' equal to the ' + (s.sign === 'positive' ? 'MEB' : 'MEC') +
+        ' makes ' + (cons ? 'buyers' : 'firms') + ' face the full social ' + (cons ? 'benefit' : 'cost') +
+        '. The market moves to Q<sub>opt</sub>, and the welfare loss disappears.'
+    ];
+    el('g-explain').innerHTML = msgs[Math.min(stage, 3)];
+  }
+
+  function socialKey() {
+    var cons = cur.side === 'consumption';
+    var above = cons ? cur.sign === 'positive' : cur.sign === 'negative';
+    return (cons ? 'b-' : 'c-') + (above ? 'above' : 'below');
+  }
+
+  function reset(btns) {
+    btns.forEach(function (b) { b.disabled = false; b.classList.remove('right', 'wrong'); });
+  }
+
+  function load() {
+    cur = order[idx];
+    firstTry = { side: true, sign: true, curve: true, outcome: true, policy: true };
+    stage = 0;
+    el('num').textContent = idx + 1;
+    el('total').textContent = order.length;
+    el('s-title').textContent = cur.title;
+    el('s-text').textContent = cur.text;
+    ['step2', 'graphbox', 'step3', 'step4', 'step5'].forEach(function (id) { el(id).classList.add('hidden'); });
+    el('b-next').classList.add('hidden');
+    ['fb-side', 'fb-sign', 'fb-curve', 'fb-outcome', 'fb-policy'].forEach(function (id) { el(id).className = 'feedback'; el(id).innerHTML = ''; });
+    document.querySelectorAll('.choices button').forEach(function (b) { b.disabled = false; b.classList.remove('right', 'wrong'); });
+    window.scrollTo({ top: 0 });
+  }
+
+  function correctAnswer(q) {
+    if (q === 'side') return cur.side;
+    if (q === 'sign') return cur.sign;
+    if (q === 'curve') return socialKey();
+    if (q === 'outcome') return model(cur).qo < QM ? 'over' : 'under';
+    return cur.sign === 'negative' ? 'tax' : 'subsidy';
+  }
+
+  function hint(q, chosen) {
+    var cons = cur.side === 'consumption';
+    if (q === 'side') {
+      return cons
+        ? 'Look at when the spillover happens. Here it happens when people <b>use</b> the good, not while it is being made.'
+        : 'Look at when the spillover happens. Here it happens while the good is being <b>made</b>, not when someone uses it.';
+    }
+    if (q === 'sign') {
+      return cur.sign === 'positive'
+        ? 'Think about the third parties. Are they worse off, or do they end up <b>better off</b> without paying anything?'
+        : 'Think about the third parties. Do they gain, or do they bear a <b>cost</b> they did not agree to?';
+    }
+    if (q === 'curve') {
+      var right = socialKey();
+      if (chosen.charAt(0) !== right.charAt(0)) {
+        return 'Check which curve changes. A ' + cur.side + ' externality comes from ' + (cons ? 'using' : 'making') +
+          ' the good, so it changes the <b>' + (cons ? 'benefit' : 'cost') + '</b> curve, not the ' + (cons ? 'cost' : 'benefit') + ' curve.';
+      }
+      var pos = cur.sign === 'positive';
+      var adds = cons ? pos : !pos;
+      return 'Right curve, wrong direction. ' +
+        (cons ? (pos ? 'Society gains the external benefit on top of the buyer\u2019s benefit, so MSB = MPB + MEB.'
+                     : 'Society subtracts the harm to others from the buyer\u2019s benefit, so MSB = MPB \u2212 MEC.')
+              : (pos ? 'The benefit to others offsets part of the firm\u2019s cost, so MSC = MPC \u2212 MEB.'
+                     : 'Society adds the harm to others to the firm\u2019s cost, so MSC = MPC + MEC.')) +
+        ' That puts the social curve <b>' + (adds ? 'above' : 'below') + '</b> the private one.';
+    }
+    if (q === 'outcome') {
+      return 'Compare the two marked points on the horizontal axis. Q<sub>opt</sub> is where the dashed social curve crosses the other curve. Is it to the left or right of Q<sub>m</sub>?';
+    }
+    return cur.sign === 'negative'
+      ? 'The market does too much of this. A subsidy would encourage even more. What discourages it?'
+      : 'The market does too little of this. A tax would discourage it further. What encourages more?';
+  }
+
+  function reveal(id) {
+    var s = el(id);
+    s.classList.remove('hidden');
+    s.classList.add('fade');
+    s.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  document.querySelectorAll('.choices').forEach(function (box) {
+    var q = box.dataset.q;
+    var btns = Array.prototype.slice.call(box.querySelectorAll('button'));
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var fb = el('fb-' + q);
+        if (b.dataset.a === correctAnswer(q)) {
+          if (firstTry[q]) score++;
+          asked++;
+          updateScore();
+          btns.forEach(function (x) { x.disabled = true; });
+          b.classList.add('right');
+          fb.className = 'feedback good show';
+          if (q === 'side') { fb.innerHTML = '<b>Correct.</b> ' + cur.sideWhy; reveal('step2'); }
+          if (q === 'sign') { fb.innerHTML = '<b>Correct.</b> ' + cur.signWhy; stage = 0; draw(); reveal('graphbox'); reveal('step3'); }
+          if (q === 'curve') {
+            fb.innerHTML = '<b>Correct.</b> A ' + cur.sign + ' ' + cur.side + ' externality shifts the ' +
+              (cur.side === 'consumption' ? 'benefit' : 'cost') + ' curve. The dashed line on the graph is the social curve, and Q<sub>opt</sub> is where it crosses the other curve.';
+            stage = 1; draw(); reveal('step4');
+          }
+          if (q === 'outcome') {
+            var ov = b.dataset.a === 'over';
+            fb.innerHTML = '<b>Correct.</b> The market ' + (cur.side === 'consumption' ? (ov ? 'overconsumes' : 'underconsumes') : (ov ? 'overproduces' : 'underproduces')) +
+              ' because ' + (cur.side === 'consumption' ? 'buyers' : 'firms') + ' ignore the ' + (cur.sign === 'positive' ? 'benefit to' : 'harm to') + ' others. The shaded triangle is the welfare loss.';
+            stage = 2; draw(); reveal('step5');
+          }
+          if (q === 'policy') {
+            fb.innerHTML = '<b>Correct.</b> ' + (cur.sign === 'negative'
+              ? 'A negative externality means too much of the activity, so a tax discourages it.'
+              : 'A positive externality means too little of the activity, so a subsidy encourages it.');
+            stage = 3; draw();
+            var nb = el('b-next');
+            nb.textContent = idx === order.length - 1 ? 'See results' : 'Next scenario';
+            nb.classList.remove('hidden');
+          }
+        } else {
+          firstTry[q] = false;
+          b.classList.add('wrong');
+          b.disabled = true;
+          fb.className = 'feedback bad show';
+          fb.innerHTML = '<b>Not quite.</b> ' + hint(q, b.dataset.a) + ' Try again.';
+        }
+      });
+    });
+  });
+
+  el('b-next').addEventListener('click', function () {
+    idx++;
+    if (idx >= order.length) {
+      el('quiz').classList.add('hidden');
+      el('done').classList.remove('hidden');
+      el('final').textContent = 'You answered ' + score + ' of ' + asked + ' questions correctly on the first try.';
+      window.scrollTo({ top: 0 });
+    } else {
+      load();
+    }
+  });
+
+  el('b-restart').addEventListener('click', start);
+  el('b-new').addEventListener('click', function () {
+    if (asked === 0 || confirm('Start a new random set? Your current score will reset.')) start();
+  });
+
+  function updateScore() {
+    el('score').textContent = score;
+    el('asked').textContent = asked;
+  }
+
+  function pickSet() {
+    var types = [['consumption', 'negative'], ['consumption', 'positive'], ['production', 'negative'], ['production', 'positive']];
+    var set = types.map(function (t) {
+      var pool = SCENARIOS.filter(function (x) { return x.side === t[0] && x.sign === t[1]; });
+      return pool[Math.floor(Math.random() * pool.length)];
+    });
+    return shuffle(set);
+  }
+
+  function start() {
+    order = pickSet();
+    idx = 0; score = 0; asked = 0;
+    updateScore();
+    el('done').classList.add('hidden');
+    el('quiz').classList.remove('hidden');
+    load();
+  }
+
+  start();
+})();
+</script>
+</body>
+</html>
