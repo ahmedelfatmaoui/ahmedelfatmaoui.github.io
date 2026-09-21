@@ -22,10 +22,13 @@ menu:
             weight: 2
           - name: Code
             url: /code/
-            weight: 3            
+            weight: 3
+          - name: Interactives
+            url: /interactives/
+            weight: 4
           - name: CV
             url: /cv.pdf
-            weight: 3
+            weight: 5
         #   # weight: 1
         # - name: Design
         #   url: /design/
@@ -93,10 +96,13 @@ params:
                 weight: 2
               - name: Code
                 url: /code/
-                weight: 3                
+                weight: 3
+              - name: Interactives
+                url: /interactives/
+                weight: 4
               - name: CV
                 url: /cv.pdf
-                weight: 3
+                weight: 5
               # - name: Design
               #   url: /design/
             # - name: Newsletter
@@ -146,7 +152,6 @@ markup:
 # * title: 70
 # * description: 120–155
 # * summary: 265
-
 
 
 

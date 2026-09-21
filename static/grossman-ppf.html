@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Why the health–bread frontier bends backward</title>
+<meta name="description" content="An interactive lesson on the production possibilities frontier for health and home goods in the Grossman model.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=STIX+Two+Text:ital,wght@0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EEF3F7; --sheet:#FBFDFF; --ink:#14233B; --ink-2:#4B5B71; --rule:#C3D1DE; --chip:#E1E9F1;
+  --grid-minor:#E3EBF3; --grid-major:#C9D7E5;
+  --health:#1C7F66; --sick:#B23F2A; --bread:#C28A1E; --pref:#5B4BCF;
+  --better:rgba(37,99,235,.14); --better-edge:#2563EB; --focus:#2563EB;
+  --ok:#17735C; --ok-bg:#E1F2EB; --no:#A83A26; --no-bg:#F7E4DF;
+  --sans:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --math:"STIX Two Text","Cambria Math",Cambria,"Times New Roman",Times,serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D1522; --sheet:#121C2C; --ink:#E6EDF6; --ink-2:#A4B3C6; --rule:#2A3A53; --chip:#1A2638;
+    --grid-minor:#172335; --grid-major:#23334B;
+    --health:#43BD97; --sick:#E0775E; --bread:#E3B24C; --pref:#A399FF;
+    --better:rgba(96,150,255,.18); --better-edge:#7AA7FF; --focus:#7AA7FF;
+    --ok:#5ED1AC; --ok-bg:#12302A; --no:#F08E77; --no-bg:#3A1F19;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0D1522; --sheet:#121C2C; --ink:#E6EDF6; --ink-2:#A4B3C6; --rule:#2A3A53; --chip:#1A2638;
+  --grid-minor:#172335; --grid-major:#23334B;
+  --health:#43BD97; --sick:#E0775E; --bread:#E3B24C; --pref:#A399FF;
+  --better:rgba(96,150,255,.18); --better-edge:#7AA7FF; --focus:#7AA7FF;
+  --ok:#5ED1AC; --ok-bg:#12302A; --no:#F08E77; --no-bg:#3A1F19;
+  color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none !important}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:1.0625rem;line-height:1.55;-webkit-font-smoothing:antialiased}
+.page{max-width:1220px;margin:0 auto;padding:clamp(18px,3vw,36px) clamp(16px,3vw,32px) 40px}
+h1,h2,h3{line-height:1.15;margin:0}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.masthead h1{font-size:clamp(1.8rem,1.2rem + 2vw,2.6rem);font-weight:700;letter-spacing:-.018em;max-width:21ch}
+.masthead .lede{margin:.75rem 0 0;max-width:64ch;color:var(--ink-2);font-size:1.08rem}
+@media (min-width:961px){.masthead{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:end}.masthead .lede{margin:0}}
+
+.steps{display:flex;gap:2px;margin:clamp(18px,2.6vw,28px) 0 clamp(16px,2.4vw,24px);border-bottom:2px solid var(--rule);overflow-x:auto;scrollbar-width:thin}
+.step{flex:0 0 auto;font:inherit;font-weight:700;font-size:1rem;color:var(--ink-2);background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:.65rem .9rem;cursor:pointer;display:flex;align-items:center;gap:.55rem;min-height:48px}
+.step .n{display:inline-grid;place-items:center;width:1.65rem;height:1.65rem;border-radius:50%;border:1.5px solid currentColor;font-size:.85rem;line-height:1}
+.step:hover{color:var(--ink)}
+.step[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.step[aria-selected="true"] .n{background:var(--ink);border-color:var(--ink);color:var(--sheet)}
+.step:focus-visible{outline-offset:-3px}
+.step .short{display:none}
+@media (max-width:600px){
+  .steps{gap:0;overflow-x:visible}
+  .step{flex:1 1 0;min-width:0;flex-direction:column;gap:3px;padding:.45rem .15rem .5rem;font-size:.82rem}
+  .step .long{display:none}
+  .step .short{display:inline}
+}
+
+.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:start}
+@media (max-width:960px){.layout{grid-template-columns:minmax(0,1fr)}}
+.figure{margin:0}
+@media (min-width:961px){.figure{position:sticky;top:calc(env(safe-area-inset-top,0px) + 14px)}#ppf{max-height:max(300px,calc(100vh - 96px))}}
+.side{display:flex;flex-direction:column;gap:22px;min-width:0}
+.sheet{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:8px 8px 12px}
+#ppf{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none}
+
+.plot-bg{fill:var(--sheet)}
+.grid .minor{stroke:var(--grid-minor);stroke-width:1}
+.grid .major{stroke:var(--grid-major);stroke-width:1}
+.axis{stroke:var(--ink);stroke-width:1.6}
+.tick{fill:var(--ink-2);font-family:var(--sans);font-size:15px}
+.math{font-family:var(--math);font-style:italic}
+.tick .sub{font-size:11px}
+.axis-title{fill:var(--ink);font-family:var(--sans);font-size:16px;font-weight:700}
+.axis-title .math{font-weight:500;font-size:18px}
+.curve{fill:none;stroke:var(--ink);stroke-width:3.2;stroke-linejoin:round;stroke-linecap:round}
+.curve-base{fill:none;stroke:var(--ink-2);stroke-width:2;stroke-dasharray:7 6}
+.curve-hit{fill:none;stroke:transparent;stroke-width:26;pointer-events:stroke;cursor:pointer}
+.dom{fill:var(--better);stroke:var(--better-edge);stroke-width:1.2;stroke-dasharray:4 4}
+.guide{stroke:var(--ink-2);stroke-width:1.2;stroke-dasharray:5 5}
+.ic{fill:none;stroke:var(--pref);stroke-width:2.6;stroke-dasharray:10 6;stroke-linecap:round}
+.pt{pointer-events:none}
+.pt.clickable{pointer-events:auto;cursor:pointer}
+.pt circle{fill:var(--sheet);stroke:var(--ink);stroke-width:2}
+.pt-label{fill:var(--ink);font-family:var(--math);font-style:italic;font-size:23px;paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+.zone-label{fill:var(--ink-2);font-family:var(--sans);font-style:italic;font-size:15px;paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+.dot{fill:var(--ink);stroke:var(--sheet);stroke-width:3}
+.dot-hit{fill:transparent;pointer-events:all;cursor:grab;touch-action:none}
+.dot-hit:active{cursor:grabbing}
+
+.graph-legend{list-style:none;margin:4px 8px 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.92rem;color:var(--ink-2)}
+.graph-legend li{display:flex;align-items:center;gap:8px}
+.graph-legend i{display:inline-block;flex:none}
+.k-dot{width:12px;height:12px;border-radius:50%;background:var(--ink)}
+.k-dom{width:18px;height:12px;background:var(--better);border:1.2px dashed var(--better-edge)}
+.k-ic{width:26px;border-top:2.6px dashed var(--pref)}
+.k-base{width:26px;border-top:2px dashed var(--ink-2)}
+
+.readout{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:14px 16px 16px}
+.figures{display:flex;flex-wrap:wrap;gap:6px 30px;align-items:baseline}
+.figures p{margin:0;display:flex;align-items:baseline;gap:.45rem}
+.figures .lbl{font-weight:700;color:var(--ink-2);font-size:.95rem}
+.figures .num{font-size:2rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.figures .unit{color:var(--ink-2);font-size:.95rem}
+.readout.is-empty .num{color:var(--ink-2)}
+.days{display:grid;grid-template-columns:repeat(25,minmax(0,1fr));grid-template-rows:repeat(4,auto);grid-auto-flow:column;gap:3px;margin:12px 0 10px}
+.days i{display:block;aspect-ratio:1/1;border-radius:2px;background:var(--grid-major)}
+.days i.h,.sw.h{background:var(--health)}
+.days i.s,.sw.s{background:repeating-linear-gradient(135deg,transparent 0 3px,rgba(255,255,255,.3) 3px 5px),var(--sick)}
+.days i.b,.sw.b{background:var(--bread)}
+@media (prefers-reduced-motion:no-preference){.days i{transition:background-color .15s ease}}
+.day-key{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px 16px;font-size:.92rem;color:var(--ink-2)}
+.day-key li{display:flex;align-items:center;gap:7px}
+.day-key b{color:var(--ink);font-variant-numeric:tabular-nums}
+.sw{display:inline-block;width:13px;height:13px;border-radius:2px;flex:none}
+.margin{margin:12px 0 0;padding:.65rem .85rem;background:var(--chip);border-radius:8px}
+
+.panel h2{font-size:clamp(1.3rem,1.1rem + .8vw,1.6rem);margin-bottom:.6rem}
+.panel p{margin:0 0 .9rem;max-width:62ch}
+.ctl-label{display:block;font-weight:700;margin:1.1rem 0 .3rem}
+.ctl-label output{font-variant-numeric:tabular-nums}
+input[type=range]{display:block;width:100%;height:36px;margin:0;accent-color:var(--ink);cursor:pointer}
+input[type=range]:focus-visible{outline-offset:4px}
+.scale-ends{display:flex;justify-content:space-between;color:var(--ink-2);font-size:.9rem}
+.scale-ends .math{font-size:1.05rem}
+.note{margin:1.1rem 0;padding:.85rem 1rem;border-left:4px solid var(--ink);background:var(--sheet)}
+.note h3{font-size:1.12rem;margin-bottom:.35rem}
+.note p{margin:0}
+.try{color:var(--ink-2)}
+.try strong{color:var(--ink)}
+.btn{font:inherit;font-weight:700;font-size:1rem;line-height:1.2;color:var(--ink);background:transparent;border:1.5px solid var(--ink);border-radius:8px;padding:.6rem 1rem;min-height:44px;cursor:pointer}
+.btn:hover{background:var(--chip)}
+.btn[aria-pressed="true"],.btn-primary{background:var(--ink);color:var(--sheet)}
+.btn[aria-pressed="true"]:hover,.btn-primary:hover{background:var(--ink);opacity:.88}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin:.3rem 0 .4rem}
+.pick{display:flex;flex-wrap:wrap;gap:10px;margin:.2rem 0 .3rem}
+.pick-btn{width:56px;height:56px;padding:0;border-radius:10px;font-family:var(--math);font-style:italic;font-weight:500;font-size:1.7rem}
+
+.progress{font-weight:700;color:var(--ink-2);margin:0 0 .5rem}
+fieldset.quiz{border:0;margin:0;padding:0;min-width:0}
+fieldset.quiz legend{font-size:1.15rem;font-weight:700;line-height:1.35;margin:0 0 .75rem;padding:0}
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:.7rem;padding:.7rem .85rem;border:1.5px solid var(--rule);border-radius:8px;background:var(--sheet);cursor:pointer}
+.opt input{flex:none;width:1.15rem;height:1.15rem;margin:.2rem 0 0;accent-color:var(--ink)}
+.opt:has(input:checked){border-color:var(--ink)}
+.opt:has(input:disabled){cursor:default}
+.opt.is-correct{border-color:var(--ok);background:var(--ok-bg)}
+.opt.is-wrong{border-color:var(--no);background:var(--no-bg)}
+.opt.is-correct::after,.opt.is-wrong::after{margin-left:auto;padding-left:.6rem;font-size:.85rem;font-weight:700;white-space:nowrap}
+.opt.is-correct::after{content:"Correct answer";color:var(--ok)}
+.opt.is-wrong::after{content:"Your answer";color:var(--no)}
+.error{color:var(--no);font-weight:700;margin:.7rem 0 0}
+.verdict{font-weight:700}
+.verdict.ok{color:var(--ok)}
+.verdict.no{color:var(--no)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:1rem}
+.score{font-size:1.45rem;font-weight:700}
+
+.table-wrap{overflow-x:auto;margin:1rem 0}
+.compare{border-collapse:collapse;width:100%;min-width:320px;font-variant-numeric:tabular-nums}
+.compare th,.compare td{padding:.5rem .6rem;border-bottom:1px solid var(--rule);text-align:right}
+.compare th[scope="row"]{text-align:left;font-weight:400}
+.compare thead th{font-size:.9rem;color:var(--ink-2)}
+.compare td:last-child{font-weight:700}
+
+.foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);color:var(--ink-2);font-size:.92rem}
+.foot p{margin:0;max-width:72ch}
+
+@media (max-width:600px){
+  body{font-size:1rem}
+  .figures .num{font-size:1.7rem}
+  .days{gap:2px}
+  .sheet{padding:6px 4px 10px}
+  .tick{font-size:22px}
+  .tick .sub{font-size:15px}
+  .axis-title{font-size:20px}
+  .pt-label{font-size:30px;stroke-width:6px}
+  .zone-label{font-size:20px;stroke-width:6px}
+  .graph-legend,.day-key{font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <h1>Why the health–bread frontier bends backward</h1>
+    <p class="lede">Ed has 100 days. Each one goes to producing health (exercise, checkups), being sick, or making bread (work and home goods, one loaf a day). How he splits those days traces out the frontier from the Grossman model.</p>
+  </header>
+
+  <main>
+    <div class="steps" role="tablist" aria-label="Lesson steps">
+      <button class="step" role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true"><span class="n" aria-hidden="true">1</span><span class="long">Build the curve</span><span class="short">Build</span></button>
+      <button class="step" role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">2</span><span class="long">Key points</span><span class="short">Points</span></button>
+      <button class="step" role="tab" id="tab-3" aria-controls="panel-3" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">3</span><span class="long">Ed’s choice</span><span class="short">Choice</span></button>
+      <button class="step" role="tab" id="tab-4" aria-controls="panel-4" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">4</span><span class="long">Check yourself</span><span class="short">Quiz</span></button>
+      <button class="step" role="tab" id="tab-5" aria-controls="panel-5" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">+</span><span class="long">Shift the curve</span><span class="short">Shift</span></button>
+    </div>
+    <div class="layout">
+    <figure class="figure">
+      <div class="sheet">
+        <svg id="ppf" role="img" aria-labelledby="ppf-title ppf-desc">
+          <title id="ppf-title">Production possibilities frontier for health and bread</title>
+          <desc id="ppf-desc">Health is on the vertical axis and bread on the horizontal axis. The frontier starts at A (minimum health, no bread), bulges out to C (the most bread), then curves back to F (the most health, no bread).</desc>
+        </svg>
+        <ul class="graph-legend" aria-label="Graph key">
+          <li id="lg-dot"><i class="k-dot"></i>Ed’s spot</li>
+          <li id="lg-dom" hidden><i class="k-dom"></i>Spots with more health and more bread</li>
+          <li id="lg-ic" hidden><i class="k-ic"></i>Ed’s indifference curve</li>
+          <li id="lg-base" hidden><i class="k-base"></i>Original frontier</li>
+        </ul>
+      </div>
+    </figure>
+
+    <div class="side">
+        <div class="readout" id="readout">
+          <div class="figures">
+            <p><span class="lbl">Bread</span><span class="num" id="ro-b">0.0</span><span class="unit">loaves</span></p>
+            <p><span class="lbl">Health</span><span class="num" id="ro-h">10.0</span></p>
+          </div>
+          <div class="days" id="days" role="img" aria-label="Ed’s 100 days"></div>
+          <ul class="day-key">
+            <li><i class="sw h"></i>Producing health <b id="ro-th">0.0</b> days</li>
+            <li><i class="sw s"></i>Sick <b id="ro-tl">100.0</b> days</li>
+            <li><i class="sw b"></i>Making bread <b id="ro-tb">0.0</b> days</li>
+          </ul>
+          <p class="margin" id="ro-margin"></p>
+        </div>
+    <div class="panels">
+      <section class="panel" role="tabpanel" id="panel-1" aria-labelledby="tab-1">
+        <h2>Split Ed’s days and watch the curve appear</h2>
+        <p>Drag the dot along the curve, or use the slider. Start at <span class="math">A</span> and move slowly, keeping an eye on the red sick days.</p>
+        <label class="ctl-label" for="walk">Days producing health: <output id="walk-out" for="walk">0.0</output></label>
+        <input type="range" id="walk" min="0" max="1000" step="1" value="0">
+        <div class="scale-ends" aria-hidden="true"><span class="math">A</span><span class="math">F</span></div>
+        <div class="note" aria-live="polite">
+          <h3 id="zone-name">Point A: minimum health</h3>
+          <p id="zone-text"></p>
+        </div>
+        <p class="try"><strong>Try this:</strong> find the spot where bread stops growing. How many sick days are left there, and why doesn’t Ed get rid of them?</p>
+        <button class="btn" data-goto="2">Next: key points</button>
+      </section>
+
+      <section class="panel" role="tabpanel" id="panel-2" aria-labelledby="tab-2" hidden>
+        <h2>Five points to know</h2>
+        <p>Pick a point here or tap one on the graph.</p>
+        <div class="pick" role="group" aria-label="Points on the frontier">
+          <button class="btn pick-btn" data-point="A" aria-pressed="false">A</button>
+          <button class="btn pick-btn" data-point="E" aria-pressed="false">E</button>
+          <button class="btn pick-btn" data-point="C" aria-pressed="false">C</button>
+          <button class="btn pick-btn" data-point="D" aria-pressed="false">D</button>
+          <button class="btn pick-btn" data-point="F" aria-pressed="false">F</button>
+        </div>
+        <div class="note" aria-live="polite">
+          <h3 id="pc-title"></h3>
+          <p id="pc-text"></p>
+        </div>
+        <p class="try"><strong>Try this:</strong> pick <span class="math">E</span> and look at the blue area. Then pick <span class="math">C</span>. Why does the blue area disappear?</p>
+        <button class="btn" data-goto="3">Next: Ed’s choice</button>
+      </section>
+
+      <section class="panel" role="tabpanel" id="panel-3" aria-labelledby="tab-3" hidden>
+        <h2>Where does Ed choose to be?</h2>
+        <p>The frontier shows what Ed <em>can</em> have. His preferences decide where he <em>wants</em> to be: he picks the highest indifference curve that still touches the frontier.</p>
+        <div class="presets" role="group" aria-label="Preset preferences">
+          <button class="btn" data-alpha="0" aria-pressed="false">Only bread (U1)</button>
+          <button class="btn" data-alpha="0.43" aria-pressed="true">Both (U2)</button>
+          <button class="btn" data-alpha="1" aria-pressed="false">Only health</button>
+        </div>
+        <label class="ctl-label" for="alpha">How much Ed values health compared with bread</label>
+        <input type="range" id="alpha" min="0" max="100" step="1" value="43">
+        <div class="scale-ends" aria-hidden="true"><span>Only bread</span><span>Only health</span></div>
+        <div class="note" aria-live="polite">
+          <h3 id="choice-title"></h3>
+          <p id="choice-text"></p>
+        </div>
+        <p class="try"><strong>Try this:</strong> slide all the way from left to right. Does Ed ever choose a point between <span class="math">A</span> and <span class="math">C</span>?</p>
+        <button class="btn" data-goto="4">Next: check yourself</button>
+      </section>
+
+      <section class="panel" role="tabpanel" id="panel-4" aria-labelledby="tab-4" hidden>
+        <h2>Check yourself</h2>
+        <div id="quiz-live">
+          <p class="progress" id="quiz-question-focus" tabindex="-1"><span id="quiz-progress">Question 1 of 7</span></p>
+          <fieldset class="quiz">
+            <legend id="quiz-question"></legend>
+            <div class="opts" id="quiz-options"></div>
+          </fieldset>
+          <p class="error" id="quiz-error" role="alert" hidden>Pick an answer first.</p>
+          <div class="note" id="quiz-feedback" aria-live="polite" hidden>
+            <p class="verdict" id="quiz-verdict"></p>
+            <p id="quiz-why"></p>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" id="quiz-check">Check answer</button>
+            <button class="btn btn-primary" id="quiz-next" hidden>Next question</button>
+          </div>
+        </div>
+        <div id="quiz-done" hidden>
+          <p class="score" id="quiz-score"></p>
+          <p>Go back to any step to review, or open the last step to see what shifts the whole curve.</p>
+          <button class="btn btn-primary" id="quiz-restart">Start over</button>
+        </div>
+      </section>
+
+      <section class="panel" role="tabpanel" id="panel-5" aria-labelledby="tab-5" hidden>
+        <h2>What shifts the whole curve?</h2>
+        <p>Education and better medical care make each day spent on health more productive. Educated people tend to be more efficient producers of health, so their whole frontier sits further out.</p>
+        <label class="ctl-label" for="eff">Health productivity: <output id="eff-out" for="eff">1.0×</output></label>
+        <input type="range" id="eff" min="6" max="16" step="1" value="10">
+        <div class="scale-ends" aria-hidden="true"><span>0.6×</span><span>1.6×</span></div>
+        <div class="table-wrap">
+          <table class="compare">
+            <thead><tr><td></td><th scope="col">Original</th><th scope="col">Now</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Most bread, at <span class="math">C</span> (loaves)</th><td id="cmp-cb-base"></td><td id="cmp-cb-now"></td></tr>
+              <tr><th scope="row">Health days to reach <span class="math">C</span></th><td id="cmp-thc-base"></td><td id="cmp-thc-now"></td></tr>
+              <tr><th scope="row">Most health, at <span class="math">F</span></th><td id="cmp-fh-base"></td><td id="cmp-fh-now"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p id="eff-text" aria-live="polite"></p>
+      </section>
+    </div>
+    </div>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <p>A stylized model for teaching. The numbers are made up; the shape and the logic follow the health and home-good frontier in the Grossman model.</p>
+  </footer>
+</div>
+<script>/* Stylized Grossman PPF model for teaching (pure functions, no DOM).
+   Ed has T days. th = days producing health, tl = sick days, tb = days making bread.
+   Health rises with th (diminishing returns); sick days fall as health rises.
+   Bread = tb (one loaf per bread day). */
+(function (root) {
+  'use strict';
+
+  var T = 100;        // total days
+  var HMIN = 10;      // minimum health: every day is a sick day
+  var HCAP = 100;     // health ceiling the production function approaches
+  var TAU = 40;       // days of health time per "e-fold" of health production (baseline)
+  var KAPPA = 8;      // health points that cut sick time by a factor of e
+  var ALPHA_D = 0.43; // preference weight on health that puts Ed at point D (slide's U2)
+  var E_SHARE = 0.24; // E uses 24% of the health days needed to reach C
+
+  function bisect(f, lo, hi, iters) {
+    var flo = f(lo), fhi = f(hi);
+    if (flo === 0) return lo;
+    if (fhi === 0) return hi;
+    if ((flo > 0) === (fhi > 0)) throw new Error('bisect: no sign change on [' + lo + ', ' + hi + ']');
+    for (var i = 0; i < (iters || 200); i++) {
+      var mid = 0.5 * (lo + hi), fm = f(mid);
+      if (fm === 0 || hi - lo < 1e-13) return mid;
+      if ((fm > 0) === (flo > 0)) { lo = mid; flo = fm; } else { hi = mid; }
+    }
+    return 0.5 * (lo + hi);
+  }
+
+  function createModel(eff) {
+    eff = eff || 1;
+    var k = eff / TAU;
+
+    function health(th) { return HMIN + (HCAP - HMIN) * (1 - Math.exp(-k * th)); }
+    function sickTime(h) { return T * Math.exp(-(h - HMIN) / KAPPA); }
+    function dHealth(th) { return (HCAP - HMIN) * k * Math.exp(-k * th); }
+    // Sick days saved per extra day spent on health (marginal rate, dimensionless)
+    function saved(th) { return sickTime(health(th)) / KAPPA * dHealth(th); }
+
+    function at(th) {
+      var h = health(th), tl = sickTime(h), tb = T - th - tl;
+      return { th: th, h: h, tl: tl, tb: tb, b: Math.max(0, tb) };
+    }
+
+    // C: one more health day saves exactly one sick day (bread time is maximized)
+    var thC = bisect(function (t) { return saved(t) - 1; }, 0, T);
+    // F: all non-sick days go to health, bread time hits zero again
+    var thMax = bisect(function (t) { return T - t - sickTime(health(t)); }, thC, T);
+
+    // Slope of the frontier dH/dB at th (Infinity at C)
+    function slope(th) {
+      var dB = saved(th) - 1;
+      return dB === 0 ? Infinity : dHealth(th) / dB;
+    }
+
+    function utility(p, alpha) { return (1 - alpha) * Math.log(p.b) + alpha * Math.log(p.h); }
+
+    // Ed's best point for preference weight alpha on health (Cobb-Douglas B^(1-a) H^a)
+    function bestPoint(alpha) {
+      if (alpha <= 0) return at(thC);
+      if (alpha >= 1) return at(thMax);
+      var M = 4000, bestI = 0, bestU = -Infinity, i, t, p, u;
+      for (i = 0; i <= M; i++) {
+        t = thC + (thMax - thC) * i / M;
+        p = at(t);
+        if (p.b <= 0) continue;
+        u = utility(p, alpha);
+        if (u > bestU) { bestU = u; bestI = i; }
+      }
+      var lo = thC + (thMax - thC) * Math.max(0, bestI - 1) / M;
+      var hi = thC + (thMax - thC) * Math.min(M, bestI + 1) / M;
+      var f = function (s) { var q = at(s); return q.b > 0 ? utility(q, alpha) : -Infinity; };
+      var g = (Math.sqrt(5) - 1) / 2;
+      var c = hi - g * (hi - lo), d = lo + g * (hi - lo), fc = f(c), fd = f(d);
+      for (i = 0; i < 90; i++) {
+        if (fc > fd) { hi = d; d = c; fd = fc; c = hi - g * (hi - lo); fc = f(c); }
+        else { lo = c; c = d; fc = fd; d = lo + g * (hi - lo); fd = f(d); }
+      }
+      return at(0.5 * (lo + hi));
+    }
+
+    // Indifference curve through p for weight alpha, as [b, h] pairs clipped to a box
+    function indifference(alpha, p, bMax, hMax) {
+      bMax = bMax || 110; hMax = hMax || 110;
+      if (alpha <= 0) return [[p.b, 0], [p.b, hMax]];
+      if (alpha >= 1) return [[0, p.h], [bMax, p.h]];
+      var pts = [], n = 240, i, x, y, e;
+      if (alpha < 0.5) {            // nearly vertical: write B as a function of H
+        e = alpha / (1 - alpha);
+        for (i = 0; i <= n; i++) {
+          y = 0.5 + (hMax - 0.5) * i / n;
+          x = p.b * Math.pow(p.h / y, e);
+          if (x <= bMax) pts.push([x, y]);
+        }
+      } else {                      // nearly horizontal: write H as a function of B
+        e = (1 - alpha) / alpha;
+        for (i = 0; i <= n; i++) {
+          x = 0.5 + (bMax - 0.5) * i / n;
+          y = p.h * Math.pow(p.b / x, e);
+          if (y <= hMax) pts.push([x, y]);
+        }
+      }
+      // make sure the curve passes exactly through the chosen point
+      pts.push([p.b, p.h]);
+      pts.sort(function (a, b) { return a[0] - b[0]; });
+      return pts;
+    }
+
+    // Region of feasible points with more bread AND more health than the point at th0
+    function dominance(th0) {
+      if (!(th0 < thC)) return null;
+      var P = at(th0);
+      var thQ = bisect(function (t) { return at(t).b - P.b; }, thC, thMax);
+      var poly = [], n = 120, i, q;
+      for (i = 0; i <= n; i++) { q = at(th0 + (thC - th0) * i / n); poly.push([q.b, q.h]); }
+      for (i = 1; i <= n; i++) { q = at(thC + (thQ - thC) * i / n); poly.push([q.b, q.h]); }
+      return { P: P, Q: at(thQ), polygon: poly };
+    }
+
+    // Dense samples along the frontier: lower branch (A to C) and upper branch (C to F)
+    function branch(t0, t1, n, pow) {
+      var out = [], i;
+      for (i = 0; i <= n; i++) out.push(at(t0 + (t1 - t0) * Math.pow(i / n, pow)));
+      return out;
+    }
+    var lower = branch(0, thC, 600, 1.6);
+    var upper = branch(thC, thMax, 900, 1.8);
+
+    var thE = E_SHARE * thC;
+    var named = {
+      A: at(0),
+      E: at(thE),
+      C: at(thC),
+      D: bestPoint(ALPHA_D),
+      F: at(thMax)
+    };
+
+    return {
+      eff: eff, T: T, HMIN: HMIN, ALPHA_D: ALPHA_D,
+      health: health, sickTime: sickTime, saved: saved, at: at, slope: slope,
+      utility: utility, bestPoint: bestPoint, indifference: indifference, dominance: dominance,
+      thC: thC, thMax: thMax, thE: thE, named: named, lower: lower, upper: upper
+    };
+  }
+
+  var api = { createModel: createModel, bisect: bisect };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  else root.GrossmanModel = api;
+})(this);
+</script>
+<script>(function () {
+  'use strict';
+
+  var GM = window.GrossmanModel;
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var VB = { w: 568, h: 480 };
+  var PLOT = { left: 66, right: 540, top: 44, bottom: 422 };
+  var ALPHA_D = 0.43;
+
+  // ---------- small helpers ----------
+  function $(id) { return document.getElementById(id); }
+  function xOf(b) { return PLOT.left + (PLOT.right - PLOT.left) * b / 100; }
+  function yOf(h) { return PLOT.bottom - (PLOT.bottom - PLOT.top) * h / 100; }
+  function r1(v) { return Math.round(v * 10) / 10; }
+  function fmt1(v) { var s = (Math.round(v * 10) / 10).toFixed(1); return s === '-0.0' ? '0.0' : s; }
+  function el(tag, attrs, parent, text) {
+    var n = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) if (Object.prototype.hasOwnProperty.call(attrs, k)) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function pathFrom(pairs, close) {
+    var d = '';
+    for (var i = 0; i < pairs.length; i++) d += (i ? 'L' : 'M') + r1(xOf(pairs[i][0])) + ' ' + r1(yOf(pairs[i][1]));
+    return close ? d + 'Z' : d;
+  }
+  function show(node, on) { node.style.display = on ? '' : 'none'; }
+  function setText(id, value) { var n = $(id); if (n.textContent !== value) n.textContent = value; }
+
+  // ---------- models (cached by efficiency in tenths) ----------
+  var cache = {};
+  function getModel(tenths) {
+    if (!cache[tenths]) {
+      var m = GM.createModel(tenths / 10);
+      m.pts = m.lower.concat(m.upper.slice(1));
+      m.px = []; m.py = []; m.cum = [0];
+      for (var i = 0; i < m.pts.length; i++) {
+        m.px.push(xOf(m.pts[i].b)); m.py.push(yOf(m.pts[i].h));
+        if (i) {
+          var dx = m.px[i] - m.px[i - 1], dy = m.py[i] - m.py[i - 1];
+          m.cum.push(m.cum[i - 1] + Math.sqrt(dx * dx + dy * dy));
+        }
+      }
+      m.len = m.cum[m.cum.length - 1];
+      m.d = pathFrom(m.pts.map(function (p) { return [p.b, p.h]; }));
+      cache[tenths] = m;
+    }
+    return cache[tenths];
+  }
+  var BASE = getModel(10);
+
+  // slider position (0..1, by distance along the drawn curve) <-> health days
+  function thFromFraction(m, f) {
+    var target = Math.min(Math.max(f, 0), 1) * m.len, lo = 0, hi = m.cum.length - 1;
+    while (hi - lo > 1) { var mid = (lo + hi) >> 1; if (m.cum[mid] <= target) lo = mid; else hi = mid; }
+    var seg = m.cum[hi] - m.cum[lo], w = seg > 0 ? (target - m.cum[lo]) / seg : 0;
+    return m.pts[lo].th + w * (m.pts[hi].th - m.pts[lo].th);
+  }
+  function fractionFromTh(m, th) {
+    var lo = 0, hi = m.pts.length - 1;
+    if (th <= m.pts[0].th) return 0;
+    if (th >= m.pts[hi].th) return 1;
+    while (hi - lo > 1) { var mid = (lo + hi) >> 1; if (m.pts[mid].th <= th) lo = mid; else hi = mid; }
+    var span = m.pts[hi].th - m.pts[lo].th, w = span > 0 ? (th - m.pts[lo].th) / span : 0;
+    return (m.cum[lo] + w * (m.cum[hi] - m.cum[lo])) / m.len;
+  }
+  // gentle magnets at A, C and F so students can land on them exactly
+  function snap(m, th) {
+    if (th < 0.03) return 0;
+    if (Math.abs(th - m.thC) < 0.35) return m.thC;
+    if (m.thMax - th < 0.6) return m.thMax;
+    return Math.min(Math.max(th, 0), m.thMax);
+  }
+  function nearestTh(m, x, y) {
+    var best = Infinity, bi = 0;
+    for (var i = 0; i < m.pts.length; i++) {
+      var dx = m.px[i] - x, dy = m.py[i] - y, d = dx * dx + dy * dy;
+      if (d < best) { best = d; bi = i; }
+    }
+    return m.pts[bi].th;
+  }
+
+  // ---------- lesson content ----------
+  var POINTS = {
+    A: { title: 'A: minimum health', text: 'Ed is so sick that all 100 days are sick days. He has no time for work, play, or even improving his health, so he makes no bread.' },
+    E: { title: 'E: the free-lunch zone', text: 'A small improvement in health wins back a lot of sick time, so Ed gets more health and more bread at the same time. Nobody would stop here: every point in the blue area beats E on both counts.' },
+    C: { title: 'C: the most bread possible', text: 'The last day spent on health saves exactly one sick day. Below C, time spent on health pays for itself; above C, it doesn’t. Someone who values health only as an investment picks C.' },
+    D: { title: 'D: the tradeoff zone', text: 'Past C, an extra day on health saves less than a day of sickness, so more health costs bread. Someone who also values health for its own sake (indifference curve U2) chooses a point like D.' },
+    F: { title: 'F: all-in on health', text: 'Ed spends every healthy day producing health and makes no bread. Only someone who cares about health alone would choose F.' }
+  };
+
+  var QUIZ = [
+    { q: 'At point A, Ed makes no bread at all. Why?',
+      options: ['He spends every day producing health', 'He is so sick that all 100 days are sick days', 'He prefers leisure to bread', 'Bread is too expensive at A'],
+      answer: 1,
+      why: 'At minimum health, every day is a sick day, so nothing is left for work, play, or even improving his health.',
+      view: { point: 'A' } },
+    { q: 'Starting at A, Ed spends a few days on health. What happens?',
+      options: ['More health, less bread', 'More health and more bread', 'Less health, more bread', 'Nothing changes until he reaches C'],
+      answer: 1,
+      why: 'This is the free-lunch zone. A little time on health wipes out a lot of sick time, so health and bread both go up.',
+      view: { point: 'E' } },
+    { q: 'Why is C the point with the most bread?',
+      options: ['Ed’s health is at its maximum at C', 'Sick time drops to zero at C', 'One more day on health saves exactly one sick day, so bread time stops growing', 'Ed stops working at C'],
+      answer: 2,
+      why: 'Below C, a day on health saves more than a day of sickness, so bread time grows. Above C, it saves less, so bread time shrinks. Sick time isn’t zero at C: look at the red days.',
+      view: { point: 'C' } },
+    { q: 'Would a rational person ever choose point E?',
+      options: ['No, because moving toward C gives more health and more bread', 'Yes, if they care mostly about bread', 'Yes, if they care mostly about health', 'Only if they care about nothing but health'],
+      answer: 0,
+      why: 'Every point between A and C is beaten by points with more of both. The blue area shows the points that beat E.',
+      view: { point: 'E', dominance: true } },
+    { q: 'Ed cares only about bread, so his indifference curves are vertical (U1). Where does he end up?',
+      options: ['A', 'E', 'C', 'F'],
+      answer: 2,
+      why: 'Only bread counts, so he goes as far right as the frontier allows: point C. Health still matters to him, but only for the days it frees up.',
+      view: { alpha: 0 } },
+    { q: 'Ed values both health and bread (U2). Compared with C, his best point has…',
+      options: ['More health and less bread', 'Less health and more bread', 'More of both', 'The same health and bread'],
+      answer: 0,
+      why: 'His indifference curve touches the tradeoff part of the frontier at a point like D. He gives up some bread because feeling healthy is worth something to him directly.',
+      view: { alpha: ALPHA_D } },
+    { q: 'What if Ed cares only about health?',
+      options: ['He picks A', 'He picks C', 'He picks D', 'He picks F'],
+      answer: 3,
+      why: 'His indifference curves are horizontal, so he climbs as high as the frontier goes: point F, with no bread at all.',
+      view: { alpha: 1 } }
+  ];
+
+  // ---------- state ----------
+  var S = {
+    step: 1,
+    th: 0,
+    point: null,
+    alpha: ALPHA_D,
+    effTenths: 10,
+    quiz: { i: 0, checked: false, choice: null, correct: 0, done: false, builtFor: -1 }
+  };
+
+  // ---------- static graph ----------
+  var svg = $('ppf');
+  svg.setAttribute('viewBox', '0 0 ' + VB.w + ' ' + VB.h);
+  var defs = el('defs', {}, svg);
+  var clip = el('clipPath', { id: 'plot-clip' }, defs);
+  el('rect', { x: PLOT.left, y: PLOT.top, width: PLOT.right - PLOT.left, height: PLOT.bottom - PLOT.top }, clip);
+
+  el('rect', { class: 'plot-bg', x: PLOT.left, y: PLOT.top, width: PLOT.right - PLOT.left, height: PLOT.bottom - PLOT.top }, svg);
+  var gGrid = el('g', { class: 'grid', 'aria-hidden': 'true' }, svg);
+  for (var v = 5; v < 100; v += 5) {
+    var cls = v % 20 === 0 ? 'major' : 'minor';
+    el('line', { class: cls, x1: xOf(v), x2: xOf(v), y1: PLOT.top, y2: PLOT.bottom }, gGrid);
+    el('line', { class: cls, x1: PLOT.left, x2: PLOT.right, y1: yOf(v), y2: yOf(v) }, gGrid);
+  }
+  var gAxes = el('g', { class: 'axes', 'aria-hidden': 'true' }, svg);
+  el('line', { class: 'axis', x1: PLOT.left, y1: PLOT.bottom, x2: PLOT.right, y2: PLOT.bottom }, gAxes);
+  el('line', { class: 'axis', x1: PLOT.left, y1: PLOT.bottom, x2: PLOT.left, y2: PLOT.top }, gAxes);
+  for (v = 0; v <= 100; v += 20) {
+    el('text', { class: 'tick', x: xOf(v), y: PLOT.bottom + 24, 'text-anchor': 'middle' }, gAxes, String(v));
+    if (v > 0) el('text', { class: 'tick', x: PLOT.left - 10, y: yOf(v) + 6, 'text-anchor': 'end' }, gAxes, String(v));
+  }
+  el('line', { class: 'axis', x1: PLOT.left - 6, x2: PLOT.left, y1: yOf(10), y2: yOf(10) }, gAxes);
+  var hmin = el('text', { class: 'tick math', x: PLOT.left - 10, y: yOf(10) + 6, 'text-anchor': 'end' }, gAxes, 'H');
+  el('tspan', { class: 'sub', dy: '5' }, hmin, 'min');
+  el('text', { class: 'axis-title', x: 8, y: 24 }, gAxes, 'Health');
+  el('text', { class: 'axis-title', x: (PLOT.left + PLOT.right) / 2, y: VB.h - 8, 'text-anchor': 'middle' }, gAxes, 'Bread (loaves)');
+
+  // ---------- dynamic graph layers ----------
+  var gClip = el('g', { 'clip-path': 'url(#plot-clip)' }, svg);
+  var domPath = el('path', { class: 'dom' }, gClip);
+  var guideH = el('line', { class: 'guide' }, gClip);
+  var guideV = el('line', { class: 'guide' }, gClip);
+  var basePath = el('path', { class: 'curve-base' }, gClip);
+  var icPath = el('path', { class: 'ic' }, gClip);
+  var curvePath = el('path', { class: 'curve' }, svg);
+  var curveHit = el('path', { class: 'curve-hit' }, svg);
+  var gNamed = el('g', { class: 'named' }, svg);
+  var zoneFree = el('text', { class: 'zone-label', x: xOf(18), y: yOf(4.2) }, svg, 'free-lunch zone');
+  var zoneTrade = el('text', { class: 'zone-label', x: xOf(58), y: yOf(80) }, svg, 'tradeoff zone');
+  var dot = el('circle', { class: 'dot', r: 8 }, svg);
+  var dotHit = el('circle', { class: 'dot-hit', r: 24 }, svg);
+
+  var LABEL_OFFSET = { A: [12, 28], E: [2, 26], C: [12, 8], D: [12, -11], F: [18, -12] };
+  var named = {};
+  ['A', 'E', 'C', 'D', 'F'].forEach(function (k) {
+    var g = el('g', { class: 'pt', 'data-key': k }, gNamed);
+    var c = el('circle', { r: 5 }, g);
+    var t = el('text', { class: 'pt-label' }, g, k);
+    g.addEventListener('click', function () {
+      if (S.step !== 1 && S.step !== 2) return;
+      S.th = BASE.named[k].th;
+      if (S.step === 2) S.point = k;
+      syncWalkSlider();
+      render();
+    });
+    named[k] = { g: g, c: c, t: t };
+  });
+
+  // ---------- drag and tap on the graph ----------
+  var dragging = false;
+  function svgPoint(evt) {
+    var ctm = svg.getScreenCTM();
+    if (!ctm) return null;
+    var pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(ctm.inverse());
+  }
+  function moveTo(evt) {
+    var p = svgPoint(evt);
+    if (!p) return;
+    var th = snap(BASE, nearestTh(BASE, p.x, p.y));
+    S.th = th;
+    if (S.step === 2) S.point = matchNamed(th);
+    syncWalkSlider();
+    render();
+  }
+  function matchNamed(th) {
+    var keys = ['A', 'E', 'C', 'D', 'F'];
+    for (var i = 0; i < keys.length; i++) {
+      var q = BASE.named[keys[i]], p = BASE.at(th);
+      var dx = xOf(q.b) - xOf(p.b), dy = yOf(q.h) - yOf(p.h);
+      if (dx * dx + dy * dy < 36) return keys[i];
+    }
+    return null;
+  }
+  dotHit.addEventListener('pointerdown', function (e) {
+    if (S.step !== 1 && S.step !== 2) return;
+    dragging = true;
+    try { dotHit.setPointerCapture(e.pointerId); } catch (err) { /* older browsers */ }
+    e.preventDefault();
+    moveTo(e);
+  });
+  dotHit.addEventListener('pointermove', function (e) { if (dragging) moveTo(e); });
+  function endDrag() { dragging = false; }
+  dotHit.addEventListener('pointerup', endDrag);
+  dotHit.addEventListener('pointercancel', endDrag);
+  curveHit.addEventListener('click', function (e) { if (S.step === 1 || S.step === 2) moveTo(e); });
+
+  // ---------- 100-day grid ----------
+  var daysBox = $('days'), cells = [];
+  for (var i = 0; i < 100; i++) { var c = document.createElement('i'); daysBox.appendChild(c); cells.push(c); }
+  function dayCounts(p) {
+    var parts = [Math.max(0, p.th), Math.max(0, p.tl), Math.max(0, p.tb)];
+    var sum = parts[0] + parts[1] + parts[2];
+    parts = parts.map(function (x) { return x * 100 / sum; });
+    var fl = parts.map(Math.floor), rem = 100 - fl[0] - fl[1] - fl[2];
+    var order = [0, 1, 2].sort(function (a, b) { return (parts[b] - fl[b]) - (parts[a] - fl[a]); });
+    for (var j = 0; j < rem; j++) fl[order[j % 3]]++;
+    return fl;
+  }
+
+  // ---------- views ----------
+  function currentModel() { return S.step === 5 ? getModel(S.effTenths) : BASE; }
+  function currentView(m) {
+    var v = { p: null, draggable: false, ic: null, dom: null, zoneLabels: false, names: ['A', 'E', 'C', 'D', 'F'] };
+    if (S.step === 1 || S.step === 2) {
+      v.p = m.at(S.th); v.draggable = true; v.zoneLabels = true;
+      v.dom = S.th < m.thC ? m.dominance(S.th) : null;
+    } else if (S.step === 3) {
+      v.p = m.bestPoint(S.alpha); v.ic = S.alpha;
+    } else if (S.step === 4) {
+      var q = QUIZ[S.quiz.i];
+      if (S.quiz.checked && !S.quiz.done && q) {
+        if (q.view.point) {
+          v.p = m.named[q.view.point];
+          if (q.view.dominance) v.dom = m.dominance(v.p.th);
+        } else {
+          v.p = m.bestPoint(q.view.alpha); v.ic = q.view.alpha;
+        }
+      }
+    } else if (S.step === 5) {
+      v.p = m.named.C; v.names = ['A', 'C', 'F'];
+    }
+    return v;
+  }
+
+  function zoneInfo(m, th) {
+    if (th <= 0) return { name: 'Point A: minimum health', text: 'Every one of Ed’s 100 days is a sick day, so he has no time to make bread, or even to improve his health. Drag the dot and watch what a little time on health does.' };
+    if (th >= m.thMax) return { name: 'Point F: all-in on health', text: 'Every healthy day goes to producing health, so Ed makes no bread at all.' };
+    if (th === m.thC) return { name: 'Point C: the most bread possible', text: 'The last day spent on health saves exactly one sick day, so bread time can’t grow any further. Move either way and bread falls.' };
+    if (th < m.thC) return { name: 'Free-lunch zone', text: 'Each extra day on health saves more than a day of sickness, so Ed gets more health and more bread at the same time. The blue area shows spots that beat this one on both counts.' };
+    return { name: 'Tradeoff zone', text: 'An extra day on health now saves less than a day of sickness, so more health costs bread.' };
+  }
+  function marginText(m, p) {
+    if (p.th >= m.thMax) return 'Ed has no bread days left to give up.';
+    if (p.th === m.thC) return 'One more day on health saves about <b>1</b> sick day, so bread time stays flat.';
+    var s = m.saved(p.th);
+    var f = s >= 10 ? s.toFixed(0) : s >= 2 ? s.toFixed(1) : s.toFixed(2);
+    if (s > 1) return 'One more day on health saves about <b>' + f + '</b> sick days, so bread time <b>rises</b>.';
+    return 'One more day on health saves only about <b>' + f + '</b> sick days, so bread time <b>falls</b>.';
+  }
+
+  // ---------- render ----------
+  function render() {
+    var m = currentModel(), view = currentView(m);
+
+    curvePath.setAttribute('d', m.d);
+    curveHit.setAttribute('d', m.d);
+    show(curveHit, view.draggable);
+    basePath.setAttribute('d', BASE.d);
+    var baseOn = S.step === 5 && S.effTenths !== 10;
+    show(basePath, baseOn);
+
+    if (view.dom) domPath.setAttribute('d', pathFrom(view.dom.polygon, true));
+    show(domPath, !!view.dom);
+
+    if (view.ic !== null && view.p) icPath.setAttribute('d', pathFrom(m.indifference(view.ic, view.p, 104, 104)));
+    show(icPath, view.ic !== null && !!view.p);
+
+    ['A', 'E', 'C', 'D', 'F'].forEach(function (k) {
+      var p = m.named[k], n = named[k], on = view.names.indexOf(k) >= 0;
+      show(n.g, on);
+      if (!on) return;
+      var x = xOf(p.b), y = yOf(p.h);
+      n.c.setAttribute('cx', r1(x)); n.c.setAttribute('cy', r1(y));
+      n.t.setAttribute('x', r1(x + LABEL_OFFSET[k][0])); n.t.setAttribute('y', r1(y + LABEL_OFFSET[k][1]));
+      n.g.classList.toggle('clickable', view.draggable);
+    });
+
+    show(zoneFree, view.zoneLabels); show(zoneTrade, view.zoneLabels);
+
+    if (view.p) {
+      var x = xOf(view.p.b), y = yOf(view.p.h);
+      dot.setAttribute('cx', r1(x)); dot.setAttribute('cy', r1(y));
+      dotHit.setAttribute('cx', r1(x)); dotHit.setAttribute('cy', r1(y));
+      guideH.setAttribute('x1', PLOT.left); guideH.setAttribute('x2', r1(x)); guideH.setAttribute('y1', r1(y)); guideH.setAttribute('y2', r1(y));
+      guideV.setAttribute('x1', r1(x)); guideV.setAttribute('x2', r1(x)); guideV.setAttribute('y1', r1(y)); guideV.setAttribute('y2', PLOT.bottom);
+    }
+    show(dot, !!view.p); show(guideH, !!view.p); show(guideV, !!view.p);
+    show(dotHit, !!view.p && view.draggable);
+
+    $('lg-dot').hidden = !view.p;
+    $('lg-dom').hidden = !view.dom;
+    $('lg-ic').hidden = !(view.ic !== null && view.p);
+    $('lg-base').hidden = !baseOn;
+
+    renderReadout(m, view.p);
+    if (S.step === 1) renderWalk(m);
+    if (S.step === 2) renderPoints(m);
+    if (S.step === 3) renderChoice(m);
+    if (S.step === 4) renderQuiz();
+    if (S.step === 5) renderBonus(m);
+  }
+
+  function renderReadout(m, p) {
+    var box = $('readout');
+    box.classList.toggle('is-empty', !p);
+    if (!p) {
+      ['ro-b', 'ro-h', 'ro-th', 'ro-tl', 'ro-tb'].forEach(function (id) { setText(id, '–'); });
+      for (var j = 0; j < 100; j++) cells[j].className = '';
+      daysBox.setAttribute('aria-label', 'Ed’s 100 days: hidden until you answer');
+      setText('ro-margin', S.quiz.done ? 'Pick any step above to keep exploring.' : 'Answer the question to see where Ed ends up.');
+      return;
+    }
+    setText('ro-b', fmt1(p.b));
+    setText('ro-h', fmt1(p.h));
+    setText('ro-th', fmt1(p.th));
+    setText('ro-tl', fmt1(p.tl));
+    setText('ro-tb', fmt1(p.b));
+    var n = dayCounts(p);
+    for (var k = 0; k < 100; k++) {
+      var want = k < n[0] ? 'h' : k < n[0] + n[1] ? 's' : 'b';
+      if (cells[k].className !== want) cells[k].className = want;
+    }
+    daysBox.setAttribute('aria-label', 'Ed’s 100 days: ' + fmt1(p.th) + ' producing health, ' + fmt1(p.tl) + ' sick, ' + fmt1(p.b) + ' making bread');
+    var mt = marginText(m, p);
+    if ($('ro-margin').innerHTML !== mt) $('ro-margin').innerHTML = mt;
+  }
+
+  // ---------- step 1: walk the curve ----------
+  var walk = $('walk');
+  function syncWalkSlider() { walk.value = String(Math.round(fractionFromTh(BASE, S.th) * 1000)); }
+  walk.addEventListener('input', function () {
+    var th = snap(BASE, thFromFraction(BASE, Number(walk.value) / 1000));
+    S.th = th;
+    if (S.step === 2) S.point = matchNamed(th);
+    var want = String(Math.round(fractionFromTh(BASE, th) * 1000));
+    if (want !== walk.value && (th === 0 || th === BASE.thC || th === BASE.thMax)) walk.value = want;
+    render();
+  });
+  function renderWalk(m) {
+    setText('walk-out', fmt1(S.th));
+    var z = zoneInfo(m, S.th);
+    setText('zone-name', z.name);
+    setText('zone-text', z.text);
+  }
+
+  // ---------- step 2: key points ----------
+  Array.prototype.forEach.call(document.querySelectorAll('[data-point]'), function (b) {
+    b.addEventListener('click', function () {
+      var k = b.getAttribute('data-point');
+      S.point = k; S.th = BASE.named[k].th;
+      syncWalkSlider();
+      render();
+    });
+  });
+  function renderPoints(m) {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-point]'), function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-point') === S.point ? 'true' : 'false');
+    });
+    if (S.point) {
+      setText('pc-title', POINTS[S.point].title);
+      setText('pc-text', POINTS[S.point].text);
+    } else {
+      var z = zoneInfo(m, S.th);
+      setText('pc-title', z.name);
+      setText('pc-text', z.text);
+    }
+  }
+
+  // ---------- step 3: preferences ----------
+  var alphaInput = $('alpha');
+  alphaInput.addEventListener('input', function () { S.alpha = Number(alphaInput.value) / 100; render(); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-alpha]'), function (b) {
+    b.addEventListener('click', function () {
+      S.alpha = Number(b.getAttribute('data-alpha'));
+      alphaInput.value = String(Math.round(S.alpha * 100));
+      render();
+    });
+  });
+  function renderChoice(m) {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-alpha]'), function (b) {
+      b.setAttribute('aria-pressed', Math.abs(Number(b.getAttribute('data-alpha')) - S.alpha) < 1e-9 ? 'true' : 'false');
+    });
+    var p = m.bestPoint(S.alpha), C = m.named.C, title, text;
+    if (S.alpha <= 0) {
+      title = 'Ed picks C';
+      text = 'His indifference curves are vertical (U1): only bread counts, and health matters only for the days it frees up. He goes as far right as the frontier allows.';
+    } else if (S.alpha >= 1) {
+      title = 'Ed picks F';
+      text = 'His indifference curves are horizontal: only health counts. He climbs as high as the frontier goes and makes no bread.';
+    } else {
+      var where = Math.abs(S.alpha - ALPHA_D) < 1e-9 ? 'D' : p.th - m.thC < 1 ? 'a point just past C' : m.thMax - p.th < 3 ? 'a point close to F' : 'a point like D';
+      title = 'Ed picks ' + where;
+      text = 'His indifference curve just touches the tradeoff part of the frontier. Compared with C, he has ' + fmt1(p.h - C.h) +
+        ' more health and ' + fmt1(C.b - p.b) + ' fewer loaves. He gives up bread because feeling healthy is worth something to him directly.';
+    }
+    setText('choice-title', title);
+    setText('choice-text', text);
+  }
+
+  // ---------- step 4: quiz ----------
+  function renderQuiz() {
+    var Q = S.quiz, q = QUIZ[Q.i];
+    $('quiz-live').hidden = Q.done;
+    $('quiz-done').hidden = !Q.done;
+    if (Q.done) {
+      $('quiz-score').textContent = 'You got ' + Q.correct + ' of ' + QUIZ.length + ' right on the first try.';
+      return;
+    }
+    $('quiz-progress').textContent = 'Question ' + (Q.i + 1) + ' of ' + QUIZ.length;
+    if (Q.builtFor !== Q.i) {
+      $('quiz-question').textContent = q.q;
+      var box = $('quiz-options');
+      box.textContent = '';
+      q.options.forEach(function (label, idx) {
+        var lab = document.createElement('label');
+        lab.className = 'opt';
+        var inp = document.createElement('input');
+        inp.type = 'radio'; inp.name = 'quiz-opt'; inp.value = String(idx);
+        inp.addEventListener('change', function () { Q.choice = idx; $('quiz-error').hidden = true; });
+        var span = document.createElement('span');
+        span.textContent = label;
+        lab.appendChild(inp); lab.appendChild(span);
+        box.appendChild(lab);
+      });
+      Q.builtFor = Q.i;
+    }
+    var inputs = document.querySelectorAll('#quiz-options input');
+    Array.prototype.forEach.call(inputs, function (inp, idx) {
+      inp.disabled = Q.checked;
+      var lab = inp.parentNode;
+      lab.classList.toggle('is-correct', Q.checked && idx === q.answer);
+      lab.classList.toggle('is-wrong', Q.checked && idx === Q.choice && idx !== q.answer);
+    });
+    $('quiz-feedback').hidden = !Q.checked;
+    $('quiz-check').hidden = Q.checked;
+    $('quiz-next').hidden = !Q.checked;
+    $('quiz-next').textContent = Q.i === QUIZ.length - 1 ? 'See your score' : 'Next question';
+    if (Q.checked) {
+      var right = Q.choice === q.answer;
+      $('quiz-verdict').textContent = right ? 'Right.' : 'Not quite. The answer is: ' + q.options[q.answer] + '.';
+      $('quiz-verdict').className = 'verdict ' + (right ? 'ok' : 'no');
+      $('quiz-why').textContent = q.why;
+    }
+  }
+  $('quiz-check').addEventListener('click', function () {
+    var Q = S.quiz;
+    if (Q.choice === null) {
+      $('quiz-error').hidden = false;
+      var first = document.querySelector('#quiz-options input');
+      if (first) first.focus();
+      return;
+    }
+    Q.checked = true;
+    if (Q.choice === QUIZ[Q.i].answer) Q.correct++;
+    render();
+    $('quiz-next').focus();
+  });
+  $('quiz-next').addEventListener('click', function () {
+    var Q = S.quiz;
+    Q.i++; Q.checked = false; Q.choice = null;
+    if (Q.i >= QUIZ.length) { Q.done = true; Q.i = QUIZ.length - 1; }
+    render();
+    if (Q.done) $('quiz-restart').focus(); else $('quiz-question-focus').focus();
+  });
+  $('quiz-restart').addEventListener('click', function () {
+    S.quiz = { i: 0, checked: false, choice: null, correct: 0, done: false, builtFor: -1 };
+    render();
+    $('quiz-question-focus').focus();
+  });
+
+  // ---------- step 5: shift the curve ----------
+  var effInput = $('eff');
+  effInput.addEventListener('input', function () { S.effTenths = Number(effInput.value); render(); });
+  function renderBonus(m) {
+    $('eff-out').textContent = (S.effTenths / 10).toFixed(1) + '×';
+    $('cmp-cb-base').textContent = fmt1(BASE.named.C.b);
+    $('cmp-cb-now').textContent = fmt1(m.named.C.b);
+    $('cmp-fh-base').textContent = fmt1(BASE.named.F.h);
+    $('cmp-fh-now').textContent = fmt1(m.named.F.h);
+    $('cmp-thc-base').textContent = fmt1(BASE.thC);
+    $('cmp-thc-now').textContent = fmt1(m.thC);
+    var t;
+    if (S.effTenths > 10) t = 'The frontier shifts out. Ed can make more bread at C and reach more health at F, and he gets to C with fewer days spent on health.';
+    else if (S.effTenths < 10) t = 'The frontier shifts in. Ed makes less bread at C, can’t reach as much health at F, and needs more days on health to get to C.';
+    else t = 'Move the slider to change how productive each day on health is. The dashed curve will keep the original frontier for comparison.';
+    setText('eff-text', t);
+  }
+
+  // ---------- tabs ----------
+  var tabs = [1, 2, 3, 4, 5].map(function (n) { return $('tab-' + n); });
+  function setStep(n, focusTab) {
+    S.step = n;
+    tabs.forEach(function (tab, idx) {
+      var on = idx + 1 === n;
+      tab.setAttribute('aria-selected', on ? 'true' : 'false');
+      tab.tabIndex = on ? 0 : -1;
+      $('panel-' + (idx + 1)).hidden = !on;
+    });
+    if (focusTab) tabs[n - 1].focus();
+    if (n === 2 && S.point === null) S.point = matchNamed(S.th);
+    render();
+  }
+  tabs.forEach(function (tab, idx) {
+    tab.addEventListener('click', function () { setStep(idx + 1, false); });
+    tab.addEventListener('keydown', function (e) {
+      var n = S.step;
+      if (e.key === 'ArrowRight') n = n % 5 + 1;
+      else if (e.key === 'ArrowLeft') n = (n + 3) % 5 + 1;
+      else if (e.key === 'Home') n = 1;
+      else if (e.key === 'End') n = 5;
+      else return;
+      e.preventDefault();
+      setStep(n, true);
+    });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-goto]'), function (b) {
+    b.addEventListener('click', function () {
+      setStep(Number(b.getAttribute('data-goto')), true);
+      var top = document.querySelector('.steps');
+      if (top && top.scrollIntoView) top.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    });
+  });
+
+  // ---------- start ----------
+  syncWalkSlider();
+  alphaInput.value = String(Math.round(S.alpha * 100));
+  effInput.value = String(S.effTenths);
+  setStep(1, false);
+})();
+</script>
+</body>
+</html>
