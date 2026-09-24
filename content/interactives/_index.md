@@ -110,6 +110,26 @@ margin: 0;
 </div>
 </div>
 
+<div class="interactive-item">
+<a class="interactive-title" href="/grossman-labor-leisure.html" target="_blank" rel="noopener noreferrer">Work, Leisure, and Healthy Time</a><br>
+<i>The labor–leisure trade-off and time constraint in the Grossman model</i><br>
+<strong>Launch:</strong> <a href="/grossman-labor-leisure.html" target="_blank" rel="noopener noreferrer">Open Labor–Leisure Interactive</a>
+<button class="accordion">Description</button>
+<div class="panel">
+<p>Explore how Ed divides healthy time between work and leisure. The interactive lesson develops the time constraint, introduces preferences and indifference curves, identifies the best choice, and shows how additional healthy time changes the feasible set and equilibrium.</p>
+</div>
+</div>
+
+<div class="interactive-item">
+<a class="interactive-title" href="/grossman-mei.html" target="_blank" rel="noopener noreferrer">How Much Health Is Worth Having?</a><br>
+<i>Marginal efficiency of investment in health and the Grossman model</i><br>
+<strong>Launch:</strong> <a href="/grossman-mei.html" target="_blank" rel="noopener noreferrer">Open Health Investment Interactive</a>
+<button class="accordion">Description</button>
+<div class="panel">
+<p>Find the optimal health stock by comparing the marginal efficiency of health investment with its user cost. Then explore the Grossman model's predictions for how age, wages, and education affect health, and check your understanding with guided questions.</p>
+</div>
+</div>
+
 <script>
 var acc = document.getElementsByClassName("accordion");
 var i;

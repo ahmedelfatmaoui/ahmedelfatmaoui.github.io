@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How much health is worth having?</title>
+<meta name="description" content="An interactive lesson on the marginal efficiency of investment in health and the Grossman model's predictions for age, wages, and education.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=STIX+Two+Text:ital,wght@0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EEF3F7; --sheet:#FBFDFF; --ink:#14233B; --ink-2:#4B5B71; --rule:#C3D1DE; --chip:#E1E9F1;
+  --grid-minor:#E3EBF3; --grid-major:#C9D7E5;
+  --health:#1C7F66; --sick:#B23F2A; --bread:#C28A1E; --pref:#5B4BCF;
+  --better:rgba(37,99,235,.14); --better-edge:#2563EB; --focus:#2563EB;
+  --ok:#17735C; --ok-bg:#E1F2EB; --no:#A83A26; --no-bg:#F7E4DF;
+  --cost:#C07A12; --cost-ink:#8A5300; --gain:rgba(28,127,102,.18); --gain-edge:#1C7F66; --loss:rgba(178,63,42,.16); --loss-edge:#B23F2A;
+  --sans:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --math:"STIX Two Text","Cambria Math",Cambria,"Times New Roman",Times,serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D1522; --sheet:#121C2C; --ink:#E6EDF6; --ink-2:#A4B3C6; --rule:#2A3A53; --chip:#1A2638;
+    --grid-minor:#172335; --grid-major:#23334B;
+    --health:#43BD97; --sick:#E0775E; --bread:#E3B24C; --pref:#A399FF;
+    --better:rgba(96,150,255,.18); --better-edge:#7AA7FF; --focus:#7AA7FF;
+    --ok:#5ED1AC; --ok-bg:#12302A; --no:#F08E77; --no-bg:#3A1F19;
+    --cost:#E7B04A; --cost-ink:#F0C46A; --gain:rgba(67,189,151,.2); --gain-edge:#43BD97; --loss:rgba(224,119,94,.2); --loss-edge:#E0775E;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0D1522; --sheet:#121C2C; --ink:#E6EDF6; --ink-2:#A4B3C6; --rule:#2A3A53; --chip:#1A2638;
+  --grid-minor:#172335; --grid-major:#23334B;
+  --health:#43BD97; --sick:#E0775E; --bread:#E3B24C; --pref:#A399FF;
+  --better:rgba(96,150,255,.18); --better-edge:#7AA7FF; --focus:#7AA7FF;
+  --ok:#5ED1AC; --ok-bg:#12302A; --no:#F08E77; --no-bg:#3A1F19;
+  --cost:#E7B04A; --cost-ink:#F0C46A; --gain:rgba(67,189,151,.2); --gain-edge:#43BD97; --loss:rgba(224,119,94,.2); --loss-edge:#E0775E;
+  color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none !important}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:1.0625rem;line-height:1.55;-webkit-font-smoothing:antialiased}
+.page{max-width:1220px;margin:0 auto;padding:clamp(18px,3vw,36px) clamp(16px,3vw,32px) 40px}
+h1,h2,h3{line-height:1.15;margin:0}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.masthead h1{font-size:clamp(1.8rem,1.2rem + 2vw,2.6rem);font-weight:700;letter-spacing:-.018em;max-width:21ch}
+.masthead .lede{margin:.75rem 0 0;max-width:64ch;color:var(--ink-2);font-size:1.08rem}
+@media (min-width:961px){.masthead{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:end}.masthead .lede{margin:0}}
+
+.steps{display:flex;gap:2px;margin:clamp(18px,2.6vw,28px) 0 clamp(16px,2.4vw,24px);border-bottom:2px solid var(--rule);overflow-x:auto;scrollbar-width:thin}
+.step{flex:0 0 auto;font:inherit;font-weight:700;font-size:1rem;color:var(--ink-2);background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:.65rem .9rem;cursor:pointer;display:flex;align-items:center;gap:.55rem;min-height:48px}
+.step .n{display:inline-grid;place-items:center;width:1.65rem;height:1.65rem;border-radius:50%;border:1.5px solid currentColor;font-size:.85rem;line-height:1}
+.step:hover{color:var(--ink)}
+.step[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.step[aria-selected="true"] .n{background:var(--ink);border-color:var(--ink);color:var(--sheet)}
+.step:focus-visible{outline-offset:-3px}
+.step .short{display:none}
+@media (max-width:600px){
+  .steps{gap:0;overflow-x:visible}
+  .step{flex:1 1 0;min-width:0;flex-direction:column;gap:3px;padding:.45rem .15rem .5rem;font-size:.82rem}
+  .step .long{display:none}
+  .step .short{display:inline}
+}
+
+.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:start}
+@media (max-width:960px){.layout{grid-template-columns:minmax(0,1fr)}}
+.figure{margin:0}
+@media (min-width:961px){.figure{position:sticky;top:calc(env(safe-area-inset-top,0px) + 14px)}#graph{max-height:max(300px,calc(100vh - 96px))}}
+.side{display:flex;flex-direction:column;gap:22px;min-width:0}
+.sheet{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:8px 8px 12px}
+#graph{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none}
+
+.plot-bg{fill:var(--sheet)}
+.grid .minor{stroke:var(--grid-minor);stroke-width:1}
+.grid .major{stroke:var(--grid-major);stroke-width:1}
+.axis{stroke:var(--ink);stroke-width:1.6}
+.tick{fill:var(--ink-2);font-family:var(--sans);font-size:15px}
+.math{font-family:var(--math);font-style:italic}
+.tick .sub{font-size:11px}
+.axis-title{fill:var(--ink);font-family:var(--sans);font-size:16px;font-weight:700}
+.axis-title .math{font-weight:500;font-size:18px}
+.curve{fill:none;stroke:var(--ink);stroke-width:3.2;stroke-linejoin:round;stroke-linecap:round}
+.curve-base{fill:none;stroke:var(--ink-2);stroke-width:2;stroke-dasharray:7 6}
+.guide{stroke:var(--ink-2);stroke-width:1.2;stroke-dasharray:5 5}
+.pt{pointer-events:none}
+.pt.clickable{pointer-events:auto;cursor:pointer}
+.pt circle{fill:var(--sheet);stroke:var(--ink);stroke-width:2}
+.pt-label{fill:var(--ink);font-family:var(--math);font-style:italic;font-size:23px;paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+.dot{fill:var(--ink);stroke:var(--sheet);stroke-width:3}
+.dot-hit{fill:transparent;pointer-events:all;cursor:grab;touch-action:none}
+.dot-hit:active{cursor:grabbing}
+
+.graph-legend{list-style:none;margin:4px 8px 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.92rem;color:var(--ink-2)}
+.graph-legend li{display:flex;align-items:center;gap:8px}
+.graph-legend i{display:inline-block;flex:none}
+.k-dot{width:12px;height:12px;border-radius:50%;background:var(--ink)}
+.k-base{width:26px;border-top:2px dashed var(--ink-2)}
+
+.readout{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:14px 16px 16px}
+.figures{display:flex;flex-wrap:wrap;gap:6px 30px;align-items:baseline}
+.figures p{margin:0;display:flex;align-items:baseline;gap:.45rem}
+.figures .lbl{font-weight:700;color:var(--ink-2);font-size:.95rem}
+.figures .num{font-size:2rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.figures .unit{color:var(--ink-2);font-size:.95rem}
+.readout.is-empty .num{color:var(--ink-2)}
+.margin{margin:12px 0 0;padding:.65rem .85rem;background:var(--chip);border-radius:8px}
+
+.panel h2{font-size:clamp(1.3rem,1.1rem + .8vw,1.6rem);margin-bottom:.6rem}
+.panel p{margin:0 0 .9rem;max-width:62ch}
+.ctl-label{display:block;font-weight:700;margin:1.1rem 0 .3rem}
+.ctl-label output{font-variant-numeric:tabular-nums}
+input[type=range]{display:block;width:100%;height:36px;margin:0;accent-color:var(--ink);cursor:pointer}
+input[type=range]:focus-visible{outline-offset:4px}
+.scale-ends{display:flex;justify-content:space-between;color:var(--ink-2);font-size:.9rem}
+.scale-ends .math{font-size:1.05rem}
+.note{margin:1.1rem 0;padding:.85rem 1rem;border-left:4px solid var(--ink);background:var(--sheet)}
+.note h3{font-size:1.12rem;margin-bottom:.35rem}
+.note p{margin:0}
+.try{color:var(--ink-2)}
+.try strong{color:var(--ink)}
+.btn{font:inherit;font-weight:700;font-size:1rem;line-height:1.2;color:var(--ink);background:transparent;border:1.5px solid var(--ink);border-radius:8px;padding:.6rem 1rem;min-height:44px;cursor:pointer}
+.btn:hover{background:var(--chip)}
+.btn[aria-pressed="true"],.btn-primary{background:var(--ink);color:var(--sheet)}
+.btn[aria-pressed="true"]:hover,.btn-primary:hover{background:var(--ink);opacity:.88}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin:.3rem 0 .4rem}
+.pick{display:flex;flex-wrap:wrap;gap:10px;margin:.2rem 0 .3rem}
+.pick-btn{width:56px;height:56px;padding:0;border-radius:10px;font-family:var(--math);font-style:italic;font-weight:500;font-size:1.7rem}
+
+.progress{font-weight:700;color:var(--ink-2);margin:0 0 .5rem}
+fieldset.quiz{border:0;margin:0;padding:0;min-width:0}
+fieldset.quiz legend{font-size:1.15rem;font-weight:700;line-height:1.35;margin:0 0 .75rem;padding:0}
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:.7rem;padding:.7rem .85rem;border:1.5px solid var(--rule);border-radius:8px;background:var(--sheet);cursor:pointer}
+.opt input{flex:none;width:1.15rem;height:1.15rem;margin:.2rem 0 0;accent-color:var(--ink)}
+.opt:has(input:checked){border-color:var(--ink)}
+.opt:has(input:disabled){cursor:default}
+.opt.is-correct{border-color:var(--ok);background:var(--ok-bg)}
+.opt.is-wrong{border-color:var(--no);background:var(--no-bg)}
+.opt.is-correct::after,.opt.is-wrong::after{margin-left:auto;padding-left:.6rem;font-size:.85rem;font-weight:700;white-space:nowrap}
+.opt.is-correct::after{content:"Correct answer";color:var(--ok)}
+.opt.is-wrong::after{content:"Your answer";color:var(--no)}
+.error{color:var(--no);font-weight:700;margin:.7rem 0 0}
+.verdict{font-weight:700}
+.verdict.ok{color:var(--ok)}
+.verdict.no{color:var(--no)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:1rem}
+.score{font-size:1.45rem;font-weight:700}
+
+.table-wrap{overflow-x:auto;margin:1rem 0}
+.compare{border-collapse:collapse;width:100%;min-width:320px;font-variant-numeric:tabular-nums}
+.compare th,.compare td{padding:.5rem .6rem;border-bottom:1px solid var(--rule);text-align:right}
+.compare th[scope="row"]{text-align:left;font-weight:400}
+.compare thead th{font-size:.9rem;color:var(--ink-2)}
+.compare td:last-child{font-weight:700}
+
+.foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);color:var(--ink-2);font-size:.92rem}
+.foot p{margin:0;max-width:72ch}
+
+@media (max-width:600px){
+  body{font-size:1rem}
+  .figures .num{font-size:1.7rem}
+  .sheet{padding:6px 4px 10px}
+  .tick{font-size:22px}
+  .tick .sub{font-size:15px}
+  .axis-title{font-size:20px}
+  .pt-label{font-size:30px;stroke-width:6px}
+  .graph-legend{font-size:.88rem}
+}
+
+/* MEI app */
+.cost-line{stroke:var(--cost);stroke-width:2.6}
+.cost-ref{stroke:var(--cost);stroke-width:1.4;stroke-dasharray:6 5;opacity:.85}
+.cost-label{fill:var(--cost-ink);font-family:var(--sans);font-size:15px;font-weight:700;paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+.cost-label .math,.xlabel .math{font-weight:500}
+.sub{font-size:.72em}
+.curve-label{fill:var(--ink);font-family:var(--sans);font-size:15px;font-weight:700;paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+.curve-label.faint{fill:var(--ink-2)}
+.xlabel{fill:var(--ink);font-family:var(--math);font-style:italic;font-size:19px}
+.area.gain{fill:var(--gain)} .area.loss{fill:var(--loss)}
+.gap{stroke-width:4.5;stroke-linecap:round}
+.gap.gain{stroke:var(--gain-edge)} .gap.loss{stroke:var(--loss-edge)}
+.plot-hit{fill:transparent;cursor:crosshair}
+.k-cost{width:26px;border-top:2.6px solid var(--cost)}
+.k-gain{width:18px;height:12px;background:var(--gain);border:1.2px solid var(--gain-edge)}
+.k-loss{width:18px;height:12px;background:var(--loss);border:1.2px solid var(--loss-edge)}
+.bars{display:grid;gap:9px;margin:14px 0 4px}
+.bar-row{display:grid;grid-template-columns:minmax(0,12.5rem) minmax(0,1fr) 4.2rem;align-items:center;gap:6px 10px;font-size:.95rem}
+.bar-lbl{color:var(--ink-2)}
+.bar{height:14px;background:var(--grid-minor);border-radius:3px;overflow:hidden}
+.fill{display:block;height:100%;width:0;border-radius:3px}
+.fill.ret{background:var(--ink)} .fill.cost{background:var(--cost)}
+.bar-row b{text-align:right;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:no-preference){.fill{transition:width .15s ease}}
+.life{display:block;width:100%;height:auto;margin:.4rem 0 .2rem}
+.life .lt{fill:var(--ink-2);font-family:var(--sans);font-size:12px}
+.life .lt-title{fill:var(--ink);font-family:var(--sans);font-size:13px;font-weight:700}
+.life .lgrid{stroke:var(--grid-minor)}
+.life .laxis{stroke:var(--ink);stroke-width:1.4}
+.life .lhmin{stroke:var(--ink-2);stroke-dasharray:4 4}
+.life .lcurve{fill:none;stroke:var(--ink);stroke-width:2.6}
+.life .lpt{fill:var(--sheet);stroke:var(--ink);stroke-width:1.8}
+.life .ldot{fill:var(--cost);stroke:var(--sheet);stroke-width:2.5}
+.life .lpt-label{fill:var(--ink);font-family:var(--math);font-style:italic;font-size:16px}
+.aside{font-size:.95rem;color:var(--ink-2);border-top:1px solid var(--rule);padding-top:.8rem}
+.presets sub,.btn sub{font-size:.7em}
+@media (max-width:600px){
+  .xlabel{font-size:24px}
+  .cost-label,.curve-label{font-size:20px;stroke-width:6px}
+  .life .lt{font-size:14px}
+  .life .lt-title{font-size:15px}
+  .bar-row{grid-template-columns:minmax(0,1fr) 4.2rem}
+  .bar-row .bar-lbl{grid-column:1 / -1}
+}
+.compare caption{text-align:left;font-weight:700;padding:0 0 .4rem}
+.scale-note{margin:.2rem 0 .6rem !important;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.life-cap{margin:1rem 0 0 !important;font-weight:700;font-size:.95rem}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <h1>How much health is worth having?</h1>
+    <p class="lede">In the Grossman model, health is capital. One more unit pays a return in healthy time; holding it costs the interest Ed could earn elsewhere (<span class="math">r</span>) plus the rate his health wears down (<span class="math">δ</span>). Ed invests until the two are equal.</p>
+  </header>
+
+  <main>
+    <div class="steps" role="tablist" aria-label="Lesson steps">
+      <button class="step" role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true"><span class="n" aria-hidden="true">1</span><span class="long">Find H*</span><span class="short">H*</span></button>
+      <button class="step" role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">2</span><span class="long">Aging</span><span class="short">Age</span></button>
+      <button class="step" role="tab" id="tab-3" aria-controls="panel-3" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">3</span><span class="long">A raise</span><span class="short">Wage</span></button>
+      <button class="step" role="tab" id="tab-4" aria-controls="panel-4" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">4</span><span class="long">Education</span><span class="short">School</span></button>
+      <button class="step" role="tab" id="tab-5" aria-controls="panel-5" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">5</span><span class="long">Check yourself</span><span class="short">Quiz</span></button>
+    </div>
+    <div class="layout">
+      <figure class="figure">
+        <div class="sheet">
+          <svg id="graph" role="img" aria-labelledby="g-title g-desc">
+            <title id="g-title">Marginal efficiency of investment in health and the cost of capital</title>
+            <desc id="g-desc">Rate of return is on the vertical axis and health stock on the horizontal axis. The downward-sloping MEI curve shows the return on one more unit of health; the flat line is the cost of capital, r plus delta. Ed’s best health stock, H*, is where they cross.</desc>
+          </svg>
+          <ul class="graph-legend" aria-label="Graph key">
+            <li id="lg-cost"><i class="k-cost"></i><span>Cost of capital, <span class="math">r</span> + <span class="math">δ</span></span></li>
+            <li id="lg-gain" hidden><i class="k-gain"></i><span>Return Ed gives up by stopping short</span></li>
+            <li id="lg-loss" hidden><i class="k-loss"></i><span>Loss on units that don’t cover their cost</span></li>
+            <li id="lg-base" hidden><i class="k-base"></i><span>Original MEI</span></li>
+          </ul>
+        </div>
+      </figure>
+
+      <div class="side">
+        <div class="readout" id="readout">
+          <div class="figures">
+            <p><span class="lbl" id="ro-k1"></span><span class="num" id="ro-v1"></span></p>
+            <p><span class="lbl" id="ro-k2"></span><span class="num" id="ro-v2"></span></p>
+          </div>
+          <div class="bars">
+            <div class="bar-row"><span class="bar-lbl" id="ro-b1-lbl"></span><span class="bar" aria-hidden="true"><i class="fill ret" id="ro-b1"></i></span><b id="ro-b1-v"></b></div>
+            <div class="bar-row"><span class="bar-lbl" id="ro-b2-lbl"></span><span class="bar" aria-hidden="true"><i class="fill cost" id="ro-b2"></i></span><b id="ro-b2-v"></b></div>
+          </div>
+          <p class="margin" id="ro-verdict"></p>
+        </div>
+
+        <div class="panels">
+          <section class="panel" role="tabpanel" id="panel-1" aria-labelledby="tab-1">
+            <h2>Find the best health stock</h2>
+            <p>The MEI curve shows what one more unit of health returns at each health stock; the amber line is what holding it costs. Drag the dot, tap the graph, or use the slider.</p>
+            <label class="ctl-label" for="hs">Ed’s health stock, <span class="math">H</span>: <output id="hs-out" for="hs">30.0</output></label>
+            <input type="range" id="hs" min="100" max="1000" step="1" value="300">
+            <div class="scale-ends" aria-hidden="true"><span><span class="math">H</span><sub>min</sub></span><span>Healthier</span></div>
+            <div class="note" aria-live="polite">
+              <h3 id="z-title"></h3>
+              <p id="z-text"></p>
+            </div>
+            <label class="ctl-label" for="rate">Interest rate, <span class="math">r</span>: <output id="rate-out" for="rate">5.0%</output></label>
+            <input type="range" id="rate" min="2" max="20" step="1" value="10">
+            <div class="scale-ends" aria-hidden="true"><span>1%</span><span>10%</span></div>
+            <p class="try"><strong>Try this:</strong> drop <span class="math">r</span> to 1%, as when interest rates are near zero. Where does <span class="math">H</span>* go? Then raise it to 10%, as if Ed paid for his gym membership with a credit card.</p>
+            <button class="btn" data-goto="2">Next: aging</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-2" aria-labelledby="tab-2" hidden>
+            <h2>Prediction 1: health declines with age</h2>
+            <p>As Ed gets older his health wears out faster, so <span class="math">δ</span> rises. That pushes the cost line up, while the MEI curve stays exactly where it was.</p>
+            <div class="presets" role="group" aria-label="Ages matching the slide">
+              <button class="btn" data-age="25" aria-pressed="true">Age 25 (<span class="math">δ</span><sub>0</sub>)</button>
+              <button class="btn" data-age="65" aria-pressed="false">Age 65 (<span class="math">δ</span><sub>1</sub>)</button>
+              <button class="btn" data-age="85" aria-pressed="false">Age 85 (<span class="math">δ</span><sub>D</sub>)</button>
+            </div>
+            <label class="ctl-label" for="age">Ed’s age: <output id="age-out" for="age">25</output></label>
+            <input type="range" id="age" min="25" max="85" step="1" value="25">
+            <p class="scale-note" id="delta-out"></p>
+            <p class="life-cap" aria-hidden="true">Ed’s best health stock, <span class="math">H</span>*, at each age</p>
+            <svg class="life" id="life" role="img" aria-labelledby="life-title"><title id="life-title">Ed’s best health stock at each age, falling from A at 25 to B at 85</title></svg>
+            <p class="try"><strong>Try this:</strong> move from 25 to 65. Did the MEI curve move at all? What did?</p>
+            <button class="btn" data-goto="3">Next: a raise</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-3" aria-labelledby="tab-3" hidden>
+            <h2>Prediction 2: higher earners are healthier</h2>
+            <p>A raise makes every healthy day Ed gains worth more money, so every unit of health returns more. The MEI shifts right to MEI′ while the cost line stays put.</p>
+            <div class="presets" role="group" aria-label="Wage presets">
+              <button class="btn" data-wage="10" aria-pressed="false">$10</button>
+              <button class="btn" data-wage="20" aria-pressed="true">$20 (start)</button>
+              <button class="btn" data-wage="40" aria-pressed="false">$40</button>
+            </div>
+            <label class="ctl-label" for="wage">Ed’s wage: <output id="wage-out" for="wage">$20</output> an hour</label>
+            <input type="range" id="wage" min="10" max="60" step="1" value="20">
+            <div class="scale-ends" aria-hidden="true"><span>$10</span><span>$60</span></div>
+            <div class="table-wrap">
+              <table class="compare">
+                <caption>Return on one more unit of health</caption>
+                <thead><tr><th scope="col">Health stock</th><th scope="col">At $20</th><th scope="col">Now</th><th scope="col">Change</th></tr></thead>
+                <tbody id="wage-rows"></tbody>
+              </table>
+            </div>
+            <p>Look at the change column: a raise multiplies every return, so MEI′ is stretched upward rather than slid. The gap is biggest at low health, where returns were already high.</p>
+            <p class="aside"><strong>One wrinkle:</strong> a raise also makes the time Ed spends on health more expensive, like hours at the doctor, so the textbook notes the overall effect could in principle go either way. The slide’s prediction assumes the higher payoff wins.</p>
+            <button class="btn" data-goto="4">Next: education</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-4" aria-labelledby="tab-4" hidden>
+            <h2>Prediction 3: the educated are healthier</h2>
+            <p>Educated people tend to be more efficient producers of health: the same time and medical care produce more health. In this made-up example, each year of school makes health investment 5% more productive, which shifts the MEI right, just like a raise.</p>
+            <div class="presets" role="group" aria-label="Schooling presets">
+              <button class="btn" data-school="10" aria-pressed="false">10 years (dropout)</button>
+              <button class="btn" data-school="12" aria-pressed="true">12 (high school)</button>
+              <button class="btn" data-school="16" aria-pressed="false">16 (college)</button>
+              <button class="btn" data-school="20" aria-pressed="false">20 (graduate)</button>
+            </div>
+            <label class="ctl-label" for="school">Years of school: <output id="school-out" for="school">12</output></label>
+            <input type="range" id="school" min="8" max="20" step="1" value="12">
+            <div class="scale-ends" aria-hidden="true"><span>8</span><span>20</span></div>
+            <div class="note" aria-live="polite"><p id="edu-text"></p></div>
+            <p class="try"><strong>Try this:</strong> compare 10 and 16 years. The slides point out that college grads benefit more than high school dropouts. Which piece of the graph explains that?</p>
+            <button class="btn" data-goto="5">Next: check yourself</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-5" aria-labelledby="tab-5" hidden>
+            <h2>Check yourself</h2>
+            <div id="quiz-live">
+              <p class="progress" id="quiz-question-focus" tabindex="-1"><span id="quiz-progress">Question 1 of 8</span></p>
+              <fieldset class="quiz">
+                <legend id="quiz-question"></legend>
+                <div class="opts" id="quiz-options"></div>
+              </fieldset>
+              <p class="error" id="quiz-error" role="alert" hidden>Pick an answer first.</p>
+              <div class="note" id="quiz-feedback" aria-live="polite" hidden>
+                <p class="verdict" id="quiz-verdict"></p>
+                <p id="quiz-why"></p>
+              </div>
+              <div class="actions">
+                <button class="btn btn-primary" id="quiz-check">Check answer</button>
+                <button class="btn btn-primary" id="quiz-next" hidden>Next question</button>
+              </div>
+            </div>
+            <div id="quiz-done" hidden>
+              <p class="score" id="quiz-score"></p>
+              <p>Go back to any step to review what moves the curve and what moves the line.</p>
+              <button class="btn btn-primary" id="quiz-restart">Start over</button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <p>A stylized model for teaching. The numbers are made up; the shapes and the logic follow the Grossman model’s demand for health capital.</p>
+  </footer>
+</div>
+<script>/* Stylized Grossman "demand for health capital" model for teaching (pure functions, no DOM).
+   MEI(H): percent-a-year return on one more unit of health capital, falling as health rises.
+   Cost of capital: r + delta. Ed holds health up to H*, where MEI(H*) = r + delta. */
+(function (root) {
+  'use strict';
+
+  var HMIN = 10;     // minimum health stock (the model's end of life)
+  var A0 = 60;       // return on the first unit above Hmin at the baseline wage and schooling (% a year)
+  var LAMBDA = 25;   // health points over which returns fall by a factor of e
+  var R0 = 5;        // baseline interest rate r (% a year)
+  var D0 = 10;       // depreciation delta at age 25 (% a year)
+  var AGE0 = 25, AGE1 = 65, AGED = 85;
+  var W0 = 20;       // baseline wage ($ an hour)
+  var S0 = 12;       // baseline schooling (years)
+  var EDU = 1.05;    // each extra year of school makes health investment 5% more productive
+  // delta grows with age at a steady rate, chosen so that r + delta(85) meets the MEI exactly at Hmin (point B)
+  var BETA = Math.log((A0 - R0) / D0) / (AGED - AGE0);
+
+  function mei(h, m) { if (m == null) m = 1; return A0 * m * Math.exp(-(h - HMIN) / LAMBDA); }
+  function delta(age) { return age >= AGED ? A0 - R0 : D0 * Math.exp(BETA * (age - AGE0)); }
+  function cost(r, age) { return r + delta(age); }
+  // H* where the MEI meets the cost line; at or past point B the best stock is Hmin
+  function optimum(c, m) { var top = mei(HMIN, m); return c >= top ? HMIN : HMIN + LAMBDA * Math.log(top / c); }
+  function wageMult(w) { return w / W0; }
+  function eduMult(s) { return Math.pow(EDU, s - S0); }
+  // health stock at which the MEI (with multiplier m) equals a given return v
+  function hAtReturn(v, m) { return HMIN + LAMBDA * Math.log(mei(HMIN, m) / v); }
+
+  var H0 = optimum(R0 + D0, 1);            // baseline optimum, point A
+  var H1 = optimum(cost(R0, AGE1), 1);     // optimum at age 65 (delta 1)
+
+  var api = {
+    HMIN: HMIN, A0: A0, LAMBDA: LAMBDA, R0: R0, D0: D0, AGE0: AGE0, AGE1: AGE1, AGED: AGED,
+    W0: W0, S0: S0, EDU: EDU, BETA: BETA, H0: H0, H1: H1,
+    mei: mei, delta: delta, cost: cost, optimum: optimum, wageMult: wageMult, eduMult: eduMult, hAtReturn: hAtReturn
+  };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  else root.MEIModel = api;
+})(this);
+</script>
+<script>(function () {
+  'use strict';
+
+  var M = window.MEIModel;
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var VB = { w: 568, h: 478 };
+  var PLOT = { left: 72, right: 540, top: 48, bottom: 410 };
+  var RMAX = 70;
+  var BASE_COST = M.R0 + M.D0;
+
+  // ---------- helpers ----------
+  function $(id) { return document.getElementById(id); }
+  function xOf(h) { return PLOT.left + (PLOT.right - PLOT.left) * h / 100; }
+  function yOf(v) { return PLOT.bottom - (PLOT.bottom - PLOT.top) * v / RMAX; }
+  function hOfX(x) { return (x - PLOT.left) * 100 / (PLOT.right - PLOT.left); }
+  function r1(v) { return Math.round(v * 10) / 10; }
+  function fmt1(v) { var s = (Math.round(v * 10) / 10).toFixed(1); return s === '-0.0' ? '0.0' : s; }
+  function pct(v) { return fmt1(v) + '%'; }
+  function signed(v) { var s = fmt1(Math.abs(v)); return s === '0.0' ? '0.0' : (v > 0 ? '+' : '−') + s; }
+  function clamp(v, a, b) { return Math.min(Math.max(v, a), b); }
+  function el(tag, attrs, parent, text) {
+    var n = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) if (Object.prototype.hasOwnProperty.call(attrs, k)) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function show(n, on) { n.style.display = on ? '' : 'none'; }
+  function setText(id, v) { var n = $(id); if (n.textContent !== v) n.textContent = v; }
+  function setHTML(id, v) { var n = $(id); if (n.__html !== v) { n.innerHTML = v; n.__html = v; } }
+  function same(a, b) { return Math.abs(a - b) < 1e-9; }
+
+  // SVG text with italic variables and sub/superscripts: parts = [[text, kind]], kind '' | 'math' | 'sub' | 'sup'
+  function rich(t, parts) {
+    var key = JSON.stringify(parts);
+    if (t.__key === key) return;
+    t.__key = key;
+    while (t.firstChild) t.removeChild(t.firstChild);
+    var shift = 0;
+    parts.forEach(function (p) {
+      var s = el('tspan', {}, t, p[0]);
+      var want = p[1] === 'sub' ? 5 : p[1] === 'sup' ? -7 : 0;
+      if (want !== shift) { s.setAttribute('dy', String(want - shift)); shift = want; }
+      if (p[1] === 'math') s.setAttribute('class', 'math');
+      if (p[1] === 'sub' || p[1] === 'sup') s.setAttribute('class', 'sub');
+    });
+  }
+  function Hl(sub) { return sub ? [['H', 'math'], [sub, 'sub']] : [['H', 'math']]; }
+  var HSTAR = [['H', 'math'], ['*', 'sup']];
+  function RD(sub) { var p = [['r', 'math'], [' + ', ''], ['δ', 'math']]; if (sub) p.push([sub, 'sub']); return p; }
+
+  var curveCache = {};
+  function curveD(m) {
+    var key = m.toFixed(6);
+    if (!curveCache[key]) {
+      var d = '', i = 0;
+      for (var h = M.HMIN; h <= 100.0001; h += 0.5, i++) d += (i ? 'L' : 'M') + r1(xOf(h)) + ' ' + r1(yOf(M.mei(h, m)));
+      curveCache[key] = d;
+    }
+    return curveCache[key];
+  }
+  function areaD(h1, h2, c, m) {
+    var d = '', n = 60;
+    for (var i = 0; i <= n; i++) { var h = h1 + (h2 - h1) * i / n; d += (i ? 'L' : 'M') + r1(xOf(h)) + ' ' + r1(yOf(M.mei(h, m))); }
+    return d + 'L' + r1(xOf(h2)) + ' ' + r1(yOf(c)) + 'L' + r1(xOf(h1)) + ' ' + r1(yOf(c)) + 'Z';
+  }
+
+  // ---------- lesson content ----------
+  var QUIZ = [
+    { q: 'Why is point A (the health stock H*) the best place for Ed to be?',
+      options: ['The MEI curve is at its highest there', 'The return on one more unit of health exactly equals its cost, r + δ', 'Health can’t go any higher than H*', 'The cost of capital is zero at H*'],
+      answer: 1,
+      why: 'Below H*, one more unit returns more than it costs, so Ed should keep investing. Above H*, it returns less. Only at H* does marginal benefit equal marginal cost.',
+      pre: { mode: 'blank', star: true },
+      view: { mode: 'explore', H: 'opt', r: 5 } },
+    { q: 'Ed’s health stock is below H*. What should he do?',
+      options: ['Cut back, because returns are too high', 'Nothing, since any stock below H* is fine', 'Invest more, because one more unit returns more than it costs', 'Stop investing in health entirely'],
+      answer: 2,
+      why: 'Where the MEI is above the cost line, each extra unit pays for itself and then some. The green area is the net return Ed gives up by stopping early.',
+      pre: { mode: 'explore', H: 30, r: 5, plain: true },
+      view: { mode: 'explore', H: 30, r: 5 } },
+    { q: 'Ed pays for his gym membership with a credit card, and interest rates rise. What happens to his best health stock?',
+      options: ['It falls, because the cost line r + δ moves up', 'It rises, because health becomes more valuable', 'Nothing, since interest rates don’t affect health', 'It falls, because the MEI curve shifts left'],
+      answer: 0,
+      why: 'A higher r raises the cost of holding health capital. The MEI doesn’t move, so the crossing point slides up and to the left.',
+      view: { mode: 'cost', r: 8, age: 25, refs: 'before' } },
+    { q: 'As Ed ages, his health depreciates faster. Which part of the graph moves?',
+      options: ['The MEI curve shifts left', 'Both the MEI and the cost line move', 'The cost line r + δ moves up; the MEI stays put', 'Nothing moves; only Ed’s wage changes'],
+      answer: 2,
+      why: 'Age raises δ, which is part of the cost of capital. The MEI curve doesn’t move, so H* falls from A toward B.',
+      view: { mode: 'cost', r: 5, age: 65, refs: 'age' } },
+    { q: 'As Ed ages, r + δ keeps climbing until it reaches r + δD. What happens at point B, where that line meets the MEI?',
+      options: ['Ed reaches his highest health stock', 'r + δ has risen so far that H* falls to Hmin, which the model treats as the end of life', 'The MEI curve shifts right', 'Ed’s wage rises enough to cover his costs'],
+      answer: 1,
+      why: 'At B, holding health costs as much as even the first unit above Hmin returns, so no health investment pays for itself any more.',
+      pre: { mode: 'cost', r: 5, age: 25, refs: 'age', nodot: true },
+      view: { mode: 'cost', r: 5, age: 85, refs: 'age' } },
+    { q: 'Ed gets a raise. Why does his MEI shift to the right?',
+      options: ['Depreciation falls when wages rise', 'The interest rate falls', 'He has more hours in the day', 'Each healthy day he gains is worth more money, so every unit of health returns more'],
+      answer: 3,
+      why: 'The return on health comes from the extra healthy time it buys, and the wage is what that time is worth. The cost line doesn’t move, so H* rises from H₀ to H₂.',
+      view: { mode: 'shift', kind: 'wage', m: 2 } },
+    { q: 'Does a raise shift the MEI up by the same amount at every health level?',
+      options: ['No: it multiplies every return, so the shift is biggest at low health, where returns are high', 'Yes: every return rises by the same number of points', 'Yes, but only above H*', 'No: returns fall at low health'],
+      answer: 0,
+      why: 'Tripling the wage triples every return. A 40% return becomes 120%, but a 4% return only becomes 12%, so MEI′ is stretched upward, not slid.',
+      view: { mode: 'shift', kind: 'wage', m: 3 } },
+    { q: 'Why does the model predict that college graduates are healthier than high school dropouts?',
+      options: ['They face a lower interest rate', 'Their health depreciates more slowly', 'They are more efficient producers of health, so each investment returns more and their MEI sits further right', 'They spend less time producing health'],
+      answer: 2,
+      why: 'The same time and medical care produce more health for a more educated person, which raises the return at every health level. That shifts the MEI right, just like a raise.',
+      view: { mode: 'shift', kind: 'edu', m: M.eduMult(16) } }
+  ];
+
+  // ---------- state ----------
+  var S = {
+    step: 1, H: 30, r: 5, age: 25, wage: 20, school: 12,
+    quiz: { i: 0, checked: false, choice: null, correct: 0, done: false, builtFor: -1 }
+  };
+
+  // ---------- static graph ----------
+  var svg = $('graph');
+  svg.setAttribute('viewBox', '0 0 ' + VB.w + ' ' + VB.h);
+  var clip = el('clipPath', { id: 'plot-clip' }, el('defs', {}, svg));
+  el('rect', { x: PLOT.left, y: PLOT.top, width: PLOT.right - PLOT.left, height: PLOT.bottom - PLOT.top }, clip);
+  el('rect', { class: 'plot-bg', x: PLOT.left, y: PLOT.top, width: PLOT.right - PLOT.left, height: PLOT.bottom - PLOT.top }, svg);
+  var gGrid = el('g', { class: 'grid', 'aria-hidden': 'true' }, svg), v;
+  for (v = 5; v < 100; v += 5) el('line', { class: v % 20 === 0 ? 'major' : 'minor', x1: xOf(v), x2: xOf(v), y1: PLOT.top, y2: PLOT.bottom }, gGrid);
+  for (v = 5; v < RMAX; v += 5) el('line', { class: v % 10 === 0 ? 'major' : 'minor', x1: PLOT.left, x2: PLOT.right, y1: yOf(v), y2: yOf(v) }, gGrid);
+  var gAxes = el('g', { class: 'axes', 'aria-hidden': 'true' }, svg);
+  el('line', { class: 'axis', x1: PLOT.left, y1: PLOT.bottom, x2: PLOT.right, y2: PLOT.bottom }, gAxes);
+  el('line', { class: 'axis', x1: PLOT.left, y1: PLOT.bottom, x2: PLOT.left, y2: PLOT.top }, gAxes);
+  for (v = 0; v <= RMAX; v += 10) el('text', { class: 'tick', x: PLOT.left - 9, y: yOf(v) + 5, 'text-anchor': 'end' }, gAxes, v + '%');
+  el('text', { class: 'axis-title', x: 8, y: 20 }, gAxes, 'Rate of return');
+  rich(el('text', { class: 'axis-title', x: (PLOT.left + PLOT.right) / 2, y: VB.h - 8, 'text-anchor': 'middle' }, gAxes), [['Health stock, ', ''], ['H', 'math']]);
+
+  // ---------- dynamic layers ----------
+  var gClip = el('g', { 'clip-path': 'url(#plot-clip)' }, svg);
+  var area = el('path', { class: 'area' }, gClip);
+  var refLines = [0, 1, 2].map(function () { return el('line', { class: 'cost-ref' }, gClip); });
+  var guides = [0, 1, 2, 3].map(function () { return el('line', { class: 'guide' }, gClip); });
+  var costLine = el('line', { class: 'cost-line' }, gClip);
+  var basePath = el('path', { class: 'curve-base' }, gClip);
+  var meiPath = el('path', { class: 'curve' }, gClip);
+  var gap = el('line', { class: 'gap' }, gClip);
+  var refLabels = [0, 1, 2].map(function () { return el('text', { class: 'cost-label', 'text-anchor': 'end' }, svg); });
+  var costLabel = el('text', { class: 'cost-label', 'text-anchor': 'end' }, svg);
+  var lblMEI = el('text', { class: 'curve-label' }, svg, 'MEI');
+  var lblMEI2 = el('text', { class: 'curve-label' }, svg, 'MEI′');
+  var xlabels = [0, 1, 2, 3, 4].map(function () { return el('text', { class: 'xlabel', 'text-anchor': 'middle', y: PLOT.bottom + 28 }, svg); });
+  var pts = {};
+  ['A', 'B', 'C'].forEach(function (k) {
+    var g = el('g', { class: 'pt', 'data-key': k }, svg);
+    pts[k] = { g: g, c: el('circle', { r: 5 }, g), t: el('text', { class: 'pt-label' }, g, k) };
+  });
+  var plotHit = el('rect', { class: 'plot-hit', x: PLOT.left, y: PLOT.top, width: PLOT.right - PLOT.left, height: PLOT.bottom - PLOT.top }, svg);
+  var dot = el('circle', { class: 'dot', r: 8 }, svg);
+  var dotHit = el('circle', { class: 'dot-hit', r: 24 }, svg);
+
+  function setLine(ln, x1, y1, x2, y2) { ln.setAttribute('x1', r1(x1)); ln.setAttribute('y1', r1(y1)); ln.setAttribute('x2', r1(x2)); ln.setAttribute('y2', r1(y2)); }
+  function placePoint(k, h, val, side) {
+    var p = pts[k], x = xOf(h), y = yOf(val), low = side === 'downleft';
+    p.c.setAttribute('cx', r1(x)); p.c.setAttribute('cy', r1(y));
+    p.t.setAttribute('x', r1(x + (low ? -9 : 9))); p.t.setAttribute('y', r1(low ? y + 24 : y - 10));
+    p.t.setAttribute('text-anchor', low ? 'end' : 'start');
+    show(p.g, true);
+  }
+  function curveSamples(m) { var a = []; for (var h = M.HMIN; h <= 100; h += 1) a.push([xOf(h), yOf(M.mei(h, m))]); return a; }
+  function hitsCurve(b, samples) {
+    return !!b && samples.some(function (q) { return q[0] > b.x - 2 && q[0] < b.x + b.width + 2 && q[1] > b.y - 2 && q[1] < b.y + b.height + 2; });
+  }
+  // label a curve beside it at the 45% level, or just above its start if it never reaches 45%
+  function placeCurveLabel(t, m, side) {
+    var top = M.mei(M.HMIN, m);
+    if (top > 48) {
+      t.setAttribute('x', r1(xOf(M.hAtReturn(45, m)) + (side === 'left' ? -10 : 10)));
+      t.setAttribute('y', r1(yOf(45) + 5));
+      t.setAttribute('text-anchor', side === 'left' ? 'end' : 'start');
+    } else {
+      t.setAttribute('x', r1(xOf(M.HMIN)));
+      t.setAttribute('y', r1(yOf(top) - 12));
+      t.setAttribute('text-anchor', 'middle');
+    }
+  }
+  function bboxOf(t) { try { return t.getBBox(); } catch (e) { return null; } }
+  function overlaps(a, b, pad) { return a && b && a.x < b.x + b.width + pad && b.x < a.x + a.width + pad && a.y < b.y + b.height && b.y < a.y + a.height; }
+
+  // ---------- view specs ----------
+  function refsFor(kind) {
+    if (kind === 'age') return [
+      { v: M.cost(M.R0, M.AGE0), label: RD('0'), sub: '0', x: M.H0, xl: Hl('0') },
+      { v: M.cost(M.R0, M.AGE1), label: RD('1'), sub: '1', x: M.H1, xl: Hl('1') },
+      { v: M.cost(M.R0, M.AGED), label: RD('D'), sub: 'D', x: M.HMIN, xl: null }];
+    if (kind === 'before') return [{ v: BASE_COST, label: [['before', '']], sub: null, x: M.H0, xl: Hl('0') }];
+    return [];
+  }
+  function specFor() {
+    if (S.step === 1) return { mode: 'explore', H: S.H, r: S.r };
+    if (S.step === 2) return { mode: 'cost', r: M.R0, age: S.age, refs: 'age' };
+    if (S.step === 3) return { mode: 'shift', kind: 'wage', m: M.wageMult(S.wage) };
+    if (S.step === 4) return { mode: 'shift', kind: 'edu', m: M.eduMult(S.school) };
+    var Q = S.quiz, q = QUIZ[Q.i];
+    if (Q.done) return { mode: 'blank' };
+    if (Q.checked) return q.view;
+    var pre = q.pre || { mode: 'blank' }, out = { pre: true };
+    for (var k in pre) if (Object.prototype.hasOwnProperty.call(pre, k)) out[k] = pre[k];
+    return out;
+  }
+  function compute(spec) {
+    var d = { mode: spec.mode, m: 1, refs: [], kind: spec.kind, pre: !!spec.pre, plain: !!spec.plain, nodot: !!spec.nodot, star: !!spec.star };
+    if (spec.mode === 'explore') {
+      d.c = spec.r + M.D0; d.opt = M.optimum(d.c, 1);
+      d.H = spec.H === 'opt' ? d.opt : spec.H; d.ret = M.mei(d.H, 1);
+    } else if (spec.mode === 'cost') {
+      d.c = M.cost(spec.r, spec.age); d.opt = M.optimum(d.c, 1); d.ret = M.mei(M.H0, 1); d.refs = refsFor(spec.refs);
+    } else if (spec.mode === 'shift') {
+      d.m = spec.m; d.c = BASE_COST; d.opt = M.optimum(d.c, d.m); d.ret = M.mei(M.H0, d.m);
+    } else {
+      d.c = BASE_COST; d.opt = M.H0;
+    }
+    return d;
+  }
+
+  // ---------- graph ----------
+  function drawGraph(d) {
+    var shifted = d.mode === 'shift' && !same(d.m, 1);
+    meiPath.setAttribute('d', curveD(d.m));
+    basePath.setAttribute('d', curveD(1));
+    show(basePath, shifted);
+    setLine(costLine, PLOT.left, yOf(d.c), PLOT.right, yOf(d.c));
+
+    // reference lines (slide's delta 0, delta 1, delta D) and right-end labels
+    var match = null;
+    refLines.forEach(function (ln, i) {
+      var r = d.refs[i]; show(ln, !!r);
+      if (r) { setLine(ln, PLOT.left, yOf(r.v), PLOT.right, yOf(r.v)); if (Math.abs(r.v - d.c) < 0.05 && r.sub) match = r; }
+    });
+    rich(costLabel, RD(match ? match.sub : '').concat([[' = ' + pct(d.c), '']]));
+    costLabel.setAttribute('x', PLOT.right - 6); costLabel.setAttribute('y', r1(yOf(d.c) - 8)); costLabel.setAttribute('text-anchor', 'end');
+    show(costLabel, true);
+    var cb = bboxOf(costLabel);
+    refLabels.forEach(function (t, i) {
+      var r = d.refs[i];
+      if (!r) { show(t, false); return; }
+      rich(t, r.label);
+      t.setAttribute('x', PLOT.right - 6); t.setAttribute('y', r1(yOf(r.v) - 8));
+      show(t, true);
+      if (r === match || overlaps(bboxOf(t), cb, 2)) show(t, false);
+    });
+
+    // explore: shaded net gain or loss between H and H*, plus the gap at H
+    var apart = d.mode === 'explore' && Math.abs(d.H - d.opt) > 0.05;
+    var areaOn = apart && !d.plain, gain = areaOn && d.H < d.opt;
+    if (areaOn) {
+      area.setAttribute('d', areaD(Math.min(d.H, d.opt), Math.max(d.H, d.opt), d.c, 1));
+      area.setAttribute('class', 'area ' + (gain ? 'gain' : 'loss'));
+      setLine(gap, xOf(d.H), yOf(d.c), xOf(d.H), yOf(d.ret));
+      gap.setAttribute('class', 'gap ' + (gain ? 'gain' : 'loss'));
+    }
+    show(area, areaOn); show(gap, areaOn);
+    $('lg-gain').hidden = !(areaOn && gain);
+    $('lg-loss').hidden = !(areaOn && !gain);
+    $('lg-base').hidden = !shifted;
+
+    // points A, B, C
+    show(pts.A.g, false); show(pts.B.g, false); show(pts.C.g, false);
+    if (d.mode === 'explore') placePoint('A', d.opt, d.c, 'upright');
+    else if (d.mode === 'cost') { placePoint('A', M.H0, BASE_COST, 'upright'); if (d.refs.length === 3) placePoint('B', M.HMIN, M.mei(M.HMIN), 'upright'); }
+    else if (d.mode === 'shift') {
+      if (shifted) {
+        var right = d.opt > M.H0;
+        placePoint('A', M.H0, BASE_COST, right ? 'downleft' : 'upright');
+        placePoint('C', d.opt, BASE_COST, right ? 'upright' : 'downleft');
+      } else placePoint('A', M.H0, BASE_COST, 'upright');
+    } else placePoint('A', M.H0, BASE_COST, 'upright');
+
+    // curve labels
+    if (shifted) {
+      placeCurveLabel(lblMEI, 1, d.m > 1 ? 'left' : 'right');
+      placeCurveLabel(lblMEI2, d.m, d.m > 1 ? 'right' : 'left');
+      lblMEI.setAttribute('class', 'curve-label faint');
+    } else {
+      placeCurveLabel(lblMEI, 1, 'right');
+      lblMEI.setAttribute('class', 'curve-label');
+    }
+    show(lblMEI2, shifted);
+
+    // cost-of-capital label: first spot (right above, right below, left above, left below) clear of point labels and curves
+    var samples = curveSamples(d.m).concat(shifted ? curveSamples(1) : []);
+    var busy = ['A', 'B', 'C'].filter(function (k) { return pts[k].g.style.display !== 'none'; }).map(function (k) { return bboxOf(pts[k].t); });
+    var yc = yOf(d.c), spots = [[PLOT.right - 6, yc - 8, 'end'], [PLOT.right - 6, yc + 21, 'end'], [PLOT.left + 8, yc - 8, 'start'], [PLOT.left + 8, yc + 21, 'start']];
+    for (var si = 0; si < spots.length; si++) {
+      costLabel.setAttribute('x', r1(spots[si][0])); costLabel.setAttribute('y', r1(spots[si][1])); costLabel.setAttribute('text-anchor', spots[si][2]);
+      var lb = bboxOf(costLabel);
+      if (!lb) break;
+      var inside = lb.y > PLOT.top + 2 && lb.y + lb.height < PLOT.bottom - 2;
+      if (inside && !hitsCurve(lb, samples) && !busy.some(function (b) { return overlaps(b, lb, 3); })) break;
+      if (si === spots.length - 1) { costLabel.setAttribute('x', r1(spots[0][0])); costLabel.setAttribute('y', r1(spots[0][1])); costLabel.setAttribute('text-anchor', 'end'); }
+    }
+
+    // dot and vertical guides
+    var dotH = null, dotV = null, gl = [];
+    if (d.mode === 'explore') { dotH = d.H; dotV = d.ret; gl.push([d.opt, d.c]); if (apart) gl.push([d.H, d.ret]); }
+    else if (d.mode === 'cost') { dotH = d.opt; dotV = d.c; d.refs.forEach(function (r) { gl.push([r.x, r.v]); }); if (!d.refs.some(function (r) { return Math.abs(r.v - d.c) < 0.05; })) gl.push([d.opt, d.c]); }
+    else if (d.mode === 'shift') { dotH = d.opt; dotV = d.c; gl.push([M.H0, BASE_COST]); if (shifted) gl.push([d.opt, d.c]); }
+    else gl.push([M.H0, BASE_COST]);
+    guides.forEach(function (ln, i) { var g = gl[i]; show(ln, !!g); if (g) setLine(ln, xOf(g[0]), yOf(g[1]), xOf(g[0]), PLOT.bottom); });
+    var hasDot = dotH !== null && !d.nodot;
+    if (hasDot) {
+      dot.setAttribute('cx', r1(xOf(dotH))); dot.setAttribute('cy', r1(yOf(dotV)));
+      dotHit.setAttribute('cx', r1(xOf(dotH))); dotHit.setAttribute('cy', r1(yOf(dotV)));
+    }
+    show(dot, hasDot); show(dotHit, hasDot && S.step === 1); show(plotHit, S.step === 1);
+
+    // x-axis labels, placed in priority order and skipped if they would collide
+    var cand = [{ h: M.HMIN, parts: Hl('min') }];
+    if (d.mode === 'explore') { cand.push({ h: d.opt, parts: HSTAR }); if (apart) cand.push({ h: d.H, parts: Hl('') }); }
+    else if (d.mode === 'cost') { d.refs.forEach(function (r) { if (r.xl) cand.push({ h: r.x, parts: r.xl }); }); cand.push({ h: d.opt, parts: HSTAR }); }
+    else if (d.mode === 'shift') { cand.push({ h: M.H0, parts: Hl('0') }); if (shifted) cand.push({ h: d.opt, parts: Hl('2') }); }
+    else cand.push({ h: M.H0, parts: d.star ? HSTAR : Hl('0') });
+    var placed = [];
+    xlabels.forEach(function (t, i) {
+      var c = cand[i];
+      if (!c) { show(t, false); return; }
+      var x0 = xOf(c.h);
+      rich(t, c.parts); t.setAttribute('x', r1(x0)); show(t, true);
+      var b = bboxOf(t), hit = placed.filter(function (p) { return overlaps(p, b, 6); });
+      if (hit.length === 1 && b) {   // nudge it clear of the one label it touches, if a small shift will do
+        var q = hit[0], dx = b.x + b.width / 2 >= q.x + q.width / 2 ? q.x + q.width + 6 - b.x : q.x - 6 - (b.x + b.width);
+        if (Math.abs(dx) <= 14) { t.setAttribute('x', r1(x0 + dx)); b = bboxOf(t); }
+      }
+      if (placed.some(function (p) { return overlaps(p, b, 5.5); })) show(t, false); else placed.push(b);
+    });
+  }
+
+  // ---------- readout ----------
+  function bar(id, value) { $(id).style.width = (clamp(value / RMAX, 0, 1) * 100).toFixed(2) + '%'; }
+  function drawReadout(d) {
+    var box = $('readout');
+    var empty = d.mode === 'blank' || d.pre;
+    box.classList.toggle('is-empty', empty);
+    if (empty) {
+      setText('ro-k1', 'Best stock now'); setText('ro-v1', '–'); setText('ro-k2', 'Change from H₀'); setText('ro-v2', '–');
+      setText('ro-b1-lbl', 'Return on one more unit'); setText('ro-b2-lbl', 'Cost of capital, r + δ');
+      setText('ro-b1-v', '–'); setText('ro-b2-v', '–'); bar('ro-b1', 0); bar('ro-b2', 0);
+      setHTML('ro-verdict', S.quiz.done ? 'Pick any step above to keep exploring.' : 'Answer the question to see what happens on the graph.');
+      return;
+    }
+    if (d.mode === 'explore') {
+      setText('ro-k1', 'Ed’s health stock'); setText('ro-v1', fmt1(d.H));
+      setText('ro-k2', 'Best stock, H*'); setText('ro-v2', fmt1(d.opt));
+      setText('ro-b1-lbl', 'Return on one more unit');
+    } else {
+      setText('ro-k1', 'Best stock now'); setText('ro-v1', fmt1(d.opt));
+      setText('ro-k2', 'Change from H₀'); setText('ro-v2', signed(d.opt - M.H0));
+      setText('ro-b1-lbl', 'Return at the old stock, H₀');
+    }
+    setText('ro-b2-lbl', d.mode === 'cost' ? 'Cost of capital now, r + δ' : 'Cost of capital, r + δ');
+    setText('ro-b1-v', pct(d.ret)); setText('ro-b2-v', pct(d.c));
+    bar('ro-b1', d.ret); bar('ro-b2', d.c);
+    setHTML('ro-verdict', verdict(d));
+  }
+  function verdict(d) {
+    var R = '<b>' + pct(d.ret) + '</b>', C = '<b>' + pct(d.c) + '</b>', O = '<b>' + fmt1(d.opt) + '</b>';
+    if (d.mode === 'explore') {
+      if (same(d.H, d.opt)) return 'One more unit returns exactly what it costs (' + C + '). This is H*: moving either way makes Ed worse off.';
+      if (d.H < d.opt) return 'One more unit returns ' + R + ' but costs only ' + C + ', so investing more pays. Ed should keep going until he reaches H*.';
+      return 'One more unit returns only ' + R + ' but costs ' + C + '. Ed would do better putting that money elsewhere, so he should let his health run down toward H*.';
+    }
+    if (same(d.ret, d.c)) return 'Nothing has changed yet: at H₀, one more unit returns exactly what it costs.';
+    if (d.mode === 'cost') {
+      if (d.opt <= M.HMIN + 1e-9) return 'r + δ has climbed to ' + C + ', as much as even the first unit above <i>H</i><sub>min</sub> returns. No health investment pays for itself any more: this is point B, which the model treats as the end of life.';
+      if (d.c > d.ret) return 'At his old stock H₀, one more unit still returns ' + R + ', but holding it now costs ' + C + '. Ed lets his health run down until the return catches up with the cost, at H* = ' + O + '.';
+      return 'At his old stock H₀, one more unit returns ' + R + ' but now costs only ' + C + '. Ed invests more, up to H* = ' + O + '.';
+    }
+    var up = d.ret > d.c;
+    if (d.kind === 'wage') {
+      return up ? 'Each healthy day is now worth more, so at H₀ one more unit returns ' + R + ' while still costing ' + C + '. Ed invests more until the return falls back to ' + pct(d.c) + ', at H₂ = ' + O + '.'
+                : 'Each healthy day is now worth less, so at H₀ one more unit returns only ' + R + ' but costs ' + C + '. Ed cuts back until the return rises to ' + pct(d.c) + ', at ' + O + '.';
+    }
+    return up ? 'Ed now turns the same time and care into more health, so at H₀ one more unit returns ' + R + ' while still costing ' + C + '. He invests more, up to H₂ = ' + O + '.'
+              : 'With less schooling, the same time and care produce less health, so at H₀ one more unit returns only ' + R + ' but costs ' + C + '. Ed holds less health, at ' + O + '.';
+  }
+
+  // ---------- render ----------
+  function render() {
+    var d = compute(specFor());
+    drawGraph(d);
+    drawReadout(d);
+    if (S.step === 1) renderExplore(d);
+    if (S.step === 2) renderAge();
+    if (S.step === 3) renderWage();
+    if (S.step === 4) renderEdu();
+    if (S.step === 5) renderQuiz();
+  }
+
+  // ---------- step 1: find H* ----------
+  var hs = $('hs'), rate = $('rate');
+  function snapH(h, opt) { h = clamp(h, M.HMIN, 100); return Math.abs(h - opt) < 0.8 ? opt : h; }
+  function currentOpt() { return M.optimum(S.r + M.D0, 1); }
+  function setH(h) { S.H = snapH(h, currentOpt()); hs.value = String(Math.round(S.H * 10)); render(); }
+  hs.addEventListener('input', function () { S.H = snapH(Number(hs.value) / 10, currentOpt()); render(); });
+  rate.addEventListener('input', function () { S.r = Number(rate.value) / 2; render(); });
+  function renderExplore(d) {
+    setText('hs-out', fmt1(S.H));
+    setText('rate-out', S.r.toFixed(1) + '%');
+    if (same(S.H, d.opt)) { setText('z-title', 'At H*: stop here'); setText('z-text', 'Marginal benefit equals marginal cost. The next unit returns exactly r + δ, so there’s nothing left to gain in either direction.'); }
+    else if (S.H < d.opt) { setText('z-title', 'Below H*: invest more'); setText('z-text', 'The green area is the net return Ed gives up by stopping here. Each sliver is a unit of health that would return more than it costs.'); }
+    else { setText('z-title', 'Above H*: cut back'); setText('z-text', 'The red area covers units that return less than they cost. Ed would do better putting that money elsewhere and letting his health depreciate toward H*.'); }
+  }
+  var dragging = false;
+  function svgX(evt) {
+    var ctm = svg.getScreenCTM(); if (!ctm) return null;
+    var pt = svg.createSVGPoint(); pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(ctm.inverse()).x;
+  }
+  function moveTo(evt) { var x = svgX(evt); if (x !== null) setH(hOfX(x)); }
+  dotHit.addEventListener('pointerdown', function (e) {
+    if (S.step !== 1) return;
+    dragging = true;
+    try { dotHit.setPointerCapture(e.pointerId); } catch (err) { /* older browsers */ }
+    e.preventDefault(); moveTo(e);
+  });
+  dotHit.addEventListener('pointermove', function (e) { if (dragging) moveTo(e); });
+  dotHit.addEventListener('pointerup', function () { dragging = false; });
+  dotHit.addEventListener('pointercancel', function () { dragging = false; });
+  plotHit.addEventListener('click', function (e) { if (S.step === 1) moveTo(e); });
+
+  // ---------- step 2: aging ----------
+  var ageInput = $('age');
+  ageInput.addEventListener('input', function () { S.age = Number(ageInput.value); render(); });
+  var life = $('life'), LP = { left: 50, right: 344, top: 14, bottom: 150 };
+  life.setAttribute('viewBox', '0 0 360 202');
+  function lx(a) { return LP.left + (LP.right - LP.left) * (a - M.AGE0) / (M.AGED - M.AGE0); }
+  function ly(h) { return LP.bottom - (LP.bottom - LP.top) * h / 50; }
+  [25, 45, 65, 85].forEach(function (a) {
+    el('line', { class: 'lgrid', x1: lx(a), x2: lx(a), y1: LP.top, y2: LP.bottom }, life);
+    el('text', { class: 'lt', x: lx(a), y: LP.bottom + 17, 'text-anchor': 'middle' }, life, String(a));
+  });
+  [25, 50].forEach(function (h) {
+    el('line', { class: 'lgrid', x1: LP.left, x2: LP.right, y1: ly(h), y2: ly(h) }, life);
+    el('text', { class: 'lt', x: LP.left - 7, y: ly(h) + 4, 'text-anchor': 'end' }, life, String(h));
+  });
+  el('line', { class: 'lhmin', x1: LP.left, x2: LP.right, y1: ly(M.HMIN), y2: ly(M.HMIN) }, life);
+  rich(el('text', { class: 'lt', x: LP.left - 7, y: ly(M.HMIN) + 4, 'text-anchor': 'end' }, life), Hl('min'));
+  el('line', { class: 'laxis', x1: LP.left, x2: LP.right, y1: LP.bottom, y2: LP.bottom }, life);
+  el('line', { class: 'laxis', x1: LP.left, x2: LP.left, y1: LP.top, y2: LP.bottom }, life);
+  var lifeD = '';
+  for (var a = M.AGE0, j = 0; a <= M.AGED + 1e-9; a += 0.5, j++) lifeD += (j ? 'L' : 'M') + r1(lx(a)) + ' ' + r1(ly(M.optimum(M.cost(M.R0, a), 1)));
+  el('path', { class: 'lcurve', d: lifeD }, life);
+  el('circle', { class: 'lpt', cx: lx(M.AGE0), cy: ly(M.H0), r: 4.5 }, life);
+  el('text', { class: 'lpt-label', x: lx(M.AGE0) + 9, y: ly(M.H0) - 7 }, life, 'A');
+  el('circle', { class: 'lpt', cx: lx(M.AGED), cy: ly(M.HMIN), r: 4.5 }, life);
+  el('text', { class: 'lpt-label', x: lx(M.AGED) - 9, y: ly(M.HMIN) - 9, 'text-anchor': 'end' }, life, 'B');
+  var lifeDot = el('circle', { class: 'ldot', r: 6 }, life);
+  el('text', { class: 'lt-title', x: (LP.left + LP.right) / 2, y: 192, 'text-anchor': 'middle' }, life, 'Age');
+  function renderAge() {
+    setText('age-out', String(S.age));
+    setText('delta-out', 'Depreciation δ = ' + pct(M.delta(S.age)) + ' a year, so r + δ = ' + pct(M.cost(M.R0, S.age)));
+    lifeDot.setAttribute('cx', r1(lx(S.age))); lifeDot.setAttribute('cy', r1(ly(M.optimum(M.cost(M.R0, S.age), 1))));
+    pressed('[data-age]', function (b) { return Number(b.getAttribute('data-age')) === S.age; });
+  }
+
+  // ---------- step 3: a raise ----------
+  var wageInput = $('wage');
+  wageInput.addEventListener('input', function () { S.wage = Number(wageInput.value); render(); });
+  var wageRows = $('wage-rows'), rowCells = [];
+  [20, 40, 60, 80].forEach(function (h) {
+    var tr = document.createElement('tr');
+    var th = document.createElement('th'); th.scope = 'row'; th.textContent = 'H = ' + h; tr.appendChild(th);
+    var cells = [0, 1, 2].map(function () { var td = document.createElement('td'); tr.appendChild(td); return td; });
+    wageRows.appendChild(tr); rowCells.push({ h: h, cells: cells });
+  });
+  function renderWage() {
+    var m = M.wageMult(S.wage);
+    setText('wage-out', '$' + S.wage);
+    rowCells.forEach(function (r) {
+      var was = M.mei(r.h, 1), now = M.mei(r.h, m);
+      r.cells[0].textContent = pct(was); r.cells[1].textContent = pct(now); r.cells[2].textContent = signed(now - was) + ' pts';
+    });
+    pressed('[data-wage]', function (b) { return Number(b.getAttribute('data-wage')) === S.wage; });
+  }
+
+  // ---------- step 4: education ----------
+  var schoolInput = $('school');
+  schoolInput.addEventListener('input', function () { S.school = Number(schoolInput.value); render(); });
+  function renderEdu() {
+    var m = M.eduMult(S.school);
+    setText('school-out', String(S.school));
+    setText('edu-text', 'With ' + S.school + ' years of school, every return is ' + m.toFixed(2) + '× the high school level and H* = ' +
+      fmt1(M.optimum(BASE_COST, m)) + '. For comparison, a dropout (10 years) holds ' + fmt1(M.optimum(BASE_COST, M.eduMult(10))) +
+      ' and a college grad (16 years) holds ' + fmt1(M.optimum(BASE_COST, M.eduMult(16))) + '.');
+    pressed('[data-school]', function (b) { return Number(b.getAttribute('data-school')) === S.school; });
+  }
+
+  function pressed(sel, test) {
+    Array.prototype.forEach.call(document.querySelectorAll(sel), function (b) { b.setAttribute('aria-pressed', test(b) ? 'true' : 'false'); });
+  }
+  [['data-age', ageInput, 'age'], ['data-wage', wageInput, 'wage'], ['data-school', schoolInput, 'school']].forEach(function (cfg) {
+    Array.prototype.forEach.call(document.querySelectorAll('[' + cfg[0] + ']'), function (b) {
+      b.addEventListener('click', function () {
+        var val = Number(b.getAttribute(cfg[0]));
+        S[cfg[2]] = val; cfg[1].value = String(val); render();
+      });
+    });
+  });
+
+  // ---------- step 5: quiz ----------
+  function renderQuiz() {
+    var Q = S.quiz, q = QUIZ[Q.i];
+    $('quiz-live').hidden = Q.done;
+    $('quiz-done').hidden = !Q.done;
+    if (Q.done) { setText('quiz-score', 'You got ' + Q.correct + ' of ' + QUIZ.length + ' right on the first try.'); return; }
+    setText('quiz-progress', 'Question ' + (Q.i + 1) + ' of ' + QUIZ.length);
+    if (Q.builtFor !== Q.i) {
+      $('quiz-question').textContent = q.q;
+      var box = $('quiz-options');
+      box.textContent = '';
+      q.options.forEach(function (label, idx) {
+        var lab = document.createElement('label'); lab.className = 'opt';
+        var inp = document.createElement('input'); inp.type = 'radio'; inp.name = 'quiz-opt'; inp.value = String(idx);
+        inp.addEventListener('change', function () { Q.choice = idx; $('quiz-error').hidden = true; });
+        var span = document.createElement('span'); span.textContent = label;
+        lab.appendChild(inp); lab.appendChild(span); box.appendChild(lab);
+      });
+      Q.builtFor = Q.i;
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('#quiz-options input'), function (inp, idx) {
+      inp.disabled = Q.checked;
+      inp.parentNode.classList.toggle('is-correct', Q.checked && idx === q.answer);
+      inp.parentNode.classList.toggle('is-wrong', Q.checked && idx === Q.choice && idx !== q.answer);
+    });
+    $('quiz-feedback').hidden = !Q.checked;
+    $('quiz-check').hidden = Q.checked;
+    $('quiz-next').hidden = !Q.checked;
+    $('quiz-next').textContent = Q.i === QUIZ.length - 1 ? 'See your score' : 'Next question';
+    if (Q.checked) {
+      var right = Q.choice === q.answer;
+      $('quiz-verdict').textContent = right ? 'Right.' : 'Not quite. The answer is: ' + q.options[q.answer] + '.';
+      $('quiz-verdict').className = 'verdict ' + (right ? 'ok' : 'no');
+      $('quiz-why').textContent = q.why;
+    }
+  }
+  $('quiz-check').addEventListener('click', function () {
+    var Q = S.quiz;
+    if (Q.choice === null) {
+      $('quiz-error').hidden = false;
+      var first = document.querySelector('#quiz-options input'); if (first) first.focus();
+      return;
+    }
+    Q.checked = true;
+    if (Q.choice === QUIZ[Q.i].answer) Q.correct++;
+    render();
+    $('quiz-next').focus();
+  });
+  $('quiz-next').addEventListener('click', function () {
+    var Q = S.quiz;
+    Q.i++; Q.checked = false; Q.choice = null;
+    if (Q.i >= QUIZ.length) { Q.done = true; Q.i = QUIZ.length - 1; }
+    render();
+    if (Q.done) $('quiz-restart').focus(); else $('quiz-question-focus').focus();
+  });
+  $('quiz-restart').addEventListener('click', function () {
+    S.quiz = { i: 0, checked: false, choice: null, correct: 0, done: false, builtFor: -1 };
+    render();
+    $('quiz-question-focus').focus();
+  });
+
+  // ---------- tabs ----------
+  var tabs = [1, 2, 3, 4, 5].map(function (n) { return $('tab-' + n); });
+  function setStep(n, focusTab) {
+    S.step = n;
+    tabs.forEach(function (tab, idx) {
+      var on = idx + 1 === n;
+      tab.setAttribute('aria-selected', on ? 'true' : 'false');
+      tab.tabIndex = on ? 0 : -1;
+      $('panel-' + (idx + 1)).hidden = !on;
+    });
+    if (focusTab) tabs[n - 1].focus();
+    render();
+  }
+  tabs.forEach(function (tab, idx) {
+    tab.addEventListener('click', function () { setStep(idx + 1, false); });
+    tab.addEventListener('keydown', function (e) {
+      var n = idx + 1;
+      if (e.key === 'ArrowRight') n = n % 5 + 1;
+      else if (e.key === 'ArrowLeft') n = (n + 3) % 5 + 1;
+      else if (e.key === 'Home') n = 1;
+      else if (e.key === 'End') n = 5;
+      else return;
+      e.preventDefault();
+      setStep(n, true);
+    });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-goto]'), function (b) {
+    b.addEventListener('click', function () {
+      setStep(Number(b.getAttribute('data-goto')), true);
+      var top = document.querySelector('.steps');
+      if (top && top.scrollIntoView) top.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    });
+  });
+
+  // ---------- start ----------
+  hs.value = String(Math.round(S.H * 10));
+  rate.value = String(S.r * 2);
+  ageInput.value = String(S.age); wageInput.value = String(S.wage); schoolInput.value = String(S.school);
+  setStep(1, false);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Work, leisure, and healthy time</title>
+<meta name="description" content="An interactive lesson on the labor-leisure trade-off in the Grossman model: the time constraint, indifference curves, equilibrium, and what more healthy time does.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=STIX+Two+Text:ital,wght@0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EEF3F7; --sheet:#FBFDFF; --ink:#14233B; --ink-2:#4B5B71; --rule:#C3D1DE; --chip:#E1E9F1;
+  --grid-minor:#E3EBF3; --grid-major:#C9D7E5;
+  --health:#1C7F66; --sick:#B23F2A; --bread:#C28A1E; --pref:#5B4BCF;
+  --better:rgba(37,99,235,.14); --better-edge:#2563EB; --focus:#2563EB;
+  --ok:#17735C; --ok-bg:#E1F2EB; --no:#A83A26; --no-bg:#F7E4DF;
+  --leis:#B8730E; --work:#2F6DB5; --hlth:#1C7F66; --sick:#B23F2A; --ic:#7A4FB0; --gain:rgba(28,127,102,.17);
+  --sans:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --math:"STIX Two Text","Cambria Math",Cambria,"Times New Roman",Times,serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D1522; --sheet:#121C2C; --ink:#E6EDF6; --ink-2:#A4B3C6; --rule:#2A3A53; --chip:#1A2638;
+    --grid-minor:#172335; --grid-major:#23334B;
+    --health:#43BD97; --sick:#E0775E; --bread:#E3B24C; --pref:#A399FF;
+    --better:rgba(96,150,255,.18); --better-edge:#7AA7FF; --focus:#7AA7FF;
+    --ok:#5ED1AC; --ok-bg:#12302A; --no:#F08E77; --no-bg:#3A1F19; --leis:#E7B04A; --work:#6EA8F0; --hlth:#43BD97; --sick:#E0775E; --ic:#B89BE8; --gain:rgba(67,189,151,.2);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0D1522; --sheet:#121C2C; --ink:#E6EDF6; --ink-2:#A4B3C6; --rule:#2A3A53; --chip:#1A2638;
+  --grid-minor:#172335; --grid-major:#23334B;
+  --health:#43BD97; --sick:#E0775E; --bread:#E3B24C; --pref:#A399FF;
+  --better:rgba(96,150,255,.18); --better-edge:#7AA7FF; --focus:#7AA7FF;
+  --ok:#5ED1AC; --ok-bg:#12302A; --no:#F08E77; --no-bg:#3A1F19; --leis:#E7B04A; --work:#6EA8F0; --hlth:#43BD97; --sick:#E0775E; --ic:#B89BE8; --gain:rgba(67,189,151,.2);
+  color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none !important}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:1.0625rem;line-height:1.55;-webkit-font-smoothing:antialiased}
+.page{max-width:1220px;margin:0 auto;padding:clamp(18px,3vw,36px) clamp(16px,3vw,32px) 40px}
+h1,h2,h3{line-height:1.15;margin:0}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.masthead h1{font-size:clamp(1.8rem,1.2rem + 2vw,2.6rem);font-weight:700;letter-spacing:-.018em;max-width:21ch}
+.masthead .lede{margin:.75rem 0 0;max-width:64ch;color:var(--ink-2);font-size:1.08rem}
+@media (min-width:961px){.masthead{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:end}.masthead .lede{margin:0}}
+
+.steps{display:flex;gap:2px;margin:clamp(18px,2.6vw,28px) 0 clamp(16px,2.4vw,24px);border-bottom:2px solid var(--rule);overflow-x:auto;scrollbar-width:thin}
+.step{flex:0 0 auto;font:inherit;font-weight:700;font-size:1rem;color:var(--ink-2);background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:.65rem .9rem;cursor:pointer;display:flex;align-items:center;gap:.55rem;min-height:48px}
+.step .n{display:inline-grid;place-items:center;width:1.65rem;height:1.65rem;border-radius:50%;border:1.5px solid currentColor;font-size:.85rem;line-height:1}
+.step:hover{color:var(--ink)}
+.step[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.step[aria-selected="true"] .n{background:var(--ink);border-color:var(--ink);color:var(--sheet)}
+.step:focus-visible{outline-offset:-3px}
+.step .short{display:none}
+@media (max-width:600px){
+  .steps{gap:0;overflow-x:visible}
+  .step{flex:1 1 0;min-width:0;flex-direction:column;gap:3px;padding:.45rem .15rem .5rem;font-size:.82rem}
+  .step .long{display:none}
+  .step .short{display:inline}
+}
+
+.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:start}
+@media (max-width:960px){.layout{grid-template-columns:minmax(0,1fr)}}
+.figure{margin:0}
+@media (min-width:961px){.figure{position:sticky;top:calc(env(safe-area-inset-top,0px) + 14px)}#graph{max-height:max(300px,calc(100vh - 96px))}}
+.side{display:flex;flex-direction:column;gap:22px;min-width:0}
+.sheet{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:8px 8px 12px}
+#graph{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none}
+
+.plot-bg{fill:var(--sheet)}
+.grid .minor{stroke:var(--grid-minor);stroke-width:1}
+.grid .major{stroke:var(--grid-major);stroke-width:1}
+.axis{stroke:var(--ink);stroke-width:1.6}
+.tick{fill:var(--ink-2);font-family:var(--sans);font-size:15px}
+.math{font-family:var(--math);font-style:italic}
+.tick .sub{font-size:11px}
+.axis-title{fill:var(--ink);font-family:var(--sans);font-size:16px;font-weight:700}
+.axis-title .math{font-weight:500;font-size:18px}
+.curve{fill:none;stroke:var(--ink);stroke-width:3.2;stroke-linejoin:round;stroke-linecap:round}
+.curve-base{fill:none;stroke:var(--ink-2);stroke-width:2;stroke-dasharray:7 6}
+.guide{stroke:var(--ink-2);stroke-width:1.2;stroke-dasharray:5 5}
+.pt{pointer-events:none}
+.pt.clickable{pointer-events:auto;cursor:pointer}
+.pt circle{fill:var(--sheet);stroke:var(--ink);stroke-width:2}
+.pt-label{fill:var(--ink);font-family:var(--math);font-style:italic;font-size:23px;paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+.dot{fill:var(--ink);stroke:var(--sheet);stroke-width:3}
+.dot-hit{fill:transparent;pointer-events:all;cursor:grab;touch-action:none}
+.dot-hit:active{cursor:grabbing}
+
+.graph-legend{list-style:none;margin:4px 8px 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.92rem;color:var(--ink-2)}
+.graph-legend li{display:flex;align-items:center;gap:8px}
+.graph-legend i{display:inline-block;flex:none}
+.k-dot{width:12px;height:12px;border-radius:50%;background:var(--ink)}
+.k-base{width:26px;border-top:2px dashed var(--ink-2)}
+
+.readout{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:14px 16px 16px}
+.figures{display:flex;flex-wrap:wrap;gap:6px 30px;align-items:baseline}
+.figures p{margin:0;display:flex;align-items:baseline;gap:.45rem}
+.figures .lbl{font-weight:700;color:var(--ink-2);font-size:.95rem}
+.figures .num{font-size:2rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.figures .unit{color:var(--ink-2);font-size:.95rem}
+.readout.is-empty .num{color:var(--ink-2)}
+.margin{margin:12px 0 0;padding:.65rem .85rem;background:var(--chip);border-radius:8px}
+
+.panel h2{font-size:clamp(1.3rem,1.1rem + .8vw,1.6rem);margin-bottom:.6rem}
+.panel p{margin:0 0 .9rem;max-width:62ch}
+.ctl-label{display:block;font-weight:700;margin:1.1rem 0 .3rem}
+.ctl-label output{font-variant-numeric:tabular-nums}
+input[type=range]{display:block;width:100%;height:36px;margin:0;accent-color:var(--ink);cursor:pointer}
+input[type=range]:focus-visible{outline-offset:4px}
+.scale-ends{display:flex;justify-content:space-between;color:var(--ink-2);font-size:.9rem}
+.scale-ends .math{font-size:1.05rem}
+.note{margin:1.1rem 0;padding:.85rem 1rem;border-left:4px solid var(--ink);background:var(--sheet)}
+.note h3{font-size:1.12rem;margin-bottom:.35rem}
+.note p{margin:0}
+.try{color:var(--ink-2)}
+.try strong{color:var(--ink)}
+.btn{font:inherit;font-weight:700;font-size:1rem;line-height:1.2;color:var(--ink);background:transparent;border:1.5px solid var(--ink);border-radius:8px;padding:.6rem 1rem;min-height:44px;cursor:pointer}
+.btn:hover{background:var(--chip)}
+.btn[aria-pressed="true"],.btn-primary{background:var(--ink);color:var(--sheet)}
+.btn[aria-pressed="true"]:hover,.btn-primary:hover{background:var(--ink);opacity:.88}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin:.3rem 0 .4rem}
+.pick{display:flex;flex-wrap:wrap;gap:10px;margin:.2rem 0 .3rem}
+.pick-btn{width:56px;height:56px;padding:0;border-radius:10px;font-family:var(--math);font-style:italic;font-weight:500;font-size:1.7rem}
+
+.progress{font-weight:700;color:var(--ink-2);margin:0 0 .5rem}
+fieldset.quiz{border:0;margin:0;padding:0;min-width:0}
+fieldset.quiz legend{font-size:1.15rem;font-weight:700;line-height:1.35;margin:0 0 .75rem;padding:0}
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:.7rem;padding:.7rem .85rem;border:1.5px solid var(--rule);border-radius:8px;background:var(--sheet);cursor:pointer}
+.opt input{flex:none;width:1.15rem;height:1.15rem;margin:.2rem 0 0;accent-color:var(--ink)}
+.opt:has(input:checked){border-color:var(--ink)}
+.opt:has(input:disabled){cursor:default}
+.opt.is-correct{border-color:var(--ok);background:var(--ok-bg)}
+.opt.is-wrong{border-color:var(--no);background:var(--no-bg)}
+.opt.is-correct::after,.opt.is-wrong::after{margin-left:auto;padding-left:.6rem;font-size:.85rem;font-weight:700;white-space:nowrap}
+.opt.is-correct::after{content:"Correct answer";color:var(--ok)}
+.opt.is-wrong::after{content:"Your answer";color:var(--no)}
+.error{color:var(--no);font-weight:700;margin:.7rem 0 0}
+.verdict{font-weight:700}
+.verdict.ok{color:var(--ok)}
+.verdict.no{color:var(--no)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:1rem}
+.score{font-size:1.45rem;font-weight:700}
+
+.table-wrap{overflow-x:auto;margin:1rem 0}
+.compare{border-collapse:collapse;width:100%;min-width:320px;font-variant-numeric:tabular-nums}
+.compare th,.compare td{padding:.5rem .6rem;border-bottom:1px solid var(--rule);text-align:right}
+.compare th[scope="row"]{text-align:left;font-weight:400}
+.compare thead th{font-size:.9rem;color:var(--ink-2)}
+.compare td:last-child{font-weight:700}
+
+.foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);color:var(--ink-2);font-size:.92rem}
+.foot p{margin:0;max-width:72ch}
+
+@media (max-width:600px){
+  body{font-size:1rem}
+  .figures .num{font-size:1.7rem}
+  .sheet{padding:6px 4px 10px}
+  .tick{font-size:22px}
+  .tick .sub{font-size:15px}
+  .axis-title{font-size:20px}
+  .pt-label{font-size:30px;stroke-width:6px}
+  .graph-legend{font-size:.88rem}
+}
+
+/* Labor-leisure app */
+.pt-s{fill:var(--sheet);stroke:var(--ink);stroke-width:1.8}
+.sub{font-size:.72em}
+.budget{fill:none;stroke:var(--ink);stroke-width:3}
+.budget-base{fill:none;stroke:var(--ink-2);stroke-width:2;stroke-dasharray:7 6}
+.ic{fill:none;stroke:var(--ic);stroke-width:2.6}
+.ic-faint{fill:none;stroke:var(--ic);stroke-width:1.8;stroke-dasharray:6 5;opacity:.7}
+.tangent{stroke:var(--ic);stroke-width:2;stroke-dasharray:6 5}
+.lens{fill:var(--gain)}
+.leg{stroke:var(--ink-2);stroke-width:1.6;stroke-dasharray:4 4}
+.br{stroke-width:5}
+.br-leis{stroke:var(--leis)} .br-work{stroke:var(--work)} .br-hlth{stroke:var(--hlth)} .br-sick{stroke:var(--sick)}
+.br-label{fill:var(--ink-2);font-family:var(--sans);font-size:14px;font-weight:700}
+.xlabel,.ylabel{fill:var(--ink);font-family:var(--math);font-style:italic;font-size:19px;paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+.xlabel.faint,.ylabel.faint{fill:var(--ink-2)}
+.xlabel .up,.ylabel .up{font-style:normal}
+.curve-label{fill:var(--ic);font-family:var(--math);font-style:italic;font-size:18px;paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+.plot-hit{fill:transparent;cursor:crosshair}
+.k-budget{width:26px;border-top:3px solid var(--ink)}
+.k-ic{width:26px;border-top:2.6px solid var(--ic)}
+.k-tangent{width:26px;border-top:2px dashed var(--ic)}
+.k-lens{width:18px;height:12px;background:var(--gain);border:1.2px solid var(--hlth)}
+.bars{display:grid;gap:9px;margin:14px 0 4px}
+.bar-row{display:grid;grid-template-columns:minmax(0,13rem) minmax(0,1fr) 4.2rem;align-items:center;gap:6px 10px;font-size:.95rem}
+.bar-lbl{color:var(--ink-2)}
+.bar{height:14px;background:var(--grid-minor);border-radius:3px;overflow:hidden}
+.fill{display:block;height:100%;width:0;border-radius:3px}
+.fill.mrs{background:var(--ic)} .fill.wage{background:var(--work)}
+.bar-row b{text-align:right;font-variant-numeric:tabular-nums}
+.year{margin:14px 0 4px}
+.year-cap{margin:0 0 6px !important;font-size:.9rem;color:var(--ink-2)}
+.year-bar{display:flex;height:16px;border-radius:4px;overflow:hidden;background:var(--grid-minor)}
+.year-bar i{display:block;height:100%;min-width:0}
+.seg-hlth{background:var(--hlth)} .seg-sick{background:var(--sick)} .seg-work{background:var(--work)} .seg-leis{background:var(--leis)}
+.year-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0;padding:0;list-style:none;font-size:.9rem;color:var(--ink-2)}
+.year-key li{display:flex;align-items:center;gap:6px}
+.year-key .sw{width:12px;height:12px;border-radius:2px;display:inline-block}
+.year-key b{color:var(--ink);font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:no-preference){.fill,.year-bar i{transition:width .15s ease}}
+.result{margin:1rem 0 !important;padding:.7rem .9rem;border:1.5px solid var(--hlth);border-radius:8px;font-weight:700}
+.presets sub,.btn sub{font-size:.7em}
+@media (max-width:600px){
+  .xlabel,.ylabel{font-size:24px;stroke-width:6px}
+  .curve-label{font-size:22px;stroke-width:6px}
+  .br-label{font-size:19px}
+  .bar-row{grid-template-columns:minmax(0,1fr) 4.2rem}
+  .bar-row .bar-lbl{grid-column:1 / -1}
+}
+.fixed{margin:.5rem 0 1rem !important;padding:.55rem .75rem;border-left:3px solid var(--hlth);background:var(--sheet);border-radius:0 6px 6px 0;font-size:.95rem;color:var(--ink-2)}
+.fixed b{color:var(--ink);font-variant-numeric:tabular-nums}
+.year-fixed{margin:10px 0 0 !important;padding-left:9px;border-left:2.5px solid var(--hlth);font-size:.9rem;color:var(--ink-2)}
+.year-fixed strong{color:var(--ink);font-weight:700}
+.sw{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:baseline}
+.glossary{margin:1.2rem 0 0;border-top:1px solid var(--rule);padding-top:.9rem}
+.glossary dt{font-weight:700;margin-top:.7rem;display:flex;align-items:center;gap:8px}
+.glossary dd{margin:.15rem 0 0 20px;color:var(--ink-2);font-size:.95rem}
+.routine{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:.7rem 0 1.1rem}
+.routine .ctl-label{margin:0}
+.routine .presets{margin:0}
+.figures .num{font-size:1.85rem}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <h1>Work, leisure, and healthy time</h1>
+    <p class="lede">Ed’s year has 365 days. Some go to producing health and some are lost to sickness; he splits the rest between work, which earns income, and leisure. Find his best split, then see what investing in his health does to it.</p>
+  </header>
+
+  <main>
+    <div class="steps" role="tablist" aria-label="Lesson steps">
+      <button class="step" role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true"><span class="n" aria-hidden="true">1</span><span class="long">Time constraint</span><span class="short">Time</span></button>
+      <button class="step" role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">2</span><span class="long">Preferences</span><span class="short">IC</span></button>
+      <button class="step" role="tab" id="tab-3" aria-controls="panel-3" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">3</span><span class="long">Equilibrium</span><span class="short">Best</span></button>
+      <button class="step" role="tab" id="tab-4" aria-controls="panel-4" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">4</span><span class="long">Healthy time</span><span class="short">Health</span></button>
+      <button class="step" role="tab" id="tab-5" aria-controls="panel-5" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">5</span><span class="long">Check yourself</span><span class="short">Quiz</span></button>
+    </div>
+    <div class="layout">
+      <figure class="figure">
+        <div class="sheet">
+          <svg id="graph" role="img" aria-labelledby="g-title g-desc">
+            <title id="g-title">Ed’s labor-leisure trade-off</title>
+            <desc id="g-desc">Income is on the vertical axis and leisure days on the horizontal axis. The budget line runs from V, all work, down to S, all leisure, with a slope of minus the wage. Indifference curves show combinations Ed likes equally; his best choice is where the highest reachable curve touches the line.</desc>
+          </svg>
+          <ul class="graph-legend" aria-label="Graph key">
+            <li id="lg-budget"><i class="k-budget"></i><span>Budget line</span></li>
+            <li id="lg-base" hidden><i class="k-base"></i><span>Before (<span class="math">E</span><sub>1</sub>)</span></li>
+            <li id="lg-ic" hidden><i class="k-ic"></i><span>Indifference curve</span></li>
+            <li id="lg-tangent" hidden><i class="k-tangent"></i><span>Slope = MRS</span></li>
+            <li id="lg-lens" hidden><i class="k-lens"></i><span>Affordable points Ed likes better</span></li>
+          </ul>
+        </div>
+      </figure>
+
+      <div class="side">
+        <div class="readout" id="readout">
+          <div class="figures">
+            <p><span class="lbl" id="ro-k1"></span><span class="num" id="ro-v1"></span></p>
+            <p><span class="lbl" id="ro-k2"></span><span class="num" id="ro-v2"></span></p>
+          </div>
+          <div class="bars" id="ro-bars" hidden>
+            <div class="bar-row"><span class="bar-lbl">Value of one more day off (MRS)</span><span class="bar" aria-hidden="true"><i class="fill mrs" id="ro-b1"></i></span><b id="ro-b1-v"></b></div>
+            <div class="bar-row"><span class="bar-lbl">Pay for one more day of work</span><span class="bar" aria-hidden="true"><i class="fill wage" id="ro-b2"></i></span><b id="ro-b2-v"></b></div>
+          </div>
+          <div class="year" id="ro-year">
+            <p class="year-cap">Ed’s 365-day year</p>
+            <div class="year-bar" aria-hidden="true"><i class="seg-hlth" id="yb-h"></i><i class="seg-sick" id="yb-s"></i><i class="seg-work" id="yb-w"></i><i class="seg-leis" id="yb-l"></i></div>
+            <ul class="year-key">
+              <li><span class="sw seg-hlth"></span>Health <b id="yk-h"></b></li>
+              <li><span class="sw seg-sick"></span>Sick <b id="yk-s"></b></li>
+              <li><span class="sw seg-work"></span>Work <b id="yk-w"></b></li>
+              <li><span class="sw seg-leis"></span>Leisure <b id="yk-l"></b></li>
+            </ul>
+            <p class="year-fixed" id="year-fixed"></p>
+          </div>
+          <p class="margin" id="ro-verdict"></p>
+        </div>
+
+        <div class="panels">
+          <section class="panel" role="tabpanel" id="panel-1" aria-labelledby="tab-1">
+            <h2>The time constraint</h2>
+            <p>Health time and sick days come off the top of the year; Ed splits what is left, <span class="math">S</span>, between work and leisure.</p>
+            <div class="routine">
+              <span class="ctl-label" id="base-label">Health routine, then fixed:</span>
+              <div class="presets" role="group" aria-labelledby="base-label">
+                <button class="btn" data-base="14" aria-pressed="false">Light 14</button>
+                <button class="btn" data-base="30" aria-pressed="true">Typical 30</button>
+                <button class="btn" data-base="48" aria-pressed="false">Serious 48</button>
+              </div>
+            </div>
+            <label class="ctl-label" for="lei">Leisure, <span class="math">T</span><sub>B</sub>: <output id="lei-out" for="lei">100</output> days</label>
+            <input type="range" id="lei" min="0" max="300" step="1" value="100">
+            <div class="scale-ends" aria-hidden="true"><span>All work (<span class="math">V</span>)</span><span>All leisure (<span class="math">S</span>)</span></div>
+            <div class="note" aria-live="polite">
+              <h3 id="z1-title"></h3>
+              <p id="z1-text"></p>
+            </div>
+            <label class="ctl-label" for="wage">Wage: <output id="wage-out" for="wage">$200</output> a day</label>
+            <input type="range" id="wage" min="100" max="250" step="10" value="200">
+            <div class="scale-ends" aria-hidden="true"><span>$100</span><span>$250</span></div>
+            <dl class="glossary">
+              <dt><span class="sw seg-work"></span><span>Work, <span class="math">T</span><sub>W</sub></span></dt>
+              <dd>Days at the job. Each one pays the wage, so work is the only way income appears.</dd>
+              <dt><span class="sw seg-leis"></span><span>Leisure, <span class="math">T</span><sub>B</sub></span></dt>
+              <dd>Days off: a Saturday hike, dinner with friends, a week at home over the holidays. No pay, but Ed wants them.</dd>
+              <dt><span class="sw seg-hlth"></span><span>Health time, <span class="math">T</span><sub>H</sub></span></dt>
+              <dd>Days spent making himself healthier: workouts, cooking instead of ordering in, the dentist, a yearly physical, physical therapy after an injury.</dd>
+              <dt><span class="sw seg-sick"></span><span>Sick days, <span class="math">T</span><sub>L</sub></span></dt>
+              <dd>Days illness takes from him: the flu, a migraine, recovering from surgery. No pay and no fun, which is why cutting them frees real time.</dd>
+            </dl>
+            <p class="try"><strong>Try this:</strong> raise the wage. Which end of the line moves, and which stays put? Why?</p>
+            <button class="btn" data-goto="2">Next: Ed’s preferences</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-2" aria-labelledby="tab-2" hidden>
+            <h2>Ed’s preferences</h2>
+            <p>Ed wants more income and more leisure. Each indifference curve links combinations he likes equally, and higher curves are better. The slope of a curve, the marginal rate of substitution (MRS), is how much income he would give up for one more day off.</p>
+            <p class="fixed" id="fixed-2"></p>
+            <label class="ctl-label" for="icx">Leisure along <span class="math">U</span><sub>2</sub>: <output id="icx-out" for="icx">100</output> days</label>
+            <input type="range" id="icx" min="30" max="330" step="1" value="100">
+            <div class="scale-ends" aria-hidden="true"><span>Little leisure</span><span>Lots of leisure</span></div>
+            <div class="note" aria-live="polite"><p id="z2-text"></p></div>
+            <p class="try"><strong>Try this:</strong> slide to 30 days, then to 250. Why would Ed give up so much more income for a day off when he has little leisure?</p>
+            <button class="btn" data-goto="3">Next: Ed’s best choice</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-3" aria-labelledby="tab-3" hidden>
+            <h2>Ed’s best choice</h2>
+            <p>Ed can only pick points on his line. Drag his dot and compare what one more day off is worth to him (his MRS) with what that day would pay (the wage). The green area holds affordable points he likes better.</p>
+            <p class="fixed" id="fixed-3"></p>
+            <label class="ctl-label" for="eq">Leisure, <span class="math">T</span><sub>B</sub>: <output id="eq-out" for="eq">40</output> days</label>
+            <input type="range" id="eq" min="5" max="295" step="1" value="40">
+            <div class="scale-ends" aria-hidden="true"><span>More work</span><span>More leisure</span></div>
+            <div class="note" aria-live="polite">
+              <h3 id="z3-title"></h3>
+              <p id="z3-text"></p>
+            </div>
+            <p class="try"><strong>Try this:</strong> find the point where the curve just touches the line. Why can’t Ed reach a higher curve than that one?</p>
+            <button class="btn" data-goto="4">Next: more healthy time</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-4" aria-labelledby="tab-4" hidden>
+            <h2>More healthy time</h2>
+            <p>Ed spends more days on health-producing activities. That uses time, but it also cuts his sick days. If he saves more sick days than he spends, his available time <span class="math">S</span> grows and the whole line shifts out, parallel, because his wage hasn’t changed.</p>
+            <p class="fixed" id="fixed-4"></p>
+            <div class="presets" role="group" aria-label="Health time presets">
+              <button class="btn" data-th-base="1" data-th="30" aria-pressed="true" id="preset-base">Your routine (30 days)</button>
+              <button class="btn" data-th="40" aria-pressed="false">40 days</button>
+              <button class="btn" data-th="70" aria-pressed="false">70 days</button>
+            </div>
+            <label class="ctl-label" for="th">Days on health, <span class="math">T</span><sub>H</sub>: <output id="th-out" for="th">10</output></label>
+            <input type="range" id="th" min="14" max="80" step="1" value="30">
+            <div class="scale-ends" aria-hidden="true"><span>14</span><span>80 days</span></div>
+            <div class="note" aria-live="polite">
+              <h3 id="z4-title"></h3>
+              <p id="z4-text"></p>
+            </div>
+            <p class="result" id="result" hidden>Result: investing in health leads to higher income and more leisure.</p>
+            <p class="try"><strong>Try this:</strong> keep adding health days past 40. Does available time keep growing? This is the slide’s “assuming there’s a positive net effect.”</p>
+            <button class="btn" data-goto="5">Next: check yourself</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-5" aria-labelledby="tab-5" hidden>
+            <h2>Check yourself</h2>
+            <div id="quiz-live">
+              <p class="progress" id="quiz-question-focus" tabindex="-1"><span id="quiz-progress">Question 1 of 8</span></p>
+              <fieldset class="quiz">
+                <legend id="quiz-question"></legend>
+                <div class="opts" id="quiz-options"></div>
+              </fieldset>
+              <p class="error" id="quiz-error" role="alert" hidden>Pick an answer first.</p>
+              <div class="note" id="quiz-feedback" aria-live="polite" hidden>
+                <p class="verdict" id="quiz-verdict"></p>
+                <p id="quiz-why"></p>
+              </div>
+              <div class="actions">
+                <button class="btn btn-primary" id="quiz-check">Check answer</button>
+                <button class="btn btn-primary" id="quiz-next" hidden>Next question</button>
+              </div>
+            </div>
+            <div id="quiz-done" hidden>
+              <p class="score" id="quiz-score"></p>
+              <p>Go back to any step to review the line, the curves, and the shift.</p>
+              <button class="btn btn-primary" id="quiz-restart">Start over</button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <p>A stylized model for teaching. The numbers are made up; the shapes and the logic follow the Grossman model’s labor-leisure trade-off.</p>
+  </footer>
+</div>
+<script>/* Stylized labor-leisure model with health time (pure functions, no DOM).
+   Ed's year: T = 365 days = health time T_H + sick days T_L + work T_W + leisure T_B.
+   Sick days follow an S-shaped curve of health time: a token effort changes little, a real
+   routine cuts sick days sharply, and no routine can push them below a floor.
+   Available time S = T - T_H - T_L; income Y = w * T_W; utility U = Y^a * T_B^(1-a). */
+(function (root) {
+  'use strict';
+
+  var T = 365;
+  var TH0 = 30;              // Ed's routine to begin with, in days a year
+  var TH_MIN = 14;           // the lightest routine on offer: at 13 days or less an extra health day saves less than a sick day
+  var LMIN = 4, LMAX = 90;   // sick days with a perfect routine, and with none at all
+  // anchors: 35 sick days at 30 health days, 5 at 50
+  var Z1 = Math.log((LMAX - LMIN) / (35 - LMIN) - 1);
+  var Z2 = Math.log((LMAX - LMIN) / (5 - LMIN) - 1);
+  var RATE = (Z2 - Z1) / 20, MID = 30 - Z1 / RATE;
+  var W0 = 200;              // wage, $ per day of work
+  var ALPHA = 2 / 3;         // weight on income in U = Y^a * T_B^(1-a)
+  var P = (1 - ALPHA) / ALPHA;
+
+  function sick(th) { return LMIN + (LMAX - LMIN) / (1 + Math.exp(RATE * (th - MID))); }
+  function saved(th) { var u = Math.exp(RATE * (th - MID)); return (LMAX - LMIN) * RATE * u / ((1 + u) * (1 + u)); }
+  function available(th) { return T - th - sick(th); }           // S = T - T_H - T_L
+  function income(tb, S, w) { return w * (S - tb); }             // on the budget line
+  function icIndex(y, tb) { return y * Math.pow(tb, P); }        // same K = same indifference curve
+  function icY(K, tb) { return K / Math.pow(tb, P); }
+  function mrs(y, tb) { return P * y / tb; }                     // $ Ed would give up for one more day off
+  function best(S, w) { var tb = (1 - ALPHA) * S; return { tb: tb, tw: S - tb, y: w * (S - tb) }; }
+
+  // the other point where the indifference curve through (tb, y on the line) crosses the budget line
+  function otherCrossing(tb, S, w) {
+    var K = icIndex(income(tb, S, w), tb), tStar = best(S, w).tb;
+    var g = function (t) { return income(t, S, w) * Math.pow(t, P) - K; };
+    var lo = tb < tStar ? tStar : 1e-9, hi = tb < tStar ? S : tStar;
+    for (var i = 0; i < 200; i++) {
+      var mid = (lo + hi) / 2;
+      if ((g(mid) > 0) === (tb < tStar)) lo = mid; else hi = mid;
+    }
+    return (lo + hi) / 2;
+  }
+  function solve(f, lo, hi) { for (var i = 0; i < 200; i++) { var mid = (lo + hi) / 2; if (f(mid) > 0) lo = mid; else hi = mid; } return (lo + hi) / 2; }
+  var TH_PEAK = solve(function (t) { return saved(t) - 1; }, MID, T);          // one more health day saves exactly one sick day
+  function breakEven(th) { return solve(function (t) { return available(th) - available(t); }, T, TH_PEAK); }
+
+  var api = {
+    T: T, TH0: TH0, TH_MIN: TH_MIN, LMIN: LMIN, LMAX: LMAX, RATE: RATE, MID: MID, W0: W0, ALPHA: ALPHA, P: P, TH_PEAK: TH_PEAK,
+    sick: sick, saved: saved, available: available, income: income, icIndex: icIndex, icY: icY, mrs: mrs, best: best,
+    otherCrossing: otherCrossing, breakEven: breakEven
+  };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  else root.LLModel = api;
+})(this);
+</script>
+<script>(function () {
+  'use strict';
+
+  var M = window.LLModel;
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var VB = { w: 568, h: 520 };
+  var PLOT = { left: 76, right: 528, top: 48, bottom: 396 };
+  var XMAX = 365, YMAX = 80000;
+  var ROW1 = PLOT.bottom + 22, ROW2 = PLOT.bottom + 56, BR_Y = PLOT.bottom + 34, BR_LABEL_Y = PLOT.bottom + 52, BR_LABEL_Y2 = PLOT.bottom + 74;
+  var SLOPE_DAYS = 30;
+
+  // ---------- helpers ----------
+  function $(id) { return document.getElementById(id); }
+  function xOf(t) { return PLOT.left + (PLOT.right - PLOT.left) * t / XMAX; }
+  function yOf(v) { return PLOT.bottom - (PLOT.bottom - PLOT.top) * v / YMAX; }
+  function tOfX(x) { return (x - PLOT.left) * XMAX / (PLOT.right - PLOT.left); }
+  function r1(v) { return Math.round(v * 10) / 10; }
+  function clamp(v, a, b) { return Math.min(Math.max(v, a), b); }
+  function money(v) { return '$' + Math.round(v).toLocaleString('en-US'); }
+  function signedMoney(v) { var r = Math.round(v); return r === 0 ? '$0' : (r > 0 ? '+' : '−') + money(Math.abs(r)); }
+  function signedDays(v) { return v === 0 ? '0 days' : (v > 0 ? '+' : '−') + Math.abs(v) + (Math.abs(v) === 1 ? ' day' : ' days'); }
+  function el(tag, attrs, parent, text) {
+    var n = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) if (Object.prototype.hasOwnProperty.call(attrs, k)) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function show(n, on) { n.style.display = on ? '' : 'none'; }
+  function setText(id, v) { var n = $(id); if (n.textContent !== v) n.textContent = v; }
+  function setHTML(id, v) { var n = $(id); if (n.__html !== v) { n.innerHTML = v; n.__html = v; } }
+  function setLine(ln, x1, y1, x2, y2) { ln.setAttribute('x1', r1(x1)); ln.setAttribute('y1', r1(y1)); ln.setAttribute('x2', r1(x2)); ln.setAttribute('y2', r1(y2)); }
+  function bboxOf(t) { try { return t.getBBox(); } catch (e) { return null; } }
+  function overlaps(a, b, pad) { return !!a && !!b && a.x < b.x + b.width + pad && b.x < a.x + a.width + pad && a.y < b.y + b.height && b.y < a.y + a.height; }
+  // SVG text with italic variables and subscripts: parts = [[text, kind]], kind '' | 'math' | 'sub'
+  function rich(t, parts) {
+    var key = JSON.stringify(parts);
+    if (t.__key === key) return;
+    t.__key = key;
+    while (t.firstChild) t.removeChild(t.firstChild);
+    var shift = 0;
+    parts.forEach(function (p) {
+      var s = el('tspan', {}, t, p[0]);
+      var want = p[1] === 'sub' ? 5 : 0;
+      if (want !== shift) { s.setAttribute('dy', String(want - shift)); shift = want; }
+      if (p[1] === 'math') s.setAttribute('class', 'math');
+      if (p[1] === 'sub') s.setAttribute('class', 'sub up');
+      if (p[1] === '') s.setAttribute('class', 'up');
+    });
+  }
+  function sym(base, sub) { return sub ? [[base, 'math'], [sub, 'sub']] : [[base, 'math']]; }
+
+  // Ed's day plan at a given number of health days, in whole days (equilibrium split of S)
+  function pressed(sel, test) {
+    Array.prototype.forEach.call(document.querySelectorAll(sel), function (b) { b.setAttribute('aria-pressed', test(b) ? 'true' : 'false'); });
+  }
+  function baseOf(th) { return plan(th == null ? S.base : th); }
+  function plan(th) {
+    var sick = Math.round(M.sick(th)), S = M.T - th - sick, tb = Math.round((1 - M.ALPHA) * S);
+    return { th: th, sick: sick, S: S, tb: tb, tw: S - tb, y: M.W0 * (S - tb) };
+  }
+
+  // ---------- lesson content ----------
+  var QUIZ = [
+    { q: 'Ed’s leisure is the segment OA. Which segment of the axis is his work time?',
+      options: ['OA', 'OS', 'AS', 'OV'], answer: 2,
+      why: 'Ed’s available time runs from O to S. Leisure takes OA, so the rest of it, AS, is his work time.',
+      pre: { mode: 'budget', tb: 100, w: 200 },
+      view: { mode: 'budget', tb: 100, w: 200, brackets: true } },
+    { q: 'What does the slope of the line VS measure?',
+      options: ['Minus the wage: the income Ed gives up for each extra day of leisure', 'Ed’s marginal rate of substitution', 'The number of days Ed is sick', 'Ed’s total income'], answer: 0,
+      why: 'Moving from S toward V, every day of leisure Ed gives up becomes a day of work that pays the wage. From S to N, 30 fewer days off buy 30 × $200 = $6,000.',
+      pre: { mode: 'budget', tb: 100, w: 200 },
+      view: { mode: 'budget', tb: 100, w: 200, brackets: true, slope: true } },
+    { q: 'The slope of an indifference curve, the MRS, tells you…',
+      options: ['how much Ed earns per day of work', 'how many days Ed spends on health', 'which curve Ed prefers', 'how much income Ed would give up for one more day off and feel just as well off'], answer: 3,
+      why: 'Along one curve Ed is equally happy. The slope says how many dollars of income one more day of leisure is worth to him at that point.',
+      pre: { mode: 'ic', tb: 100 },
+      view: { mode: 'ic', tb: 100 } },
+    { q: 'At Ed’s dot, his MRS is bigger than the wage. What should he do?',
+      options: ['Work more, because the pay is worth more than the time off', 'Take more leisure, because a day off is worth more to him than the pay he gives up', 'Nothing, since every point on the line is equally good', 'Choose a point above the line'], answer: 1,
+      why: 'A day off costs him the wage in lost pay, but he values it at his MRS. When the MRS is higher, trading pay for time off makes him better off, which is why the better points (green) all lie to the right.',
+      pre: { mode: 'equil', tb: 40 },
+      view: { mode: 'equil', tb: 40, lens: true, brackets: true } },
+    { q: 'Why is point E Ed’s equilibrium?',
+      options: ['It gives Ed the most income', 'It gives Ed the most leisure', 'It is on the highest indifference curve he can reach, where that curve is tangent to the line (MRS = wage)', 'It is halfway between V and S'], answer: 2,
+      why: 'At E the curve just touches the line. Any other affordable point sits on a lower curve, and there the MRS and the wage no longer match.',
+      pre: { mode: 'equil', tb: 100 },
+      view: { mode: 'equil', tb: 100, lens: true, brackets: true } },
+    { q: 'Ed spends more days on health and saves even more sick days. What happens to his budget line?',
+      options: ['It shifts out, parallel: more available time at the same wage', 'It pivots and gets steeper', 'It shifts in toward the origin', 'It doesn’t move; only his indifference curves change'], answer: 0,
+      why: 'Available time S grows, so both ends move out: V because he can work more days, S because he has more days in total. The wage, and so the slope, is unchanged.',
+      pre: { mode: 'health', th: 30 },
+      view: { mode: 'health', th: 40 } },
+    { q: 'After the shift from E₁ to E₂, why does Ed have both more income and more leisure?',
+      options: ['His wage went up', 'He works fewer days', 'Health time counts as leisure', 'He has more available days to split, and he wants more of both'], answer: 3,
+      why: 'More healthy time frees days he used to lose to sickness. With the same wage and more days to divide, he takes some as extra work (income) and some as extra leisure.',
+      pre: { mode: 'health', th: 40 },
+      view: { mode: 'health', th: 40 } },
+    { q: 'The slide assumes “a positive net effect.” When does more health time fail to give Ed more available time?',
+      options: ['When his wage is high', 'When one more day on health saves less than one sick day', 'Never, since health time always adds time', 'When he takes more leisure'], answer: 1,
+      why: 'A health day costs one day and saves some sick days. Once it saves less than one, extra health time eats into work and leisure; push far enough and S falls below where Ed started.',
+      pre: { mode: 'health', th: 30 },
+      view: { mode: 'health', th: 70 } }
+  ];
+
+  // ---------- state ----------
+  var S = { step: 1, base: M.TH0, lei: 100, w: M.W0, icx: 100, eq: 40, th: M.TH0,
+    quiz: { i: 0, checked: false, choice: null, correct: 0, done: false, builtFor: -1 } };
+
+  // ---------- static graph ----------
+  var svg = $('graph');
+  svg.setAttribute('viewBox', '0 0 ' + VB.w + ' ' + VB.h);
+  var defs = el('defs', {}, svg);
+  var clip = el('clipPath', { id: 'plot-clip' }, defs);
+  el('rect', { x: PLOT.left, y: PLOT.top, width: PLOT.right - PLOT.left, height: PLOT.bottom - PLOT.top }, clip);
+  el('rect', { class: 'plot-bg', x: PLOT.left, y: PLOT.top, width: PLOT.right - PLOT.left, height: PLOT.bottom - PLOT.top }, svg);
+  var gGrid = el('g', { class: 'grid', 'aria-hidden': 'true' }, svg), v;
+  for (v = 25; v < XMAX; v += 25) el('line', { class: v % 100 === 0 ? 'major' : 'minor', x1: xOf(v), x2: xOf(v), y1: PLOT.top, y2: PLOT.bottom }, gGrid);
+  for (v = 10000; v < YMAX; v += 10000) el('line', { class: v % 20000 === 0 ? 'major' : 'minor', x1: PLOT.left, x2: PLOT.right, y1: yOf(v), y2: yOf(v) }, gGrid);
+  var gAxes = el('g', { class: 'axes', 'aria-hidden': 'true' }, svg);
+  el('line', { class: 'axis', x1: PLOT.left, y1: PLOT.bottom, x2: PLOT.right, y2: PLOT.bottom }, gAxes);
+  el('line', { class: 'axis', x1: PLOT.left, y1: PLOT.bottom, x2: PLOT.left, y2: PLOT.top }, gAxes);
+  var yTicks = [];
+  for (v = 20000; v <= YMAX; v += 20000) yTicks.push(el('text', { class: 'tick', x: PLOT.left - 9, y: yOf(v) + 5, 'text-anchor': 'end' }, gAxes, '$' + (v / 1000) + 'k'));
+  var originLabel = el('text', { class: 'xlabel', x: PLOT.left - 8, y: PLOT.bottom + 7, 'text-anchor': 'end' }, gAxes);
+  rich(originLabel, sym('O'));
+  el('text', { class: 'axis-title', x: 8, y: 20 }, gAxes, 'Y (income)');
+  rich(el('text', { class: 'axis-title', x: (PLOT.left + PLOT.right) / 2, y: VB.h - 15, 'text-anchor': 'middle' }, gAxes),
+    [['Leisure time, ', ''], ['T', 'math'], ['B', 'sub'], [' (days)', '']]);
+
+  // ---------- dynamic layers ----------
+  var gClip = el('g', { 'clip-path': 'url(#plot-clip)' }, svg);
+  var lens = el('path', { class: 'lens' }, gClip);
+  var icFam = [0, 1, 2].map(function () { return el('path', { class: 'ic' }, gClip); });
+  var icBase = el('path', { class: 'ic-faint' }, gClip);
+  var icMain = el('path', { class: 'ic' }, gClip);
+  var tangent = el('line', { class: 'tangent' }, gClip);
+  var guides = [0, 1, 2, 3].map(function () { return el('line', { class: 'guide' }, gClip); });
+  var legV = el('line', { class: 'leg' }, gClip);
+  var budgetBase = el('line', { class: 'budget-base' }, gClip);
+  var budget = el('line', { class: 'budget' }, gClip);
+  var BR = [['leis', 'Leisure'], ['work', 'Work'], ['hlth', 'Health'], ['sick', 'Sick']].map(function (k) {
+    return { key: k[0], line: el('line', { class: 'br br-' + k[0] }, svg),
+      cap1: el('line', { class: 'br br-' + k[0] + ' br-cap' }, svg), cap2: el('line', { class: 'br br-' + k[0] + ' br-cap' }, svg),
+      label: el('text', { class: 'br-label', 'text-anchor': 'middle', y: BR_LABEL_Y }, svg, k[1]) };
+  });
+  var icLabels = [0, 1, 2].map(function () { return el('text', { class: 'curve-label' }, svg); });
+  var ylabels = [0, 1].map(function () { return el('text', { class: 'ylabel' }, svg); });
+  var row1 = [0, 1, 2, 3].map(function () { return el('text', { class: 'xlabel', 'text-anchor': 'middle', y: ROW1 }, svg); });
+  var row2 = [0, 1, 2].map(function () { return el('text', { class: 'xlabel', 'text-anchor': 'middle', y: ROW2 }, svg); });
+  var sMarks = [0, 1].map(function () { return el('circle', { class: 'pt-s', r: 4 }, svg); });
+  var pts = {};
+  [['V', sym('V')], ['N', sym('N')], ['E', sym('E')], ['E1', sym('E', '1')], ['E2', sym('E', '2')]].forEach(function (k) {
+    var g = el('g', { class: 'pt', 'data-key': k[0] }, svg);
+    var t = el('text', { class: 'pt-label' }, g); rich(t, k[1]);
+    pts[k[0]] = { g: g, c: el('circle', { r: 5 }, g), t: t };
+  });
+  var plotHit = el('rect', { class: 'plot-hit', x: PLOT.left, y: PLOT.top, width: PLOT.right - PLOT.left, height: PLOT.bottom - PLOT.top }, svg);
+  var dot = el('circle', { class: 'dot', r: 8 }, svg);
+  var dotHit = el('circle', { class: 'dot-hit', r: 24 }, svg);
+
+  function placePoint(k, t, y, quad) {
+    var p = pts[k], x = xOf(t), yy = yOf(y), low = quad === 'downleft';
+    p.c.setAttribute('cx', r1(x)); p.c.setAttribute('cy', r1(yy));
+    if (quad === 'axisleft') { p.t.setAttribute('x', r1(x - 10)); p.t.setAttribute('y', r1(yy + 7)); p.t.setAttribute('text-anchor', 'end'); show(p.g, true); return; }
+    p.t.setAttribute('x', r1(x + (low ? -9 : 9))); p.t.setAttribute('y', r1(low ? yy + 25 : yy - 10));
+    p.t.setAttribute('text-anchor', low ? 'end' : 'start');
+    show(p.g, true);
+  }
+  function icD(K) {
+    var a = Math.max(Math.pow(K / (YMAX * 1.05), 1 / M.P), 0.5), b = XMAX, n = 140, d = '';
+    for (var i = 0; i <= n; i++) { var t = a * Math.pow(b / a, i / n); d += (i ? 'L' : 'M') + r1(xOf(t)) + ' ' + r1(yOf(M.icY(K, t))); }
+    return d;
+  }
+  function lensD(t1, t2, Sd, w, K) {
+    var lo = Math.max(Math.min(t1, t2), 1e-6), hi = Math.max(t1, t2), n = 90;
+    var d = 'M' + r1(xOf(lo)) + ' ' + r1(yOf(M.income(lo, Sd, w))) + 'L' + r1(xOf(hi)) + ' ' + r1(yOf(M.income(hi, Sd, w)));
+    for (var i = 0; i <= n; i++) { var t = hi * Math.pow(lo / hi, i / n); d += 'L' + r1(xOf(t)) + ' ' + r1(Math.max(yOf(M.icY(K, t)), PLOT.top - 40)); }
+    return d + 'Z';
+  }
+  // labels in a row under the axis: placed in order of priority, nudged apart if close, dropped if they still collide
+  function placeRow(pool, cands, fixed) {
+    var placed = (fixed || []).filter(Boolean);
+    pool.forEach(function (t, i) {
+      var c = cands[i];
+      if (!c) { show(t, false); return; }
+      var x0 = xOf(c.t);
+      rich(t, c.parts); t.setAttribute('x', r1(x0)); t.setAttribute('class', 'xlabel' + (c.faint ? ' faint' : '')); show(t, true);
+      var b = bboxOf(t), hit = placed.filter(function (p) { return overlaps(p, b, 6); });
+      if (hit.length === 1 && b) {
+        var q = hit[0], dx = b.x + b.width / 2 >= q.x + q.width / 2 ? q.x + q.width + 6 - b.x : q.x - 6 - (b.x + b.width);
+        if (Math.abs(dx) <= 14) { t.setAttribute('x', r1(x0 + dx)); b = bboxOf(t); }
+      }
+      if (placed.some(function (p) { return overlaps(p, b, 5.5); })) show(t, false); else placed.push(b);
+    });
+  }
+  function drawBrackets(on, tb, Sd, th) {
+    var seg = [[0, tb], [tb, Sd], [Sd, Sd + th], [Sd + th, XMAX]], prev = null, prev2 = null;
+    BR.forEach(function (br, i) {
+      var a = seg[i][0], b = seg[i][1], vis = on && b - a > 0.5;
+      show(br.line, vis); show(br.cap1, vis); show(br.cap2, vis); show(br.label, false);
+      if (!vis) return;
+      var x1 = xOf(a) + (i ? 2.5 : 0), x2 = xOf(b) - 2.5;
+      setLine(br.line, x1, BR_Y, x2, BR_Y);
+      setLine(br.cap1, x1, BR_Y - 4, x1, BR_Y + 4); setLine(br.cap2, x2, BR_Y - 4, x2, BR_Y + 4);
+      br.label.setAttribute('x', r1((xOf(a) + xOf(b)) / 2)); br.label.setAttribute('y', BR_LABEL_Y); show(br.label, true);
+      var bb = bboxOf(br.label);
+      if (bb && overlaps(bb, prev, 6)) { br.label.setAttribute('y', BR_LABEL_Y2); bb = bboxOf(br.label); }   // crowded: drop to a second row
+      if (bb && (bb.x < PLOT.left - 4 || bb.x + bb.width > PLOT.right + 24 || overlaps(bb, prev, 6) || overlaps(bb, prev2, 6))) show(br.label, false);
+      else if (+br.label.getAttribute('y') === BR_LABEL_Y) prev = bb; else prev2 = bb;
+    });
+  }
+
+  // ---------- view specs ----------
+  function specFor() {
+    if (S.step === 1) return { mode: 'budget', tb: S.lei, w: S.w, brackets: true, slope: true, live: true };
+    if (S.step === 2) return { mode: 'ic', tb: S.icx, live: true };
+    if (S.step === 3) return { mode: 'equil', tb: S.eq, lens: true, brackets: true, live: true };
+    if (S.step === 4) return { mode: 'health', th: S.th };
+    var Q = S.quiz, q = QUIZ[Q.i], out = { base: M.TH0 }, src;
+    if (Q.done) return { mode: 'health', th: M.TH0, pre: true, base: M.TH0 };
+    src = Q.checked ? q.view : q.pre;
+    if (!Q.checked) out.pre = true;
+    for (var k in src) if (Object.prototype.hasOwnProperty.call(src, k)) out[k] = src[k];
+    return out;
+  }
+  function compute(spec) {
+    var d = { mode: spec.mode, pre: !!spec.pre, live: !!spec.live, brackets: !!spec.brackets, slope: !!spec.slope, lens: !!spec.lens };
+    d.base = baseOf(spec.base);
+    if (spec.mode === 'budget' || spec.mode === 'equil') {
+      d.w = spec.mode === 'budget' ? spec.w : M.W0; d.Sd = d.base.S; d.tb = spec.tb; d.tw = d.Sd - d.tb; d.y = d.w * d.tw;
+      d.th = d.base.th; d.sick = d.base.sick; d.best = d.base;
+      if (spec.mode === 'equil') { d.mrs = M.mrs(d.y, d.tb); d.K = M.icIndex(d.y, d.tb); d.atBest = d.tb === d.best.tb; }
+    } else if (spec.mode === 'ic') {
+      d.K = M.icIndex(40000, 100); d.tb = spec.tb; d.y = M.icY(d.K, d.tb); d.mrs = M.mrs(d.y, d.tb);
+    } else {
+      var p = plan(spec.th);
+      d.p = p; d.w = M.W0; d.Sd = p.S; d.tb = p.tb; d.tw = p.tw; d.y = p.y; d.th = p.th; d.sick = p.sick; d.shifted = spec.th !== d.base.th;
+    }
+    return d;
+  }
+
+  // ---------- graph ----------
+  function drawGraph(d) {
+    var hide = [lens, icBase, icMain, tangent, legV, budgetBase, budget].concat(icFam, icLabels, ylabels, guides, sMarks);
+    hide.forEach(function (n) { show(n, false); });
+    Object.keys(pts).forEach(function (k) { show(pts[k].g, false); });
+    ['lg-base', 'lg-ic', 'lg-tangent', 'lg-lens'].forEach(function (id) { $(id).hidden = true; });
+    $('lg-budget').hidden = d.mode === 'ic';
+    var dotAt = null, r1c = [], r2c = [], gl = [];
+
+    if (d.mode === 'budget' || d.mode === 'equil') {
+      setLine(budget, xOf(0), yOf(d.w * d.Sd), xOf(d.Sd), yOf(0)); show(budget, true);
+      sMarks[0].setAttribute('cx', r1(xOf(d.Sd))); sMarks[0].setAttribute('cy', PLOT.bottom); show(sMarks[0], true);
+      placePoint('V', 0, d.w * d.Sd, 'axisleft');
+      dotAt = [d.tb, d.y];
+      gl.push([d.tb, d.y, 'v']);
+      if (d.mode === 'budget') {
+        gl.push([d.tb, d.y, 'h']);
+        r1c.push({ t: d.tb, parts: sym('A') });
+        if (d.slope) {
+          var tn = d.Sd - SLOPE_DAYS;
+          placePoint('N', tn, d.w * SLOPE_DAYS, 'upright');
+          setLine(legV, xOf(tn), yOf(d.w * SLOPE_DAYS), xOf(tn), PLOT.bottom); show(legV, true);
+        }
+      } else {
+        placePoint('E', d.best.tb, d.best.y, 'upright');
+        icMain.setAttribute('d', icD(d.K)); show(icMain, true); $('lg-ic').hidden = false;
+        if (d.lens && !d.atBest) {
+          var other = M.otherCrossing(d.tb, d.Sd, d.w);
+          lens.setAttribute('d', lensD(d.tb, other, d.Sd, d.w, d.K)); show(lens, true); $('lg-lens').hidden = false;
+        }
+      }
+      r1c.unshift({ t: d.Sd, parts: sym('S') });
+      r1c.push({ t: XMAX, parts: [['365', '']] });
+      drawBrackets(d.brackets, d.tb, d.Sd, d.th);
+    } else if (d.mode === 'ic') {
+      var ends = [300000, 400000, 500000].map(function (K, i) {
+        icFam[i].setAttribute('d', icD(K)); show(icFam[i], true);
+        rich(icLabels[i], sym('U', String(i + 1)));
+        icLabels[i].setAttribute('x', PLOT.right + 5); icLabels[i].setAttribute('y', r1(yOf(M.icY(K, XMAX)) + 6)); show(icLabels[i], true);
+        return icLabels[i];
+      });
+      for (var pass = 0; pass < 3; pass++) {
+        for (var j = 1; j < ends.length; j++) {   // U(j+1) sits above U(j); keep a clear gap between them
+          var lo = bboxOf(ends[j - 1]), hi = bboxOf(ends[j]);
+          if (!lo || !hi) break;
+          var need = hi.y + hi.height + 2 - lo.y;
+          if (need > 0) {
+            ends[j].setAttribute('y', r1(+ends[j].getAttribute('y') - need / 2));
+            ends[j - 1].setAttribute('y', r1(+ends[j - 1].getAttribute('y') + need / 2));
+          }
+        }
+      }
+      var half = 45, m = d.mrs;
+      setLine(tangent, xOf(d.tb - half), yOf(d.y + m * half), xOf(d.tb + half), yOf(d.y - m * half)); show(tangent, true);
+      $('lg-ic').hidden = false; $('lg-tangent').hidden = false;
+      dotAt = [d.tb, d.y]; gl.push([d.tb, d.y, 'v']);
+      r1c.push({ t: d.tb, parts: [['T', 'math'], ['B', 'sub']] });
+      drawBrackets(false);
+    } else {
+      var b0 = d.base, p = d.p, outer = p.S >= b0.S;
+      if (d.shifted) {
+        setLine(budgetBase, xOf(0), yOf(d.w * b0.S), xOf(b0.S), yOf(0)); show(budgetBase, true); $('lg-base').hidden = false;
+        icBase.setAttribute('d', icD(M.icIndex(b0.y, b0.tb))); show(icBase, true);
+      }
+      setLine(budget, xOf(0), yOf(d.w * p.S), xOf(p.S), yOf(0)); show(budget, true);
+      icMain.setAttribute('d', icD(M.icIndex(p.y, p.tb))); show(icMain, true); $('lg-ic').hidden = false;
+      sMarks[0].setAttribute('cx', r1(xOf(b0.S))); sMarks[0].setAttribute('cy', PLOT.bottom); show(sMarks[0], true);
+      if (d.shifted) {
+        sMarks[1].setAttribute('cx', r1(xOf(p.S))); sMarks[1].setAttribute('cy', PLOT.bottom); show(sMarks[1], true);
+        placePoint('E1', b0.tb, b0.y, outer ? 'downleft' : 'upright');
+        placePoint('E2', p.tb, p.y, outer ? 'upright' : 'downleft');
+      } else placePoint('E1', b0.tb, b0.y, 'upright');
+      dotAt = [p.tb, p.y];
+      gl.push([b0.tb, b0.y, 'v'], [b0.tb, b0.y, 'h']);
+      if (d.shifted) gl.push([p.tb, p.y, 'v'], [p.tb, p.y, 'h']);
+      r1c.push({ t: b0.S, parts: sym('S'), faint: d.shifted }, { t: b0.tb, parts: [['T', 'math'], ['B1', 'sub']], faint: d.shifted });
+      if (d.shifted) r2c.push({ t: p.S, parts: [['S′', 'math']] }, { t: p.tb, parts: [['T', 'math'], ['B2', 'sub']] });
+      r1c.push({ t: XMAX, parts: [['365', '']] });
+      // income labels on the y-axis: the higher one above its guide, the lower one below
+      var ys = [{ v: b0.y, parts: sym('Y', '1'), faint: d.shifted }];
+      if (d.shifted) ys.push({ v: p.y, parts: sym('Y', '2') });
+      var top = ys.length > 1 && ys[1].v > ys[0].v ? 1 : 0;
+      ys.forEach(function (yl, i) {
+        var t = ylabels[i]; rich(t, yl.parts);
+        t.setAttribute('x', PLOT.left + 7); t.setAttribute('y', r1(yOf(yl.v) + (i === top ? -7 : 21)));
+        t.setAttribute('class', 'ylabel' + (yl.faint ? ' faint' : '')); show(t, true);
+      });
+      if (ys.length > 1) {
+        var up = ylabels[top], dn = ylabels[1 - top], bu = bboxOf(up), bd = bboxOf(dn);
+        var need = bu && bd ? bu.y + bu.height + 2 - bd.y : 0;
+        if (need > 0) {
+          up.setAttribute('y', r1(+up.getAttribute('y') - need / 2));
+          dn.setAttribute('y', r1(+dn.getAttribute('y') + need / 2));
+        }
+      }
+      drawBrackets(false);
+    }
+
+    guides.forEach(function (ln, i) {
+      var g = gl[i]; if (!g) return;
+      if (g[2] === 'v') setLine(ln, xOf(g[0]), yOf(g[1]), xOf(g[0]), PLOT.bottom);
+      else setLine(ln, PLOT.left, yOf(g[1]), xOf(g[0]), yOf(g[1]));
+      show(ln, true);
+    });
+    var hasDot = !!dotAt && !(d.pre && d.mode !== 'budget' && d.mode !== 'equil' && d.mode !== 'ic');
+    if (dotAt) {
+      dot.setAttribute('cx', r1(xOf(dotAt[0]))); dot.setAttribute('cy', r1(yOf(dotAt[1])));
+      dotHit.setAttribute('cx', r1(xOf(dotAt[0]))); dotHit.setAttribute('cy', r1(yOf(dotAt[1])));
+    }
+    show(dot, hasDot); show(dotHit, hasDot && d.live); show(plotHit, d.live);
+    var vb = pts.V.g.style.display === 'none' ? null : bboxOf(pts.V.t);
+    yTicks.forEach(function (tk) { show(tk, true); if (vb && overlaps(bboxOf(tk), vb, 2)) show(tk, false); });
+    placeRow(row1, r1c, [bboxOf(originLabel)]); placeRow(row2, r2c);
+  }
+
+  // ---------- readout ----------
+  function bar(id, value, max) { $(id).style.width = (clamp(value / max, 0, 1) * 100).toFixed(2) + '%'; }
+  function year(h, s, w, l) {
+    [['h', h], ['s', s], ['w', w], ['l', l]].forEach(function (p) {
+      $('yb-' + p[0]).style.width = (p[1] / M.T * 100).toFixed(3) + '%';
+      setText('yk-' + p[0], String(p[1]));
+    });
+  }
+  function drawReadout(d) {
+    var box = $('readout'), empty = d.pre;
+    box.classList.toggle('is-empty', empty);
+    $('ro-bars').hidden = empty || d.mode !== 'equil';
+    $('ro-year').hidden = empty || d.mode === 'ic';
+    if (!empty && d.mode !== 'ic') setHTML('year-fixed', d.mode === 'health'
+      ? '<strong>Health time is what changes here.</strong> Sick days follow from it.'
+      : '<strong>Health and sick days are fixed here</strong>, leaving <b>' + d.base.S + '</b> days to split. Step 4 changes them.');
+    if (empty) {
+      setText('ro-k1', 'Income'); setText('ro-v1', '–'); setText('ro-k2', 'Leisure'); setText('ro-v2', '–');
+      setHTML('ro-verdict', S.quiz.done ? 'Pick any step above to keep exploring.' : 'Answer the question to see what happens on the graph.');
+      return;
+    }
+    if (d.mode === 'ic') {
+      setText('ro-k1', 'Leisure'); setText('ro-v1', Math.round(d.tb) + ' days');
+      setText('ro-k2', 'Income'); setText('ro-v2', money(d.y));
+      setHTML('ro-verdict', 'To get one more day off, Ed would give up about <b>' + money(d.mrs) + '</b> of income and feel just as well off. That is his MRS here.');
+      return;
+    }
+    if (d.mode === 'health') {
+      var tag = d.shifted ? '₂' : '₁';
+      setText('ro-k1', 'Income at E' + tag); setText('ro-v1', money(d.y));
+      setText('ro-k2', 'Leisure at E' + tag); setText('ro-v2', d.tb + ' days');
+      year(d.th, d.sick, d.tw, d.tb);
+      if (!d.shifted) setHTML('ro-verdict', 'This is <b>E₁</b>: ' + d.base.th + ' days on health and ' + d.base.sick + ' sick days leave Ed <b>' + d.base.S + '</b> days to split between work and leisure.');
+      else setHTML('ro-verdict', 'Compared with E₁: income <b>' + signedMoney(d.y - d.base.y) + '</b> and leisure <b>' + signedDays(d.tb - d.base.tb) + '</b>. Available time is <b>' + d.Sd + '</b> days instead of ' + d.base.S + '.');
+      return;
+    }
+    setText('ro-k1', 'Income'); setText('ro-v1', money(d.y));
+    setText('ro-k2', 'Leisure'); setText('ro-v2', d.tb + ' days');
+    year(d.th, d.sick, d.tw, d.tb);
+    if (d.mode === 'budget') {
+      setHTML('ro-verdict', 'Each extra day of leisure costs Ed <b>' + money(d.w) + '</b> of income, so the slope of VS is −' + money(d.w) + ' a day.');
+      return;
+    }
+    setText('ro-b1-v', money(d.mrs)); setText('ro-b2-v', money(d.w));
+    bar('ro-b1', d.mrs, 500); bar('ro-b2', d.w, 500);
+    if (d.atBest && Math.abs(d.mrs - d.w) < 0.5) setHTML('ro-verdict', 'One more day off is worth exactly what working it would pay (<b>' + money(d.w) + '</b>). This is <b>E</b>, the highest indifference curve Ed can reach.');
+    else if (d.atBest) setHTML('ro-verdict', 'One more day off is worth <b>' + money(d.mrs) + '</b> against a <b>' + money(d.w) + '</b> wage, as close as whole days allow. This is <b>E</b>, the highest indifference curve Ed can reach.');
+    else if (d.mrs > d.w) setHTML('ro-verdict', 'One more day off is worth <b>' + money(d.mrs) + '</b> to Ed but costs only <b>' + money(d.w) + '</b> in pay, so he’d be better off taking more leisure.');
+    else setHTML('ro-verdict', 'One more day off is worth only <b>' + money(d.mrs) + '</b> to Ed, but working it would pay <b>' + money(d.w) + '</b>, so he’d be better off working more.');
+  }
+
+  // ---------- render ----------
+  function render() {
+    var d = compute(specFor());
+    drawGraph(d);
+    drawReadout(d);
+    if (S.step === 1) renderBudgetPanel();
+    if (S.step === 2) renderIcPanel(d);
+    if (S.step === 3) renderEquilPanel(d);
+    if (S.step === 4) renderHealthPanel(d);
+    if (S.step === 5) renderQuiz();
+  }
+
+  // ---------- step 1 ----------
+  var lei = $('lei'), wageIn = $('wage');
+  lei.addEventListener('input', function () { S.lei = Number(lei.value); render(); });
+  wageIn.addEventListener('input', function () { S.w = Number(wageIn.value); render(); });
+  function fixedLine(b) { return '<b>' + b.th + '</b> days on health leave <b>' + b.sick + '</b> sick days, so <b>' + b.S + '</b> days are left to split between work and leisure.'; }
+  function renderBudgetPanel() {
+    var b = baseOf(), Sd = b.S;
+    var slope = ' From S to N, giving up ' + SLOPE_DAYS + ' days of leisure earns ' + money(S.w * SLOPE_DAYS) + ': that is the slope of VS.';
+    setText('lei-out', String(S.lei)); setText('wage-out', money(S.w));
+    pressed('[data-base]', function (x) { return Number(x.getAttribute('data-base')) === S.base; });
+    if (S.lei === 0) { setText('z1-title', 'Point V: all work'); setHTML('z1-text', 'Every one of Ed’s ' + Sd + ' available days is a work day, so he earns the most he can: ' + money(S.w * Sd) + '.' + slope); }
+    else if (S.lei === Sd) { setText('z1-title', 'Point S: all leisure'); setHTML('z1-text', '<i>T</i><sub>B</sub> = OS and <i>T</i><sub>W</sub> = 0. Ed doesn’t work at all, so his income is zero.' + slope); }
+    else { setText('z1-title', 'Point A'); setHTML('z1-text', 'Leisure <i>T</i><sub>B</sub> = OA = ' + S.lei + ' days and work <i>T</i><sub>W</sub> = AS = ' + (Sd - S.lei) + ' days, so Ed earns ' + (Sd - S.lei) + ' × ' + money(S.w) + ' = ' + money(S.w * (Sd - S.lei)) + '.' + slope); }
+  }
+
+  // ---------- step 2 ----------
+  var icx = $('icx');
+  icx.addEventListener('input', function () { S.icx = Number(icx.value); render(); });
+  function renderIcPanel(d) {
+    setText('icx-out', String(S.icx));
+    setHTML('fixed-2', 'Still fixed as you set it: ' + fixedLine(baseOf()));
+    var K = M.icIndex(40000, 100), at = function (t) { return money(M.mrs(M.icY(K, t), t)); };
+    setText('z2-text', 'The more leisure Ed has, the less another day off is worth to him: about ' + at(30) + ' at 30 days, ' + money(d.mrs) +
+      ' at ' + S.icx + ' days, and only ' + at(250) + ' at 250 days. That is why the curve flattens out: a diminishing MRS.');
+  }
+
+  // ---------- step 3 ----------
+  var eqIn = $('eq');
+  eqIn.addEventListener('input', function () { S.eq = Number(eqIn.value); render(); });
+  function renderEquilPanel(d) {
+    setText('eq-out', String(S.eq));
+    setHTML('fixed-3', 'Still fixed as you set it: ' + fixedLine(baseOf()) + ' The wage is fixed at ' + money(M.W0) + ' a day.');
+    if (d.atBest) { setText('z3-title', 'Equilibrium, E'); setText('z3-text', 'The indifference curve just touches the line. Every other affordable point sits on a lower curve, so Ed can’t do better.'); }
+    else if (S.eq < d.best.tb) { setText('z3-title', 'Working too much'); setText('z3-text', 'The green area holds affordable points Ed likes better. They all have more leisure, so he should slide right.'); }
+    else { setText('z3-title', 'Too much leisure'); setText('z3-text', 'The green area holds affordable points Ed likes better. They all have more work and more income, so he should slide left.'); }
+  }
+
+  // ---------- step 4 ----------
+  var thIn = $('th');
+  thIn.addEventListener('input', function () { S.th = Number(thIn.value); render(); });
+  function renderHealthPanel(d) {
+    var p = d.p, b = d.base, sv = M.saved(S.th), svs = sv >= 10 ? sv.toFixed(0) : sv.toFixed(1);
+    setText('th-out', String(S.th));
+    setHTML('fixed-4', 'Ed starts from the routine you set: ' + fixedLine(b) + ' That is <b>E₁</b>. Now change it.');
+    var bt = $('preset-base');
+    bt.setAttribute('data-th', String(b.th));
+    if (bt.textContent !== 'Your routine (' + b.th + ' days)') bt.textContent = 'Your routine (' + b.th + ' days)';
+    if (S.th === b.th) { setText('z4-title', 'Where Ed starts: E₁'); setText('z4-text', 'One more day on health would save about ' + svs + ' sick days, more than the day it costs, so there is time to gain. Try 40 days.'); }
+    else if (p.S > b.S && sv > 1) { setText('z4-title', 'More healthy time, more time overall'); setText('z4-text', 'One more day on health still saves about ' + svs + ' sick days, more than the day it costs, so available time grows. The line shifts out to S′ = ' + p.S + ' days.'); }
+    else if (p.S > b.S) { setText('z4-title', 'Still ahead, but shrinking'); setText('z4-text', 'Ed has more available time than at E₁ (' + p.S + ' days), but one more health day now saves only about ' + svs + ' sick days, less than the day it costs, so each extra day on health shrinks it.'); }
+    else if (p.S === b.S) { setText('z4-title', 'Back where he started'); setText('z4-text', 'Ed’s extra health days now cost as much time as they save: available time is back to ' + b.S + ' days.'); }
+    else if (S.th < b.th) { setText('z4-title', 'A lighter routine, more sick days'); setText('z4-text', 'Each health day Ed drops frees one day but costs him about ' + svs + ' sick days, so available time falls to ' + p.S + ' days and the line shifts in.'); }
+    else { setText('z4-title', 'The net effect turns negative'); setText('z4-text', 'Ed now spends more days on health than he saves in sickness. Available time falls to ' + p.S + ' days, below E₁, so the slide’s “positive net effect” no longer holds.'); }
+    $('result').hidden = !(p.S > b.S);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-th]'), function (b) { b.setAttribute('aria-pressed', Number(b.getAttribute('data-th')) === S.th ? 'true' : 'false'); });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-th]'), function (b) {
+    b.addEventListener('click', function () { S.th = Number(b.getAttribute('data-th')); thIn.value = String(S.th); render(); });
+  });
+  function syncControls() {
+    var b = baseOf();
+    lei.max = String(b.S); eqIn.max = String(b.S - 5);
+    S.lei = clamp(S.lei, 0, b.S); S.eq = clamp(S.eq, 5, b.S - 5);
+    lei.value = String(S.lei); eqIn.value = String(S.eq); thIn.value = String(S.th);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-base]'), function (b) {
+    b.addEventListener('click', function () {
+      S.base = Number(b.getAttribute('data-base'));
+      S.th = S.base;
+      syncControls(); render();
+    });
+  });
+
+  // ---------- dragging the dot / tapping the graph ----------
+  var dragging = false;
+  function svgX(evt) {
+    var ctm = svg.getScreenCTM(); if (!ctm) return null;
+    var pt = svg.createSVGPoint(); pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(ctm.inverse()).x;
+  }
+  function moveTo(evt) {
+    var x = svgX(evt); if (x === null) return;
+    var t = Math.round(tOfX(x));
+    if (S.step === 1) { S.lei = clamp(t, 0, baseOf().S); lei.value = String(S.lei); }
+    else if (S.step === 2) { S.icx = clamp(t, 30, 330); icx.value = String(S.icx); }
+    else if (S.step === 3) { var b3 = baseOf(); t = clamp(t, 5, b3.S - 5); if (Math.abs(t - b3.tb) <= 2) t = b3.tb; S.eq = t; eqIn.value = String(S.eq); }
+    else return;
+    render();
+  }
+  dotHit.addEventListener('pointerdown', function (e) {
+    if (S.step > 3) return;
+    dragging = true;
+    try { dotHit.setPointerCapture(e.pointerId); } catch (err) { /* older browsers */ }
+    e.preventDefault(); moveTo(e);
+  });
+  dotHit.addEventListener('pointermove', function (e) { if (dragging) moveTo(e); });
+  dotHit.addEventListener('pointerup', function () { dragging = false; });
+  dotHit.addEventListener('pointercancel', function () { dragging = false; });
+  plotHit.addEventListener('click', function (e) { if (S.step <= 3) moveTo(e); });
+
+  // ---------- step 5: quiz ----------
+  function renderQuiz() {
+    var Q = S.quiz, q = QUIZ[Q.i];
+    $('quiz-live').hidden = Q.done;
+    $('quiz-done').hidden = !Q.done;
+    if (Q.done) { setText('quiz-score', 'You got ' + Q.correct + ' of ' + QUIZ.length + ' right on the first try.'); return; }
+    setText('quiz-progress', 'Question ' + (Q.i + 1) + ' of ' + QUIZ.length);
+    if (Q.builtFor !== Q.i) {
+      $('quiz-question').textContent = q.q;
+      var box = $('quiz-options');
+      box.textContent = '';
+      q.options.forEach(function (label, idx) {
+        var lab = document.createElement('label'); lab.className = 'opt';
+        var inp = document.createElement('input'); inp.type = 'radio'; inp.name = 'quiz-opt'; inp.value = String(idx);
+        inp.addEventListener('change', function () { Q.choice = idx; $('quiz-error').hidden = true; });
+        var span = document.createElement('span'); span.textContent = label;
+        lab.appendChild(inp); lab.appendChild(span); box.appendChild(lab);
+      });
+      Q.builtFor = Q.i;
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('#quiz-options input'), function (inp, idx) {
+      inp.disabled = Q.checked;
+      inp.parentNode.classList.toggle('is-correct', Q.checked && idx === q.answer);
+      inp.parentNode.classList.toggle('is-wrong', Q.checked && idx === Q.choice && idx !== q.answer);
+    });
+    $('quiz-feedback').hidden = !Q.checked;
+    $('quiz-check').hidden = Q.checked;
+    $('quiz-next').hidden = !Q.checked;
+    $('quiz-next').textContent = Q.i === QUIZ.length - 1 ? 'See your score' : 'Next question';
+    if (Q.checked) {
+      var right = Q.choice === q.answer;
+      $('quiz-verdict').textContent = right ? 'Right.' : 'Not quite. The answer is: ' + q.options[q.answer] + '.';
+      $('quiz-verdict').className = 'verdict ' + (right ? 'ok' : 'no');
+      $('quiz-why').textContent = q.why;
+    }
+  }
+  $('quiz-check').addEventListener('click', function () {
+    var Q = S.quiz;
+    if (Q.choice === null) {
+      $('quiz-error').hidden = false;
+      var first = document.querySelector('#quiz-options input'); if (first) first.focus();
+      return;
+    }
+    Q.checked = true;
+    if (Q.choice === QUIZ[Q.i].answer) Q.correct++;
+    render();
+    $('quiz-next').focus();
+  });
+  $('quiz-next').addEventListener('click', function () {
+    var Q = S.quiz;
+    Q.i++; Q.checked = false; Q.choice = null;
+    if (Q.i >= QUIZ.length) { Q.done = true; Q.i = QUIZ.length - 1; }
+    render();
+    if (Q.done) $('quiz-restart').focus(); else $('quiz-question-focus').focus();
+  });
+  $('quiz-restart').addEventListener('click', function () {
+    S.quiz = { i: 0, checked: false, choice: null, correct: 0, done: false, builtFor: -1 };
+    render();
+    $('quiz-question-focus').focus();
+  });
+
+  // ---------- tabs ----------
+  var tabs = [1, 2, 3, 4, 5].map(function (n) { return $('tab-' + n); });
+  function setStep(n, focusTab) {
+    S.step = n;
+    tabs.forEach(function (tab, idx) {
+      var on = idx + 1 === n;
+      tab.setAttribute('aria-selected', on ? 'true' : 'false');
+      tab.tabIndex = on ? 0 : -1;
+      $('panel-' + (idx + 1)).hidden = !on;
+    });
+    if (focusTab) tabs[n - 1].focus();
+    render();
+  }
+  tabs.forEach(function (tab, idx) {
+    tab.addEventListener('click', function () { setStep(idx + 1, false); });
+    tab.addEventListener('keydown', function (e) {
+      var n = idx + 1;
+      if (e.key === 'ArrowRight') n = n % 5 + 1;
+      else if (e.key === 'ArrowLeft') n = (n + 3) % 5 + 1;
+      else if (e.key === 'Home') n = 1;
+      else if (e.key === 'End') n = 5;
+      else return;
+      e.preventDefault();
+      setStep(n, true);
+    });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-goto]'), function (b) {
+    b.addEventListener('click', function () {
+      setStep(Number(b.getAttribute('data-goto')), true);
+      var top = document.querySelector('.steps');
+      if (top && top.scrollIntoView) top.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    });
+  });
+
+  // ---------- start ----------
+  wageIn.value = String(S.w); icx.value = String(S.icx);
+  syncControls();
+  setStep(1, false);
+})();
+</script>
+</body>
+</html>
