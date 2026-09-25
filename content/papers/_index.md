@@ -91,7 +91,7 @@ display: block !important;
 <p style="margin:0">
   <b>Dollars and Degrees: The Asymmetric Impact of State Appropriations on STEM and Non-STEM Fields</b><br>
   Ahmed El Fatmaoui<br>
-  Revised &amp; Resubmitted, <i>Education Finance and Policy</i><br>
+  Accepted, <i>Education Finance and Policy</i><br>
   <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5000787">Paper</a> &nbsp; <button class="accordion">Abstract</button>
 </p>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;"><p>This study examines the differential impact of state appropriations on STEM and non-STEM degree completion at U.S. public four-year institutions. Using a panel dataset from 2003 to 2019 and a Bartik-style instrumental variables approach, I find that state funding disproportionately affects STEM degree completion, with little to no impact on Non-STEM degrees. A 10% increase in state appropriations leads to a 3.4% increase in STEM degrees conferred, primarily four years after the funding change. This effect is concentrated among male students, science STEM majors, and non-selective institutions. Increased state support leads to higher institutional spending, and more STEM programs–factors that impact STEM degree completion more than non-STEM fields.</p></div><br>
