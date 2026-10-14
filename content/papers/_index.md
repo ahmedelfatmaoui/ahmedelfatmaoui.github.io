@@ -98,7 +98,7 @@ display: block !important;
 <p style="margin:0">
   <b>Vaccine Hesitancy and Neonatal Mortality: The Life-Saving Power of Hepatitis B Immunization</b><br>
   with Pallab Ghosh and Junying Zhao<br>
-  Revising and Resubmitting, <i>Applied Economics Letters</i><br>
+  Accepted, <i>Applied Economics Letters</i><br>
   <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4954105">Paper</a>
 </p><br>
 
