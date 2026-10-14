@@ -46,6 +46,13 @@ display: block !important;
 <h2><a id="published-papers-updated" class="anchor" href="#publications" aria-hidden="true"><span class="octicon octicon-link"></span></a><i class="fas fa-book-open" style="color: #2e7d32; margin-right: 8px;"></i>Published &amp; Forthcoming Papers</h2>
 
 <p style="margin:0">
+  <a style="margin:0; font-size:100%; font-weight:bold" href="https://doi.org/10.1162/EDFP.a.491">Dollars and Degrees: The Asymmetric Impact of State Appropriations on STEM and Non-STEM Fields</a><br>
+  Ahmed El Fatmaoui<br>
+  <i>Education Finance and Policy</i>, 2026 &nbsp; <button class="accordion">Abstract</button>
+</p>
+<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;"><p>This study examines the differential impact of state appropriations on STEM and non-STEM degree completion at U.S. public four-year institutions. Using a panel dataset from 2003 to 2019 and a Bartik-style instrumental variables approach, I find that state funding disproportionately affects STEM degree completion, with little to no impact on Non-STEM degrees. A 10% increase in state appropriations leads to a 3.4% increase in STEM degrees conferred, primarily four years after the funding change. This effect is concentrated among male students, science STEM majors, and non-selective institutions. Increased state support leads to higher institutional spending, and more STEM programs–factors that impact STEM degree completion more than non-STEM fields.</p></div><br>
+
+<p style="margin:0">
   <a style="margin:0; font-size:100%; font-weight:bold" href="https://www.tandfonline.com/doi/full/10.1080/10438599.2025.2511865">Vaccine Production and Innovation: Insights from Tort Reform and Medicare Expansion</a><br>
   with Myongjin Kim, Firat Demir, Qi Ge, Pallab Ghosh, and Junying Zhao<br>
   <i>Economics of Innovation and New Technology</i>, 2025
@@ -87,14 +94,6 @@ display: block !important;
   <a href="https://tyleransom.github.io/research/college-sports-SES.pdf">Paper</a> &nbsp; <button class="accordion">Abstract</button>
 </p>
 <div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;"><p>This study investigates the extent to which U.S. universities strategically use athletic admissions to shape the socioeconomic status (SES) of their student bodies. Using a novel dataset linking NCAA roster data to neighborhood characteristics, we document substantial SES segregation across sports and universities. More selective institutions, particularly elite private universities, allocate up to 30% of enrollment to athletes who typically come from higher-SES backgrounds than their non-athlete peers. However, contrary to popular belief, we find that elite institutions enroll similarly wealthy athletes across all sports. Estimates of our structural model of sports bundle choice reveal that this SES homogeneity across sports limits universities' ability to systematically choose sports offerings to target higher-SES students. Counterfactual analyses demonstrate that athletic enrollment caps would create additional seats for non-athletes but require complementary policies to meaningfully impact socioeconomic mobility.</p></div><br>
-
-<p style="margin:0">
-  <b>Dollars and Degrees: The Asymmetric Impact of State Appropriations on STEM and Non-STEM Fields</b><br>
-  Ahmed El Fatmaoui<br>
-  Accepted, <i>Education Finance and Policy</i><br>
-  <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5000787">Paper</a> &nbsp; <button class="accordion">Abstract</button>
-</p>
-<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;"><p>This study examines the differential impact of state appropriations on STEM and non-STEM degree completion at U.S. public four-year institutions. Using a panel dataset from 2003 to 2019 and a Bartik-style instrumental variables approach, I find that state funding disproportionately affects STEM degree completion, with little to no impact on Non-STEM degrees. A 10% increase in state appropriations leads to a 3.4% increase in STEM degrees conferred, primarily four years after the funding change. This effect is concentrated among male students, science STEM majors, and non-selective institutions. Increased state support leads to higher institutional spending, and more STEM programs–factors that impact STEM degree completion more than non-STEM fields.</p></div><br>
 
 <p style="margin:0">
   <b>Vaccine Hesitancy and Neonatal Mortality: The Life-Saving Power of Hepatitis B Immunization</b><br>
