@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How Much Insurance</title>
+<meta name="description" content="An interactive lesson on the demand for insurance: the marginal benefit and marginal cost of coverage, the optimal amount, and how it responds to the premium, the expected loss and wealth.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=STIX+Two+Text:ital,wght@0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --paper:#EEF3F7; --sheet:#FBFDFF; --ink:#14233B; --ink-2:#4B5B71; --rule:#C3D1DE; --chip:#E1E9F1;
+  --grid-minor:#E3EBF3; --grid-major:#C9D7E5;
+  --health:#1C7F66; --sick:#B23F2A; --bread:#C28A1E; --pref:#5B4BCF;
+  --better:rgba(37,99,235,.14); --better-edge:#2563EB; --focus:#2563EB;
+  --ok:#17735C; --ok-bg:#E1F2EB; --no:#A83A26; --no-bg:#F7E4DF;
+  --cost:#C07A12; --cost-ink:#8A5300; --gain:rgba(28,127,102,.18); --gain-edge:#1C7F66; --loss:rgba(178,63,42,.16); --loss-edge:#B23F2A;
+  --sans:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --math:"STIX Two Text","Cambria Math",Cambria,"Times New Roman",Times,serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D1522; --sheet:#121C2C; --ink:#E6EDF6; --ink-2:#A4B3C6; --rule:#2A3A53; --chip:#1A2638;
+    --grid-minor:#172335; --grid-major:#23334B;
+    --health:#43BD97; --sick:#E0775E; --bread:#E3B24C; --pref:#A399FF;
+    --better:rgba(96,150,255,.18); --better-edge:#7AA7FF; --focus:#7AA7FF;
+    --ok:#5ED1AC; --ok-bg:#12302A; --no:#F08E77; --no-bg:#3A1F19;
+    --cost:#E7B04A; --cost-ink:#F0C46A; --gain:rgba(67,189,151,.2); --gain-edge:#43BD97; --loss:rgba(224,119,94,.2); --loss-edge:#E0775E;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0D1522; --sheet:#121C2C; --ink:#E6EDF6; --ink-2:#A4B3C6; --rule:#2A3A53; --chip:#1A2638;
+  --grid-minor:#172335; --grid-major:#23334B;
+  --health:#43BD97; --sick:#E0775E; --bread:#E3B24C; --pref:#A399FF;
+  --better:rgba(96,150,255,.18); --better-edge:#7AA7FF; --focus:#7AA7FF;
+  --ok:#5ED1AC; --ok-bg:#12302A; --no:#F08E77; --no-bg:#3A1F19;
+  --cost:#E7B04A; --cost-ink:#F0C46A; --gain:rgba(67,189,151,.2); --gain-edge:#43BD97; --loss:rgba(224,119,94,.2); --loss-edge:#E0775E;
+  color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none !important}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:1.0625rem;line-height:1.55;-webkit-font-smoothing:antialiased}
+.page{max-width:1220px;margin:0 auto;padding:clamp(18px,3vw,36px) clamp(16px,3vw,32px) 40px}
+h1,h2,h3{line-height:1.15;margin:0}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.masthead h1{font-size:clamp(1.8rem,1.2rem + 2vw,2.6rem);font-weight:700;letter-spacing:-.018em;max-width:21ch}
+.masthead .lede{margin:.75rem 0 0;max-width:64ch;color:var(--ink-2);font-size:1.08rem}
+@media (min-width:961px){.masthead{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:end}.masthead .lede{margin:0}}
+
+.steps{display:flex;gap:2px;margin:clamp(18px,2.6vw,28px) 0 clamp(16px,2.4vw,24px);border-bottom:2px solid var(--rule);overflow-x:auto;scrollbar-width:thin}
+.step{flex:0 0 auto;font:inherit;font-weight:700;font-size:1rem;color:var(--ink-2);background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:.65rem .9rem;cursor:pointer;display:flex;align-items:center;gap:.55rem;min-height:48px}
+.step .n{display:inline-grid;place-items:center;width:1.65rem;height:1.65rem;border-radius:50%;border:1.5px solid currentColor;font-size:.85rem;line-height:1}
+.step:hover{color:var(--ink)}
+.step[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.step[aria-selected="true"] .n{background:var(--ink);border-color:var(--ink);color:var(--sheet)}
+.step:focus-visible{outline-offset:-3px}
+.step .short{display:none}
+@media (max-width:600px){
+  .steps{gap:0;overflow-x:visible}
+  .step{flex:1 1 0;min-width:0;flex-direction:column;gap:3px;padding:.45rem .15rem .5rem;font-size:.82rem}
+  .step .long{display:none}
+  .step .short{display:inline}
+}
+
+.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:start}
+@media (max-width:960px){.layout{grid-template-columns:minmax(0,1fr)}}
+.figure{margin:0}
+@media (min-width:961px){.figure{position:sticky;top:calc(env(safe-area-inset-top,0px) + 14px)}#graph{max-height:max(300px,calc(100vh - 96px))}}
+.side{display:flex;flex-direction:column;gap:22px;min-width:0}
+.sheet{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:8px 8px 12px}
+#graph{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none}
+
+.plot-bg{fill:var(--sheet)}
+.grid .minor{stroke:var(--grid-minor);stroke-width:1}
+.grid .major{stroke:var(--grid-major);stroke-width:1}
+.axis{stroke:var(--ink);stroke-width:1.6}
+.tick{fill:var(--ink-2);font-family:var(--sans);font-size:15px}
+.math{font-family:var(--math);font-style:italic}
+.tick .sub{font-size:11px}
+.axis-title{fill:var(--ink);font-family:var(--sans);font-size:16px;font-weight:700}
+.axis-title .math{font-weight:500;font-size:18px}
+.curve{fill:none;stroke:var(--ink);stroke-width:3.2;stroke-linejoin:round;stroke-linecap:round}
+.curve-base{fill:none;stroke:var(--ink-2);stroke-width:2;stroke-dasharray:7 6}
+.guide{stroke:var(--ink-2);stroke-width:1.2;stroke-dasharray:5 5}
+.pt{pointer-events:none}
+.pt.clickable{pointer-events:auto;cursor:pointer}
+.pt circle{fill:var(--sheet);stroke:var(--ink);stroke-width:2}
+.pt-label{fill:var(--ink);font-family:var(--math);font-style:italic;font-size:23px;paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+.dot{fill:var(--ink);stroke:var(--sheet);stroke-width:3}
+.dot-hit{fill:transparent;pointer-events:all;cursor:grab;touch-action:none}
+.dot-hit:active{cursor:grabbing}
+
+.graph-legend{list-style:none;margin:4px 8px 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.92rem;color:var(--ink-2)}
+.graph-legend li{display:flex;align-items:center;gap:8px}
+.graph-legend i{display:inline-block;flex:none}
+.k-dot{width:12px;height:12px;border-radius:50%;background:var(--ink)}
+.k-base{width:26px;border-top:2px dashed var(--ink-2)}
+
+.readout{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:14px 16px 16px}
+.figures{display:flex;flex-wrap:wrap;gap:6px 30px;align-items:baseline}
+.figures p{margin:0;display:flex;align-items:baseline;gap:.45rem}
+.figures .lbl{font-weight:700;color:var(--ink-2);font-size:.95rem}
+.figures .num{font-size:2rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.figures .unit{color:var(--ink-2);font-size:.95rem}
+.readout.is-empty .num{color:var(--ink-2)}
+.margin{margin:12px 0 0;padding:.65rem .85rem;background:var(--chip);border-radius:8px}
+
+.panel h2{font-size:clamp(1.3rem,1.1rem + .8vw,1.6rem);margin-bottom:.6rem}
+.panel p{margin:0 0 .9rem;max-width:62ch}
+.ctl-label{display:block;font-weight:700;margin:1.1rem 0 .3rem}
+.ctl-label output{font-variant-numeric:tabular-nums}
+input[type=range]{display:block;width:100%;height:36px;margin:0;accent-color:var(--ink);cursor:pointer}
+input[type=range]:focus-visible{outline-offset:4px}
+.scale-ends{display:flex;justify-content:space-between;color:var(--ink-2);font-size:.9rem}
+.scale-ends .math{font-size:1.05rem}
+.note{margin:1.1rem 0;padding:.85rem 1rem;border-left:4px solid var(--ink);background:var(--sheet)}
+.note h3{font-size:1.12rem;margin-bottom:.35rem}
+.note p{margin:0}
+.try{color:var(--ink-2)}
+.try strong{color:var(--ink)}
+.btn{font:inherit;font-weight:700;font-size:1rem;line-height:1.2;color:var(--ink);background:transparent;border:1.5px solid var(--ink);border-radius:8px;padding:.6rem 1rem;min-height:44px;cursor:pointer}
+.btn:hover{background:var(--chip)}
+.btn[aria-pressed="true"],.btn-primary{background:var(--ink);color:var(--sheet)}
+.btn[aria-pressed="true"]:hover,.btn-primary:hover{background:var(--ink);opacity:.88}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin:.3rem 0 .4rem}
+.pick{display:flex;flex-wrap:wrap;gap:10px;margin:.2rem 0 .3rem}
+.pick-btn{width:56px;height:56px;padding:0;border-radius:10px;font-family:var(--math);font-style:italic;font-weight:500;font-size:1.7rem}
+
+.progress{font-weight:700;color:var(--ink-2);margin:0 0 .5rem}
+fieldset.quiz{border:0;margin:0;padding:0;min-width:0}
+fieldset.quiz legend{font-size:1.15rem;font-weight:700;line-height:1.35;margin:0 0 .75rem;padding:0}
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:.7rem;padding:.7rem .85rem;border:1.5px solid var(--rule);border-radius:8px;background:var(--sheet);cursor:pointer}
+.opt input{flex:none;width:1.15rem;height:1.15rem;margin:.2rem 0 0;accent-color:var(--ink)}
+.opt:has(input:checked){border-color:var(--ink)}
+.opt:has(input:disabled){cursor:default}
+.opt.is-correct{border-color:var(--ok);background:var(--ok-bg)}
+.opt.is-wrong{border-color:var(--no);background:var(--no-bg)}
+.opt.is-correct::after,.opt.is-wrong::after{margin-left:auto;padding-left:.6rem;font-size:.85rem;font-weight:700;white-space:nowrap}
+.opt.is-correct::after{content:"Correct answer";color:var(--ok)}
+.opt.is-wrong::after{content:"Your answer";color:var(--no)}
+.error{color:var(--no);font-weight:700;margin:.7rem 0 0}
+.verdict{font-weight:700}
+.verdict.ok{color:var(--ok)}
+.verdict.no{color:var(--no)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:1rem}
+.score{font-size:1.45rem;font-weight:700}
+
+.table-wrap{overflow-x:auto;margin:1rem 0}
+.compare{border-collapse:collapse;width:100%;min-width:320px;font-variant-numeric:tabular-nums}
+.compare th,.compare td{padding:.5rem .6rem;border-bottom:1px solid var(--rule);text-align:right}
+.compare th[scope="row"]{text-align:left;font-weight:400}
+.compare thead th{font-size:.9rem;color:var(--ink-2)}
+.compare td:last-child{font-weight:700}
+
+.foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);color:var(--ink-2);font-size:.92rem}
+.foot p{margin:0;max-width:72ch}
+
+@media (max-width:600px){
+  body{font-size:1rem}
+  .figures .num{font-size:1.7rem}
+  .sheet{padding:6px 4px 10px}
+  .tick{font-size:22px}
+  .tick .sub{font-size:15px}
+  .axis-title{font-size:20px}
+  .pt-label{font-size:30px;stroke-width:6px}
+  .graph-legend{font-size:.88rem}
+}
+
+
+/* insurance lesson */
+:root{--chord:#B23F2A;--eff:#C07A12;--eff-ink:#8A5300;--gain:#1C7F66;--buy:#17735C;--skip:#A83A26;--fair:#4B5B71}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--chord:#E0775E;--eff:#E7B04A;--eff-ink:#F0C46A;--gain:#43BD97;--buy:#5ED1AC;--skip:#F08E77;--fair:#A4B3C6}}
+:root[data-theme="dark"]{--chord:#E0775E;--eff:#E7B04A;--eff-ink:#F0C46A;--gain:#43BD97;--buy:#5ED1AC;--skip:#F08E77;--fair:#A4B3C6}
+.ucurve{fill:none;stroke:var(--ink);stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+.ucurve.neutral{stroke-dasharray:none}
+.chord{stroke:var(--chord);stroke-width:2.8;stroke-linecap:round}
+.tangent{stroke:var(--eff);stroke-width:2.4;stroke-linecap:round}
+.double{stroke:var(--ink-2);stroke-width:1.4;stroke-dasharray:3 4}
+.gainline{stroke:var(--gain);stroke-width:3.4;stroke-linecap:round}
+.fc{stroke:var(--eff);stroke-width:3.2;stroke-linecap:round}
+.ruler-risk{stroke:var(--eff);stroke-width:8}
+.ruler-fair{stroke:var(--fair);stroke-width:8;opacity:.55}
+.prem-mark{stroke:var(--ink);stroke-width:2.4}
+.break{stroke:var(--ink);stroke-width:1.6;fill:none}
+.dot.buy{fill:var(--buy)} .dot.skip{fill:var(--skip)} .dot.indiff{fill:var(--eff)}
+.mdot{fill:var(--sheet);stroke:var(--ink);stroke-width:2.2}
+.mdot.chordpt{stroke:var(--chord)}
+.curve-label{fill:var(--ink);font-family:var(--sans);font-size:15px;font-weight:700;paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+.curve-label.cl{fill:var(--chord)}
+.curve-label.gl{fill:var(--gain)}
+.curve-label.fl{fill:var(--eff-ink)}
+.tag rect{fill:var(--sheet);stroke:var(--ink);stroke-width:1.2}
+.tag text{fill:var(--ink);font-family:var(--sans);font-size:14px;font-weight:700}
+.tag.eff rect{stroke:var(--eff)} .tag.eff text{fill:var(--eff-ink)}
+.tag.chordt rect{stroke:var(--chord)} .tag.chordt text{fill:var(--chord)}
+.tag.gaint rect{stroke:var(--gain)} .tag.gaint text{fill:var(--gain)}
+.tag.faint rect{stroke:var(--ink-2)} .tag.faint text{fill:var(--ink-2)}
+.k-u{width:26px;border-top:3px solid var(--ink)}
+.k-chord{width:26px;border-top:3px solid var(--chord)}
+.k-tan{width:26px;border-top:2.4px solid var(--eff)}
+.k-gain{width:26px;border-top:3px solid var(--gain)}
+.k-fc{width:26px;border-top:3px solid var(--eff)}
+.k-risk{width:22px;height:8px;background:var(--eff)}
+.k-fair{width:22px;height:8px;background:var(--fair);opacity:.55}
+.k-buy{width:12px;height:12px;border-radius:50%;background:var(--buy)}
+.bars{display:grid;gap:9px;margin:14px 0 4px}
+.bar-row{display:grid;grid-template-columns:minmax(0,12.5rem) minmax(0,1fr) 4.8rem;align-items:center;gap:6px 10px;font-size:.95rem}
+.bar-lbl{color:var(--ink-2)}
+.bar{height:14px;background:var(--grid-minor);border-radius:3px;overflow:hidden}
+.fill{display:block;height:100%;width:0;border-radius:3px}
+.fill.a{background:var(--ink)} .fill.b{background:var(--chord)} .fill.g{background:var(--gain)} .fill.e{background:var(--eff)}
+.bar-row b{text-align:right;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:no-preference){.fill{transition:width .15s ease}}
+.figures .was{color:var(--ink-2);font-size:.95rem;font-weight:400}
+.formula{font-family:var(--math);font-size:1.08rem;margin:.2rem 0 .9rem;padding:.55rem .8rem;background:var(--chip);border-radius:8px;display:block;max-width:62ch;line-height:1.6}
+.formula i{font-style:italic}
+.formula output{font-variant-numeric:tabular-nums}
+.aside{font-size:.95rem;color:var(--ink-2);border-top:1px solid var(--rule);padding-top:.8rem}
+.toggle{display:flex;align-items:center;gap:.6rem;margin:.9rem 0;font-weight:700;cursor:pointer}
+.toggle input{width:1.2rem;height:1.2rem;accent-color:var(--ink);margin:0}
+.facts{margin:0 0 .9rem;padding-left:1.3rem;max-width:62ch}
+.facts li{margin:.3rem 0}
+.verdict-buy{color:var(--buy);font-weight:700} .verdict-skip{color:var(--skip);font-weight:700}
+@media (max-width:600px){
+  .curve-label{font-size:20px}
+  .tag text{font-size:19px}
+  .bar-row{grid-template-columns:minmax(0,1fr) 4.8rem}
+  .bar-row .bar-lbl{grid-column:1 / -1}
+}
+@media (max-width:600px){ .pt-label{font-size:25px} }
+.lossline{stroke:var(--skip);stroke-width:3.4;stroke-linecap:round}
+.prem-bracket{stroke:var(--ink-2);stroke-width:1.8}
+.note-label{font-family:var(--sans);font-size:14px;font-weight:700;paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+.note-label.gain{fill:var(--gain)} .note-label.loss{fill:var(--skip)} .note-label.even{fill:var(--eff-ink)} .note-label.prem{fill:var(--ink-2)}
+@media (max-width:600px){ .note-label{font-size:19px} }
+.fc-glow{stroke:var(--eff);stroke-width:14;stroke-linecap:round;opacity:.22}
+.note-label.fcl{fill:var(--eff-ink)}
+.ruler-neg{stroke:var(--skip);stroke-width:8;opacity:.75}
+.k-neg{width:22px;height:8px;background:var(--skip);opacity:.75}
+.ucurve.loving{stroke-dasharray:none}
+.foot .cite{margin-bottom:.6rem}
+
+.key-terms{margin:1.1rem 0;padding:.8rem 1rem .6rem;background:var(--chip);border-radius:8px;border-top:4px solid var(--eff)}
+.key-terms h3{font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;color:var(--eff-ink);margin:0 0 .5rem}
+.key-terms dl{margin:0;display:grid;gap:.5rem}
+.key-terms dt{font-weight:700}
+.key-terms dd{margin:0;color:var(--ink);font-size:.97rem;max-width:62ch}
+/* how-much lesson */
+:root{--mb:#2563EB;--mc:#B23F2A}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--mb:#7AA7FF;--mc:#E0775E}}
+:root[data-theme="dark"]{--mb:#7AA7FF;--mc:#E0775E}
+.mbc{fill:none;stroke:var(--mb);stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+.mcc{fill:none;stroke:var(--mc);stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+.mbc.old,.mcc.old{stroke-width:2;stroke-dasharray:7 6;opacity:.7}
+.curve-label.mbl{fill:var(--mb)} .curve-label.mcl{fill:var(--mc)}
+.curve-label.old{opacity:.75}
+.dot.mbd{fill:var(--mb)} .dot.mcd{fill:var(--mc)} .dot.opt{fill:var(--ink)}
+.mdot.old{stroke:var(--ink-2)}
+.fullcov{stroke:var(--ink-2);stroke-width:1.4;stroke-dasharray:2 4}
+.qline{stroke:var(--eff);stroke-width:2}
+.move{stroke:var(--eff);stroke-width:2.6;fill:none}
+.moveh{fill:var(--eff)}
+.k-mb{width:26px;border-top:3px solid var(--mb)} .k-mc{width:26px;border-top:3px solid var(--mc)}
+.k-old{width:26px;border-top:2px dashed var(--ink-2)}
+.fill.mbf{background:var(--mb)} .fill.mcf{background:var(--mc)} .fill.q{background:var(--ink)}
+table.ws{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:.95rem;margin:.2rem 0}
+table.ws caption{text-align:left;font-weight:700;font-style:italic;margin-bottom:.3rem;color:var(--ink-2)}
+table.ws th,table.ws td{padding:.3rem .5rem;border-bottom:1px solid var(--rule);text-align:right}
+table.ws th[scope=row]{text-align:left;font-weight:400}
+table.ws thead th{font-size:.88rem;color:var(--ink-2)}
+table.ws tr.total th,table.ws tr.total td{font-weight:700;border-top:2px solid var(--ink)}
+table.ws td.op{color:var(--ink-2);text-align:left;width:3.2rem}
+.clip-hide{display:none}
+@media (min-width:601px){ .step{padding:.65rem .62rem} }
+.area-gain{fill:var(--gain);opacity:.18}
+.area-loss{fill:var(--skip);opacity:.22}
+.k-gain{width:18px;height:12px;background:var(--gain);opacity:.35}
+.k-loss{width:18px;height:12px;background:var(--skip);opacity:.4}
+table.eu th[scope=row]{max-width:14rem}
+.tag-mb{color:var(--mb);font-weight:700;font-size:.8em}
+.tag-mc{color:var(--mc);font-weight:700;font-size:.8em}
+
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <h1>How much insurance?</h1>
+    <p class="lede">Insurance is not all or nothing. A person chooses how much coverage to buy, weighing what one more dollar of coverage adds when ill against what its premium costs when well.</p>
+  </header>
+
+  <main>
+    <div class="steps" role="tablist" aria-label="Lesson steps">
+      <button class="step" role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true"><span class="n" aria-hidden="true">1</span><span class="long">Benefit and cost</span><span class="short">MB, MC</span></button>
+      <button class="step" role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">2</span><span class="long">The best amount</span><span class="short">q*</span></button>
+      <button class="step" role="tab" id="tab-3" aria-controls="panel-3" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">3</span><span class="long">Higher premium</span><span class="short">Premium</span></button>
+      <button class="step" role="tab" id="tab-4" aria-controls="panel-4" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">4</span><span class="long">Bigger loss</span><span class="short">Loss</span></button>
+      <button class="step" role="tab" id="tab-5" aria-controls="panel-5" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">5</span><span class="long">More wealth</span><span class="short">Wealth</span></button>
+      <button class="step" role="tab" id="tab-6" aria-controls="panel-6" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">6</span><span class="long">Check yourself</span><span class="short">Quiz</span></button>
+    </div>
+    <div class="layout">
+      <figure class="figure">
+        <div class="sheet">
+          <svg id="graph" viewBox="0 0 640 540" role="img" aria-labelledby="g-title g-desc">
+            <title id="g-title">Marginal benefit and marginal cost of insurance coverage</title>
+            <desc id="g-desc"></desc>
+          </svg>
+          <ul class="graph-legend" id="legend" aria-label="Graph key"></ul>
+        </div>
+      </figure>
+
+      <div class="side">
+        <div class="readout" id="readout" aria-live="polite">
+          <div class="figures">
+            <p><span class="lbl" id="ro-k1"></span><span class="num" id="ro-v1"></span><span class="was" id="ro-w1"></span></p>
+            <p><span class="lbl" id="ro-k2"></span><span class="num" id="ro-v2"></span><span class="was" id="ro-w2"></span></p>
+          </div>
+          <div class="bars">
+            <div class="bar-row"><span class="bar-lbl" id="ro-b1-lbl"></span><span class="bar" aria-hidden="true"><i class="fill a" id="ro-b1"></i></span><b id="ro-b1-v"></b></div>
+            <div class="bar-row"><span class="bar-lbl" id="ro-b2-lbl"></span><span class="bar" aria-hidden="true"><i class="fill b" id="ro-b2"></i></span><b id="ro-b2-v"></b></div>
+          </div>
+          <p class="margin" id="ro-verdict"></p>
+        </div>
+
+        <div class="panels">
+          <section class="panel" role="tabpanel" id="panel-1" aria-labelledby="tab-1">
+            <h2>The benefit and cost of coverage</h2>
+            <p>A person has $100,000 and a 0.10 chance of an illness that costs $50,000. They can buy any amount of coverage, <span class="math">q</span>, at a premium of 20 cents per dollar of coverage: $1,000 for a $5,000 policy.</p>
+            <p>Coverage helps only when they are ill: each dollar of coverage pays $1 but costs 20 cents, a net gain of 80 cents. When they stay well, the premium is a pure cost.</p>
+            <label class="ctl-label" for="q1">Coverage, <span class="math">q</span>: <output id="q1-out" for="q1">$5,000</output></label>
+            <input type="range" id="q1" min="0" max="50" step="1" value="5">
+            <div class="scale-ends" aria-hidden="true"><span>$0</span><span>$50,000 (the whole loss)</span></div>
+            <div class="table-wrap"><table class="ws" id="ws1"></table></div>
+            <div class="table-wrap"><table class="ws eu" id="eu1"></table></div>
+            <p class="aside">The utility worksheet adds up the graph: the area under <span class="math">MB</span> is the expected utility coverage brings when ill, the area under <span class="math">MC</span> is what its premiums cost when well, and the green area between them is the net gain.</p>
+            <div class="note">
+              <h3>Weighing the next dollar of coverage</h3>
+              <p><strong>Marginal benefit</strong> (<span class="math">MB</span>, blue): the expected utility the next dollar of coverage adds when ill. <strong>Marginal cost</strong> (<span class="math">MC</span>, red): the expected utility its premium takes away when well. Both are measured in utility, so the graph’s vertical scale is an index.</p>
+            </div>
+            <aside class="key-terms" aria-label="Key terms">
+              <h3>Key terms</h3>
+              <dl>
+                <dt>Coverage</dt><dd>The amount the policy pays if the loss happens.</dd>
+                <dt>Premium rate</dt><dd>The price per dollar of coverage: a 20% premium means $0.20 for each $1 of coverage.</dd>
+                <dt>Marginal benefit of coverage</dt><dd>The expected utility gained from one more dollar of coverage, which pays off only when ill. It falls as coverage rises, because each extra dollar raises wealth when ill, where marginal utility is already lower.</dd>
+                <dt>Marginal cost of coverage</dt><dd>The expected utility given up by paying that dollar’s premium, felt when well. It rises with coverage, because each premium dollar comes out of wealth that is already lower.</dd>
+              </dl>
+            </aside>
+            <p class="try"><strong>Try this:</strong> slide coverage from $5,000 to $10,000. Which way do <span class="math">A</span> and <span class="math">A</span>′ move, and why?</p>
+            <button class="btn" data-goto="2">Next: the best amount</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-2" aria-labelledby="tab-2" hidden>
+            <h2>The best amount of coverage</h2>
+            <p>At $5,000 of coverage, the marginal benefit (<span class="math">A</span>) is far above the marginal cost (<span class="math">A</span>′): another dollar of coverage adds more than it costs, so the person buys more. At $10,000 (<span class="math">B</span> and <span class="math">B</span>′) the gap is smaller.</p>
+            <div class="note">
+              <h3>Buy until marginal benefit equals marginal cost</h3>
+              <p>The gap closes at point <span class="math">X</span>, where <span class="math">MB</span> = <span class="math">MC</span>. That coverage, <span class="math">q</span>*, is the best amount: about <strong>$30,000</strong>, less than the $50,000 loss. Past <span class="math">X</span>, another dollar costs more than it adds.</p>
+            </div>
+            <label class="ctl-label" for="q2">Try a coverage amount, <span class="math">q</span>: <output id="q2-out" for="q2">$20,000</output></label>
+            <input type="range" id="q2" min="0" max="50" step="1" value="20">
+            <div class="scale-ends" aria-hidden="true"><span>$0</span><span>$50,000</span></div>
+            <div class="table-wrap"><table class="ws eu" id="eu2"></table></div>
+            <p class="aside">Watch the expected column as you move the coverage line. The net gain (green area) grows while each extra $1,000 adds more than it costs, peaks at <span class="math">X</span>, and shrinks once the red area appears: buying past <span class="math">X</span> gives back utility.</p>
+            <aside class="key-terms" aria-label="Key terms">
+              <h3>Key terms</h3>
+              <dl>
+                <dt>Optimal coverage, <span class="math">q</span>*</dt><dd>The amount of coverage at which the marginal benefit of the last dollar equals its marginal cost.</dd>
+                <dt>Partial insurance</dt><dd>Coverage below the full loss. A person chooses it when the premium rate is above the chance of loss, as here (0.20 versus 0.10).</dd>
+              </dl>
+            </aside>
+            <p class="try"><strong>Try this:</strong> drag the coverage line to the right of <span class="math">X</span>. Which curve is now higher, and what does that tell the person to do?</p>
+            <button class="btn" data-goto="3">Next: a higher premium</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-3" aria-labelledby="tab-3" hidden>
+            <h2>A higher premium</h2>
+            <p>Raise the premium from 20 to 25 cents per dollar of coverage: $1,250 for the $5,000 policy. Each dollar of coverage now nets only 75 cents when ill, so <span class="math">MB</span> shifts down to <span class="math">MB</span><sub>2</sub>. Each dollar also costs more when well, so <span class="math">MC</span> shifts up to <span class="math">MC</span><sub>2</sub>.</p>
+            <div class="presets" role="group" aria-label="Premium presets">
+              <button class="btn" data-r3="10" aria-pressed="false">10% (fair)</button>
+              <button class="btn" data-r3="20" aria-pressed="false">20%</button>
+              <button class="btn" data-r3="25" aria-pressed="true">25%</button>
+              <button class="btn" data-r3="30" aria-pressed="false">30%</button>
+            </div>
+            <label class="ctl-label" for="r3">Premium per dollar of coverage: <output id="r3-out" for="r3">25%</output></label>
+            <input type="range" id="r3" min="10" max="35" step="1" value="25">
+            <div class="scale-ends" aria-hidden="true"><span>10%</span><span>35%</span></div>
+            <div class="table-wrap"><table class="ws" id="ws3"></table></div>
+            <p>The new optimum <span class="math">Y</span> is at <span class="math">q</span>**, about $23,000. People react to higher premiums by buying less coverage: the demand for insurance slopes down.</p>
+            <aside class="key-terms" aria-label="Key terms">
+              <h3>Key terms</h3>
+              <dl>
+                <dt>Actuarially fair premium rate</dt><dd>A premium per dollar of coverage equal to the chance of loss (here 10%). At this rate a risk-averse person buys full coverage.</dd>
+                <dt>Loading</dt><dd>The part of the premium above the fair rate, which pays the insurer’s costs. The bigger the loading, the less coverage people buy.</dd>
+              </dl>
+            </aside>
+            <p class="try"><strong>Try this:</strong> choose the fair 10% premium. How much coverage does the person buy now?</p>
+            <button class="btn" data-goto="4">Next: a bigger loss</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-4" aria-labelledby="tab-4" hidden>
+            <h2>A bigger expected loss</h2>
+            <p>Back at a 20% premium, suppose illness would cost $75,000 instead of $50,000. Wealth when well does not change, so <span class="math">MC</span> stays put. But wealth when ill is now much lower ($29,000 with a $5,000 policy), where each extra dollar matters more: <span class="math">MB</span> shifts up to <span class="math">MB</span><sub>2</sub>.</p>
+            <div class="presets" role="group" aria-label="Loss presets">
+              <button class="btn" data-l4="50" aria-pressed="false">$50,000</button>
+              <button class="btn" data-l4="60" aria-pressed="false">$60,000</button>
+              <button class="btn" data-l4="75" aria-pressed="true">$75,000</button>
+            </div>
+            <label class="ctl-label" for="l4">Loss if ill: <output id="l4-out" for="l4">$75,000</output></label>
+            <input type="range" id="l4" min="50" max="80" step="1" value="75">
+            <div class="scale-ends" aria-hidden="true"><span>$50,000</span><span>$80,000</span></div>
+            <div class="table-wrap"><table class="ws" id="ws4"></table></div>
+            <p>The new optimum <span class="math">Z</span>, at <span class="math">q</span>***, is higher, about $35,000: a bigger expected loss raises the demand for coverage.</p>
+            <aside class="key-terms" aria-label="Key terms">
+              <h3>Key terms</h3>
+              <dl>
+                <dt>Expected loss</dt><dd>The chance of loss times its size: 0.10 × $75,000 = $7,500 here, up from $5,000.</dd>
+              </dl>
+            </aside>
+            <p class="try"><strong>Try this:</strong> raise the loss step by step from $50,000. Which curve moves, which stays put, and why?</p>
+            <button class="btn" data-goto="5">Next: more wealth</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-5" aria-labelledby="tab-5" hidden>
+            <h2>More wealth</h2>
+            <p>Now suppose the person starts with $125,000 instead of $100,000, with the same $50,000 loss and 20% premium. Two things change at once:</p>
+            <ul class="facts">
+              <li>The coverage pays off at a higher wealth, where it adds less utility: <span class="math">MB</span> shifts down.</li>
+              <li>The premium comes out of a higher wealth, where it costs less utility: <span class="math">MC</span> shifts down too.</li>
+            </ul>
+            <p>The new optimum <span class="math">W</span> can be above or below <span class="math">q</span>*: it depends on which shift is larger. Compare three people:</p>
+            <div class="presets" role="group" aria-label="Who gets richer">
+              <button class="btn" data-m5="same" aria-pressed="true">Same caution</button>
+              <button class="btn" data-m5="less" aria-pressed="false">Less cautious when richer</button>
+              <button class="btn" data-m5="bigloss" aria-pressed="false">Bigger loss too</button>
+            </div>
+            <p class="aside" id="m5-note"></p>
+            <label class="ctl-label" for="w5">Starting wealth: <output id="w5-out" for="w5">$125,000</output></label>
+            <input type="range" id="w5" min="100" max="130" step="5" value="125">
+            <div class="scale-ends" aria-hidden="true"><span>$100,000</span><span>$130,000</span></div>
+            <div class="table-wrap"><table class="ws" id="ws5"></table></div>
+            <p class="try"><strong>Try this:</strong> switch between the three people. Why can richer people buy more coverage, less, or the same?</p>
+            <button class="btn" data-goto="6">Next: check yourself</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-6" aria-labelledby="tab-6" hidden>
+            <h2>Check yourself</h2>
+            <div id="quiz"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <p class="cite"><strong>Source.</strong> Folland, S., Goodman, A. C., Stano, M., &amp; Danagoulian, S. (2024). <i>The economics of health and health care</i> (9th ed.). Routledge. Chapter 13, “Demand and Supply of Health Insurance,” Figures 13.2 and 13.3.</p>
+    <p>A stylized model for teaching. As in Figures 13.2 and 13.3, marginal benefit and marginal cost are straight lines on an index scale, and each change shifts them parallel to the originals: a higher premium moves <i>MB</i> down and <i>MC</i> up, a bigger loss moves <i>MB</i> up, and more wealth moves both down. The shifts are sized so the best coverage is $30,000 at a 20% premium, about $23,000 at 25%, the full loss at the fair 10% premium, and about $35,000 for a $75,000 loss. The worksheet amounts are exact.</p>
+  </footer>
+</div>
+<script>
+// How much insurance? Marginal benefit and marginal cost of coverage (textbook Figures 13.2-13.3).
+// A person with wealth W faces a loss L with chance p and buys coverage q at r per dollar of coverage:
+//   wealth if ill = W - L + (1 - r) q        wealth if well = W - r q      (thousands of dollars)
+// As in the textbook figures, MB and MC are straight lines on an index scale, and every change
+// shifts them parallel to the originals:
+//   premium r : MB shifts down and MC shifts up (by equal amounts)
+//   loss L    : MB shifts up; MC stays put
+//   wealth W  : both shift down; how far MB moves depends on the person
+// The shifts are sized so the optimum is $30,000 at 20% (Fig. 13.2), about $23,000 at 25% (Fig. 13.3),
+// the full loss at the fair 10% premium, and about $35,000 for a $75,000 loss (Fig. 13.3).
+(function (root) {
+  const P = 0.10, W0 = 100, L0 = 50, R0 = 0.20, QSTAR = 30, V = 3;
+  const b = 0.04, n = 0.05;                        // slopes of MB1 (down) and MC1 (up)
+  const mb1 = q => V + b * (QSTAR - q), mc1 = q => V + n * (q - QSTAR);
+  // best coverage at premium r: the full loss at the fair rate (r = p), $30,000 at 20% and $23,000 at 25%,
+  // following the expected-utility condition through the odds ratio (1-p) r / (p (1-r))
+  const lnOdds = r => Math.log(((1 - P) * r) / (P * (1 - r))), base = lnOdds(R0);
+  const GAMMA = Math.log(27 / 20) / Math.log(lnOdds(0.25) / base);
+  const qPremium = r => lnOdds(r) <= 0 ? L0 : L0 - (L0 - QSTAR) * Math.pow(lnOdds(r) / base, GAMMA);
+  const qLoss = L => QSTAR + 0.2 * (L - L0);        // $35,000 at a $75,000 loss
+  const WEALTH_DOWN = 0.5;                          // both curves fall this much per $25,000 of wealth
+  const TYPE_DQ = { same: 0, less: -4, bigloss: 4.6 };  // change in coverage per $25,000 of wealth
+  function setup(o) {
+    o = o || {};
+    const W = o.W === undefined ? W0 : o.W, r = o.r === undefined ? R0 : o.r, mode = o.mode || 'same';
+    const L = o.L === undefined ? (mode === 'bigloss' ? L0 * W / W0 : L0) : o.L;
+    let dMB = 0, dMC = 0;
+    // a gap D = dMB - dMC moves the crossing to 30 + D / (b + n)
+    if (o.r !== undefined) { const D = (b + n) * (qPremium(r) - QSTAR); dMB += D / 2; dMC -= D / 2; }
+    if (o.L !== undefined) dMB += (b + n) * (qLoss(L) - QSTAR);
+    if (o.W !== undefined) {
+      const k = (W - W0) / 25;
+      dMB -= WEALTH_DOWN * k; dMC -= WEALTH_DOWN * k;
+      dMB += (b + n) * (TYPE_DQ[mode] || 0) * k;
+    }
+    return { W, L, r, p: P, mode, dMB, dMC };
+  }
+  const ill = (s, q) => s.W - s.L + (1 - s.r) * q;
+  const well = (s, q) => s.W - s.r * q;
+  const MB = (s, q) => mb1(q) + s.dMB;
+  const MC = (s, q) => mc1(q) + s.dMC;
+  const qStar = s => Math.min(s.L, Math.max(0, QSTAR + (s.dMB - s.dMC) / (b + n)));
+  const api = { P, W0, L0, R0, b, n, setup, ill, well, MB, MC, qStar };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  else root.Model = api;
+})(this);
+
+</script>
+<script>
+(function () {
+  'use strict';
+  const M = window.Model;
+  const NS = 'http://www.w3.org/2000/svg';
+  const $ = id => document.getElementById(id);
+  const svg = $('graph');
+
+  // ---------- geometry: coverage $0-80k across, an index of expected marginal utility up ----------
+  const X0 = 70, X1 = 600, Y0 = 30, Y1 = 440, VMAX = 6;
+  let QMAX = 60;                         // the axis runs a little past full coverage
+  const axisFor = L => Math.min(Math.ceil((L + 10) / 10) * 10, 85);
+  const gx = q => X0 + (X1 - X0) * q / QMAX;
+  const gy = v => Y1 - (Y1 - Y0) * v / VMAX;
+  const ixq = x => (x - X0) / (X1 - X0) * QMAX;
+
+  // ---------- formatting ----------
+  const money = k => '$' + Math.round(k * 1000).toLocaleString('en-US');
+  const cover = k => '$' + (Math.round(k * 10) * 100).toLocaleString('en-US');      // nearest $100
+  const kfmt = k => '$' + (Math.abs(k - Math.round(k)) < 0.05 ? Math.round(k) : k.toFixed(1)) + 'k';
+  const pct = r => Math.round(r * 100) + '%';
+  const idx = v => v.toFixed(2);
+  const clamp = (x, lo, hi) => Math.min(hi, Math.max(lo, x));
+
+  // ---------- state ----------
+  const S = { step: 1, q1: 5, q2: 20, r3: 0.25, L4: 75, W5: 125, m5: 'same' };
+
+  // ---------- svg helpers ----------
+  function el(name, attrs, parent) {
+    const e = document.createElementNS(NS, name);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    (parent || svg).appendChild(e);
+    return e;
+  }
+  const line = (x1, y1, x2, y2, cls, parent) => el('line', { x1, y1, x2, y2, class: cls }, parent);
+  function text(x, y, s, cls, anchor, parent) {
+    const t = el('text', { x, y, class: cls, 'text-anchor': anchor || 'start' }, parent);
+    t.textContent = s;
+    return t;
+  }
+  const compact = () => svg.getBoundingClientRect().width < 520;
+
+  // ---------- frame, ticks and tags ----------
+  let curves = [];          // sampled screen points of each drawn curve, for label placement
+  function drawFrame(xTags) {
+    svg.querySelectorAll(':scope > :not(title):not(desc)').forEach(n => n.remove());
+    curves = [];
+    const defs = el('defs', {});
+    const cp = el('clipPath', { id: 'plotclip' }, defs);
+    el('rect', { x: X0, y: Y0, width: X1 - X0, height: Y1 - Y0 }, cp);
+    el('rect', { x: X0, y: Y0, width: X1 - X0, height: Y1 - Y0, class: 'plot-bg' });
+    const g = el('g', { class: 'grid' });
+    for (let q = 5; q < QMAX - 0.01; q += 5) line(gx(q), Y0, gx(q), Y1, q % 10 ? 'minor' : 'major', g);
+    for (let v = 0.5; v < VMAX; v += 0.5) line(X0, gy(v), X1, gy(v), v % 1 ? 'minor' : 'major', g);
+    line(X0, Y1, X1, Y1, 'axis'); line(X0, Y0, X0, Y1, 'axis');
+    const tg = el('g', { class: 'ticks' });
+    for (let v = 0; v < VMAX; v += 1) text(X0 - 10, gy(v) + 5, String(v), 'tick', 'end', tg);
+    const step = compact() && QMAX > 50 ? 20 : 10;
+    for (let q = step; q <= QMAX + 0.01; q += step) if (gx(QMAX) - gx(q) > 44 || Math.abs(QMAX - q) < 0.01) text(gx(q), Y1 + 24, '$' + q + 'k', 'tick', 'middle', tg);
+    if (Math.abs(QMAX / step - Math.round(QMAX / step)) > 0.01) text(gx(QMAX), Y1 + 24, kfmt(QMAX), 'tick', 'middle', tg);
+    text(14, 18, 'Marginal benefit, marginal cost (index)', 'axis-title');
+    text((X0 + X1) / 2, 532, 'Insurance coverage, q (thousands of dollars)', 'axis-title', 'middle');
+    return xTags;
+  }
+  function tag(x, y, label, cls, anchor) {
+    const g = el('g', { class: 'tag ' + (cls || '') });
+    const t = text(x, y, label, '', anchor, g);
+    const b = t.getBBox();
+    g.insertBefore(el('rect', { x: b.x - 6, y: b.y - 3, width: b.width + 12, height: b.height + 6, rx: 5 }, g), t);
+    return g;
+  }
+  function drawXTags(xTags) {
+    const placed = [];
+    for (const t of xTags.slice().sort((a, b) => a.v - b.v)) {
+      let row = 0;
+      const g0 = tag(gx(t.v), Y1 + 26, t.label, t.cls, 'middle');
+      let b = g0.getBBox();
+      const hit = placed.find(p => p.row === 0 && b.x < p.b.x + p.b.width + 4 && p.b.x < b.x + b.width + 4);
+      if (hit) {
+        g0.remove(); row = 1;
+        b = tag(gx(t.v), Y1 + 26 + b.height + 5, t.label, t.cls, 'middle').getBBox();
+        const hit2 = placed.find(p => p.row === 1 && b.x < p.b.x + p.b.width + 4 && p.b.x < b.x + b.width + 4);
+        if (hit2) {
+          svg.lastChild.remove();
+          const right = hit2.b.x + hit2.b.width + 8 + b.width / 2;
+          const cx = right + b.width / 2 + 6 < 638 ? right : hit2.b.x - 8 - b.width / 2;
+          b = tag(cx, Y1 + 26 + b.height + 5, t.label, t.cls, 'middle').getBBox();
+        }
+      }
+      placed.push({ row, b });
+    }
+    // keep tags at the right edge inside the graph
+    svg.querySelectorAll('.tag').forEach(g => {
+      const b = g.getBBox(), over = b.x + b.width - 636;
+      if (over > 0) { g.querySelectorAll('text, rect').forEach(e => e.setAttribute('x', +e.getAttribute('x') - over)); }
+    });
+    const boxes = [...svg.querySelectorAll('.tag')].map(g => g.getBBox());
+    svg.querySelectorAll('.ticks text').forEach(t => {
+      const b = t.getBBox();
+      if (boxes.some(r => b.x < r.x + r.width + 4 && r.x < b.x + b.width + 4 && b.y < r.y + r.height + 2 && r.y < b.y + b.height + 2)) t.remove();
+    });
+  }
+  const inPlot = v => v >= 0 && v <= VMAX;
+  const dot = (q, v, cls, r) => inPlot(v) ? el('circle', { cx: gx(q), cy: gy(v), r: r || 7, class: cls || 'dot' }) : null;
+
+  // ---------- curves ----------
+  // f: q -> value; drawn from 0 to the full loss (coverage cannot exceed the loss)
+  function drawCurve(f, qEnd, cls, name, lcls) {
+    const pts = [];
+    for (let k = 0; k <= 200; k++) { const q = qEnd * k / 200; pts.push([gx(q), gy(f(q))]); }
+    el('path', { d: 'M' + pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' L'), class: cls, 'clip-path': 'url(#plotclip)' });
+    const vis = pts.filter(p => p[1] >= Y0 && p[1] <= Y1);
+    curves.push(vis);
+    if (name && vis.length) {
+      // label near the start of the visible part of the curve, or near its end
+      const anchors = [0.02, 0.08, 0.15, 0.25, 0.97, 0.9, 0.8, 0.65, 0.5].map(fr => vis[Math.min(vis.length - 1, Math.round(fr * (vis.length - 1)))]);
+      pending.push({ kind: 'curve', anchors, s: name, cls: 'curve-label ' + lcls });
+    }
+  }
+
+  // ---------- collision-aware labels ----------
+  let pending = [];
+  const queuePoint = (q, v, s) => { if (inPlot(v)) pending.push({ kind: 'point', x: gx(q), y: gy(v), s }); };
+  function segs() {
+    const out = [...svg.querySelectorAll('line.guide, line.qline, line.fullcov, line.move')]
+      .map(l => ['x1', 'y1', 'x2', 'y2'].map(a => +l.getAttribute(a)).concat([l.classList.contains('guide') || l.classList.contains('fullcov') ? 3 : 5]));
+    curves.forEach((pts, i) => { for (let k = 1; k < pts.length; k++) out.push([pts[k - 1][0], pts[k - 1][1], pts[k][0], pts[k][1], 5, 'c' + i]); });
+    return out;
+  }
+  function conflicts(b, sg, bounds) {
+    let score = 0;
+    if (b.x < bounds[0] || b.y < bounds[1] || b.x + b.width > bounds[2] || b.y + b.height > bounds[3]) score += 100;
+    const boxes = [...svg.querySelectorAll('.tag')].map(g => g.getBBox())
+      .concat([...svg.querySelectorAll('text')].filter(t => !t.closest('.tag') && !t.dataset.placing).map(t => t.getBBox()));
+    for (const o of boxes) if (b.x < o.x + o.width + 2 && o.x < b.x + b.width + 2 && b.y < o.y + o.height + 2 && o.y < b.y + b.height + 2) score += 50;
+    const hit = new Set();
+    for (const [x1, y1, x2, y2, w, grp] of sg) {
+      if (grp && hit.has(grp)) continue;
+      const steps = Math.max(8, Math.ceil(Math.hypot(x2 - x1, y2 - y1) / 5));
+      for (let k = 0; k <= steps; k++) {
+        const x = x1 + (x2 - x1) * k / steps, y = y1 + (y2 - y1) * k / steps;
+        if (x > b.x - 2 && x < b.x + b.width + 2 && y > b.y && y < b.y + b.height) { score += w; if (grp) hit.add(grp); break; }
+      }
+    }
+    for (const c of svg.querySelectorAll('circle')) {
+      const cx = +c.getAttribute('cx'), cy = +c.getAttribute('cy'), r = +c.getAttribute('r') + 4;
+      if (cx + r > b.x && cx - r < b.x + b.width && cy + r > b.y && cy - r < b.y + b.height) score += 20;
+    }
+    return score;
+  }
+  function nearOther(b, own) {
+    const cx = b.x + b.width / 2, cy = b.y + b.height / 2, d0 = Math.hypot(cx - own[0], cy - own[1]);
+    for (const c of svg.querySelectorAll('circle')) {
+      const x = +c.getAttribute('cx'), y = +c.getAttribute('cy');
+      if (Math.hypot(x - own[0], y - own[1]) < 1) continue;
+      if (Math.hypot(cx - x, cy - y) < d0 - 2) return 30;
+    }
+    return 0;
+  }
+  function placeAt(make, cands, bounds, own) {
+    const sg = segs();
+    let best = null, bestScore = Infinity;
+    for (const c of cands) {
+      const t = make(c); t.dataset.placing = '1';
+      const bb = t.getBBox();
+      const sc = conflicts(bb, sg, bounds) + (own ? nearOther(bb, own) : 0);
+      if (sc < bestScore) { if (best) best.remove(); best = t; bestScore = sc; } else t.remove();
+      if (sc === 0) break;
+    }
+    if (best) delete best.dataset.placing;
+    return best;
+  }
+  function flush() {
+    const plot = [X0 + 4, Y0 + 2, X1 - 2, Y1 - 4];
+    const ORDER = ['X', 'Y', 'Z', 'W', 'A', 'A′', 'B', 'B′', 'C', 'C′'];
+    const pts = pending.filter(l => l.kind === 'point').sort((a, b) => ORDER.indexOf(a.s) - ORDER.indexOf(b.s));
+    for (const L of pts) {
+      const ring = [[12, -10, 'start'], [-12, -10, 'end'], [14, 8, 'start'], [-14, 8, 'end'], [0, -16, 'middle'], [0, 30, 'middle'], [12, 26, 'start'], [-12, 26, 'end']];
+      const offs = ring.concat(ring.map(([dx, dy, a]) => [dx * 2, dy < 0 ? dy * 2 : dy + 12, a]), ring.map(([dx, dy, a]) => [dx * 3, dy < 0 ? dy * 3 : dy + 24, a]));
+      placeAt(c => text(L.x + c[0], L.y + c[1], L.s, 'pt-label', c[2]), offs, plot, [L.x, L.y]);
+    }
+    for (const L of pending.filter(l => l.kind === 'curve')) {
+      const cands = [];
+      for (const [x, y] of L.anchors) cands.push([x + 12, y - 8, 'start'], [x + 12, y + 22, 'start'], [x - 10, y - 10, 'end'], [x - 10, y + 22, 'end'], [x + 16, y - 20, 'start'], [x + 16, y + 34, 'start'], [x + 4, y - 22, 'start'], [x + 4, y + 36, 'start']);
+      const t = placeAt(c => text(c[0], c[1], L.s, L.cls, c[2]), cands, plot);
+      // the legend names every curve, so a label with no clear spot is left out
+      if (t) { t.dataset.placing = '1'; const sc = conflicts(t.getBBox(), segs(), plot); delete t.dataset.placing; if (sc >= 5) t.remove(); }
+    }
+    pending = [];
+  }
+  function setLegend(items) {
+    $('legend').innerHTML = items.map(([k, html]) => `<li><i class="${k}"></i><span>${html}</span></li>`).join('');
+  }
+  function moveArrow(qa, qb) {
+    // an arrow just above the axis from the old optimum to the new one
+    const xa = gx(qa), xb = gx(qb), y = Y1 - 12;
+    if (Math.abs(xb - xa) < 16) return;
+    const dir = xb > xa ? 1 : -1;
+    line(xa, y, xb - dir * 9, y, 'move');
+    el('path', { d: `M${xb},${y} l${-dir * 11},-6 l0,12 Z`, class: 'moveh' });
+  }
+
+  // ---------- scenes ----------
+  let dragTo = null;
+  const MBh = s => `<span class="math">MB</span><sub>${s}</sub>`, MCh = s => `<span class="math">MC</span><sub>${s}</sub>`;
+
+  // the baseline person; marks: 'A' moving pair at q, or the textbook's A, B pairs; X at q*; a coverage line at q
+  function sceneBase(q, o) {
+    pending = []; o = o || {};
+    const s = M.setup(), qs = M.qStar(s);
+    QMAX = axisFor(s.L);
+    const xT = [];
+    if (o.pair || o.line) xT.push({ v: q, label: kfmt(q), cls: 'faint' });
+    if (o.X && !o.hideX) xT.push({ v: qs, label: 'q* ' + kfmt(qs) });
+    drawFrame();
+    if (o.area && q > 0) {
+      // shaded areas between the curves up to q: green where MB > MC (expected utility gained), red past X (lost)
+      const band = (qa, qb, cls) => {
+        if (qb - qa < 0.05) return;
+        const top = [], bot = [];
+        for (let k = 0; k <= 60; k++) { const v = qa + (qb - qa) * k / 60; top.push([gx(v), gy(Math.min(VMAX, M.MB(s, v)))]); bot.push([gx(v), gy(Math.min(VMAX, M.MC(s, v)))]); }
+        el('path', { d: 'M' + top.concat(bot.reverse()).map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' L') + ' Z', class: cls });
+      };
+      band(0, Math.min(q, qs), 'area-gain');
+      if (q > qs) band(qs, q, 'area-loss');
+    }
+    drawCurve(v => M.MB(s, v), QMAX, 'mbc', 'MB₁', 'mbl');
+    drawCurve(v => M.MC(s, v), QMAX, 'mcc', 'MC₁', 'mcl');
+    if (o.fixed) {
+      for (const [qq, a, b] of [[5, 'A', 'A′'], [10, 'B', 'B′']]) {
+        line(gx(qq), gy(Math.min(VMAX, M.MB(s, qq))), gx(qq), Y1, 'guide');
+        dot(qq, M.MB(s, qq), 'dot mbd', 6); queuePoint(qq, M.MB(s, qq), a);
+        dot(qq, M.MC(s, qq), 'dot mcd', 6); queuePoint(qq, M.MC(s, qq), b);
+      }
+    }
+    if (o.pair || o.line) {
+      line(gx(q), gy(Math.min(VMAX, Math.max(M.MB(s, q), M.MC(s, q)))), gx(q), Y1, 'qline');
+      dot(q, M.MB(s, q), 'dot mbd', 7); dot(q, M.MC(s, q), 'dot mcd', 7);
+      if (o.pair) { queuePoint(q, M.MB(s, q), 'A'); queuePoint(q, M.MC(s, q), 'A′'); }
+    }
+    if (o.X && !o.hideX) {
+      line(gx(qs), gy(M.MB(s, qs)), gx(qs), Y1, 'guide');
+      dot(qs, M.MB(s, qs), 'dot opt', 8); queuePoint(qs, M.MB(s, qs), 'X');
+      if (o.arrow) moveArrow(10, qs);
+    }
+    drawXTags(xT);
+    flush();
+    const leg = [['k-mb', `${MBh(1)}: marginal benefit of coverage (when ill)`], ['k-mc', `${MCh(1)}: marginal cost of coverage (the premium, when well)`]];
+    if (o.area && q > 0) { leg.push(['k-gain', 'Expected utility gained (MB above MC)']); if (q > qs) leg.push(['k-loss', 'Expected utility lost past X (MC above MB)']); }
+    setLegend(leg);
+    $('g-desc').textContent = `Marginal benefit falls and marginal cost rises with coverage. They cross at X, about ${cover(qs)} of coverage.` + (o.pair || o.line ? ` At ${cover(q)}, MB is ${idx(M.MB(s, q))} and MC is ${idx(M.MC(s, q))}.` : '');
+    return { s, qs };
+  }
+
+  // a change: the old curves dashed, the new ones solid, the new optimum labeled
+  function sceneShift(change, o) {
+    pending = []; o = o || {};
+    const s0 = M.setup(), q0 = M.qStar(s0);
+    const s1 = M.setup(change), q1 = M.qStar(s1);
+    QMAX = axisFor(Math.max(s0.L, s1.L));
+    const mbMoved = Math.abs(M.MB(s1, 10) - M.MB(s0, 10)) > 1e-6, mcMoved = Math.abs(M.MC(s1, 10) - M.MC(s0, 10)) > 1e-6;
+    const xT = [{ v: q0, label: 'q* ' + kfmt(q0), cls: 'faint' }];
+    if (!o.hideNew && Math.abs(q1 - q0) > 0.05) xT.push({ v: q1, label: o.qname + ' ' + kfmt(q1) });
+    drawFrame();
+    if (mbMoved) drawCurve(v => M.MB(s0, v), QMAX, 'mbc old', 'MB₁', 'mbl old');
+    if (mcMoved) drawCurve(v => M.MC(s0, v), QMAX, 'mcc old', 'MC₁', 'mcl old');
+    if (!o.hideNew || !mbMoved) drawCurve(v => M.MB(s1, v), QMAX, 'mbc', mbMoved ? 'MB₂' : 'MB₁', 'mbl');
+    if (!o.hideNew || !mcMoved) drawCurve(v => M.MC(s1, v), QMAX, 'mcc', mcMoved ? 'MC₂' : 'MC₁', 'mcl');
+    // the old optimum
+    line(gx(q0), gy(Math.min(VMAX, M.MB(s0, q0))), gx(q0), Y1, 'guide');
+    dot(q0, M.MB(s0, q0), 'mdot old', 6); queuePoint(q0, M.MB(s0, q0), 'X');
+    if (!o.hideNew) {
+      if (o.C) {
+        dot(5, M.MB(s1, 5), 'dot mbd', 6); queuePoint(5, M.MB(s1, 5), 'C');
+        dot(5, M.MC(s1, 5), 'dot mcd', 6); queuePoint(5, M.MC(s1, 5), 'C′');
+        line(gx(5), gy(Math.min(VMAX, M.MB(s1, 5))), gx(5), Y1, 'guide');
+      }
+      if (Math.abs(q1 - q0) > 0.05) {
+        line(gx(q1), gy(Math.min(VMAX, M.MB(s1, q1))), gx(q1), Y1, 'guide');
+        moveArrow(q0, q1);
+      }
+      dot(q1, M.MB(s1, q1), 'dot opt', 8); queuePoint(q1, M.MB(s1, q1), o.pname);
+    }
+    drawXTags(xT);
+    flush();
+    const leg = [];
+    if (mbMoved) leg.push(['k-old', `${MBh(1)}, ${MCh(1)}: before (dashed)`]);
+    else if (mcMoved) leg.push(['k-old', `${MCh(1)}: before (dashed)`]);
+    leg.push(['k-mb', `${mbMoved ? MBh(2) : MBh(1)}: marginal benefit${mbMoved ? ', after the change' : ' (unchanged)'}`]);
+    leg.push(['k-mc', `${mcMoved ? MCh(2) : MCh(1)}: marginal cost${mcMoved ? ', after the change' : ' (unchanged)'}`]);
+    setLegend(leg);
+    $('g-desc').textContent = `Before the change the best coverage is ${cover(q0)} (X). After it, the curves cross at ${o.pname}, ${cover(q1)} of coverage.`;
+    return { s0, s1, q0, q1 };
+  }
+
+  // ---------- worksheet ----------
+  function worksheet(id, s, q, title) {
+    const prem = s.r * q;
+    const rows = [
+      ['', 'Starting wealth', money(s.W), money(s.W)],
+      ['Less', 'Loss', money(s.L), '$0'],
+      ['', 'Remainder', money(s.W - s.L), money(s.W)],
+      ['Plus', 'Insurance paid', money(q), '$0'],
+      ['', 'Sum', money(s.W - s.L + q), money(s.W)],
+      ['Less', `Premium (${pct(s.r)} of ${money(q)})`, money(prem), money(prem)]
+    ];
+    $(id).innerHTML = `<caption>${title}</caption><thead><tr><td></td><td></td><th scope="col">If ill</th><th scope="col">If well</th></tr></thead><tbody>` +
+      rows.map(([op, k, a, b]) => `<tr><td class="op">${op}</td><th scope="row">${k}</th><td>${a}</td><td>${b}</td></tr>`).join('') +
+      `<tr class="total"><td class="op">Or</td><th scope="row">New wealth</th><td>${money(M.ill(s, q))}</td><td>${money(M.well(s, q))}</td></tr></tbody>`;
+  }
+
+  // expected utility from coverage: areas under MB (gain, when ill) and MC (cost, when well)
+  function area(f, a, b) { const n = 200, h = (b - a) / n; let t = 0; for (let k = 0; k <= n; k++) t += f(a + k * h) * (k === 0 || k === n ? 1 : k % 2 ? 4 : 2); return t * h / 3; }
+  function euParts(s, q) {
+    const gain = area(v => M.MB(s, v), 0, q), cost = area(v => M.MC(s, v), 0, q);
+    return { gain, cost, net: gain - cost };
+  }
+  const pts1 = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1);
+  const pts2 = v => (Math.abs(v) < 0.005 ? '' : v > 0 ? '+' : '−') + Math.abs(v).toFixed(2);
+  function euTable(id, s, q) {
+    const { gain, cost, net } = euParts(s, q), mb = M.MB(s, q), mc = M.MC(s, q);
+    $(id).innerHTML = `<caption>Expected utility worksheet: ${money(q)} of coverage (utility points)</caption>
+      <thead><tr><td></td><th scope="col">If ill</th><th scope="col">If well</th><th scope="col">Expected</th></tr></thead><tbody>
+      <tr><th scope="row">Chance</th><td>${s.p.toFixed(2)}</td><td>${(1 - s.p).toFixed(2)}</td><td></td></tr>
+      <tr><th scope="row">Utility change from ${money(q)} of coverage</th><td>${pts1(gain / s.p)}</td><td>${pts1(-cost / (1 - s.p))}</td><td></td></tr>
+      <tr><th scope="row">× chance = change in expected utility</th><td>${pts1(gain)}</td><td>${pts1(-cost)}</td><td><b>${pts2(net)}</b></td></tr>
+      <tr class="total"><th scope="row">The next $1,000 of coverage</th><td>${pts2(mb)} <span class="tag-mb">MB</span></td><td>${pts2(-mc)} <span class="tag-mc">MC</span></td><td><b>${pts2(mb - mc)}</b></td></tr>
+      </tbody>`;
+  }
+
+  // ---------- readout ----------
+  function readout(k1, v1, w1, k2, v2, w2, b1l, b1, b1v, b2l, b2, b2v, verdict, fills) {
+    $('ro-k1').innerHTML = k1; $('ro-v1').textContent = v1; $('ro-w1').textContent = w1 || '';
+    $('ro-k2').innerHTML = k2; $('ro-v2').textContent = v2; $('ro-w2').textContent = w2 || '';
+    $('ro-b1-lbl').innerHTML = b1l; $('ro-b1').style.width = clamp(b1, 0, 100) + '%'; $('ro-b1-v').textContent = b1v;
+    $('ro-b2-lbl').innerHTML = b2l; $('ro-b2').style.width = clamp(b2, 0, 100) + '%'; $('ro-b2-v').textContent = b2v;
+    $('ro-b1').className = 'fill ' + fills[0]; $('ro-b2').className = 'fill ' + fills[1];
+    $('ro-verdict').innerHTML = verdict;
+  }
+  function advice(s, q) {
+    const mb = M.MB(s, q), mc = M.MC(s, q), qs = M.qStar(s);
+    if (Math.abs(q - qs) < 0.5) return `At ${cover(q)}, <span class="math">MB</span> ≈ <span class="math">MC</span>: this is the best amount, point <span class="math">X</span>.`;
+    if (mb > mc) return `At ${cover(q)}, <span class="math">MB</span> (${idx(mb)}) is above <span class="math">MC</span> (${idx(mc)}): another dollar of coverage adds more than it costs, so <strong>buy more</strong>.`;
+    return `At ${cover(q)}, <span class="math">MB</span> (${idx(mb)}) is below <span class="math">MC</span> (${idx(mc)}): the last dollar of coverage costs more than it adds, so <strong>buy less</strong>.`;
+  }
+  const MODE_NOTE = {
+    same: 'Same caution: both curves shift down by the same proportion, so they still cross at the same coverage.',
+    less: 'Less cautious when richer (as most evidence suggests): the marginal benefit falls by more than the marginal cost, so coverage falls.',
+    bigloss: 'Bigger loss too: richer people often face bigger losses (pricier care, more income at stake). Here the loss grows in step with wealth, so MB falls less and coverage rises.'
+  };
+
+  function render() {
+    $('readout').hidden = S.step === 6;
+    if (S.step === 1) {
+      const { s } = sceneBase(S.q1, { pair: true, area: true });
+      worksheet('ws1', s, S.q1, `Insurance worksheet: ${money(S.q1)} of coverage`);
+      euTable('eu1', s, S.q1);
+      const mb = M.MB(s, S.q1), mc = M.MC(s, S.q1);
+      readout('Gain in expected utility', pts2(euParts(s, S.q1).net), 'green area', 'Next $1,000 adds', pts2(mb - mc), 'MB − MC',
+        'Marginal benefit (<span class="math">A</span>)', 100 * mb / VMAX, idx(mb),
+        'Marginal cost (<span class="math">A</span>′)', 100 * mc / VMAX, idx(mc),
+        advice(s, S.q1), ['mbf', 'mcf']);
+    } else if (S.step === 2) {
+      const { s, qs } = sceneBase(S.q2, { fixed: true, X: true, line: true, arrow: true, area: true });
+      euTable('eu2', s, S.q2);
+      const e = euParts(s, S.q2).net, eBest = euParts(s, qs).net;
+      readout('Best coverage, <span class="math">q</span>*', cover(qs), `gain ${pts2(eBest)}`, 'Gain at your choice', pts2(e), cover(S.q2),
+        'Marginal benefit', 100 * M.MB(s, S.q2) / VMAX, idx(M.MB(s, S.q2)),
+        'Marginal cost', 100 * M.MC(s, S.q2) / VMAX, idx(M.MC(s, S.q2)),
+        advice(s, S.q2), ['mbf', 'mcf']);
+    } else if (S.step === 3) {
+      const { s1, q0, q1 } = sceneShift({ r: S.r3 }, { qname: 'q**', pname: 'Y', C: true });
+      worksheet('ws3', s1, 5, `Insurance worksheet: $5,000 of coverage at a ${pct(S.r3)} premium`);
+      const fair = Math.abs(S.r3 - M.P) < 1e-9;
+      readout('Best coverage', cover(q1), `was ${cover(q0)}`, 'Premium for $5,000', money(5 * S.r3), '',
+        'Coverage at 20%', 100 * q0 / 80, cover(q0),
+        `Coverage at ${pct(S.r3)}`, 100 * q1 / 80, cover(q1),
+        fair ? 'At the fair 10% premium, <span class="math">MB</span> and <span class="math">MC</span> meet at the full $50,000 loss: a risk-averse person buys <strong>full coverage</strong> when insurance is priced fairly.'
+          : S.r3 > M.R0 ? `A higher premium lowers <span class="math">MB</span> and raises <span class="math">MC</span>, so coverage falls from ${cover(q0)} to ${cover(q1)}.`
+            : S.r3 < M.R0 ? `A lower premium raises <span class="math">MB</span> and lowers <span class="math">MC</span>, so coverage rises from ${cover(q0)} to ${cover(q1)}.`
+              : 'This is the original 20% premium.', ['q', 'q']);
+    } else if (S.step === 4) {
+      const { s1, q0, q1 } = sceneShift({ L: S.L4 }, { qname: 'q***', pname: 'Z' });
+      worksheet('ws4', s1, 5, `Insurance worksheet: $5,000 of coverage, ${money(S.L4)} loss`);
+      readout('Best coverage', cover(q1), `was ${cover(q0)}`, 'Expected loss', money(0.1 * S.L4), 'was $5,000',
+        'Coverage with a $50,000 loss', 100 * q0 / 80, cover(q0),
+        `Coverage with a ${money(S.L4)} loss`, 100 * q1 / 80, cover(q1),
+        S.L4 > 50 ? `Wealth if ill is lower, where each dollar matters more: <span class="math">MB</span> shifts up and coverage rises from ${cover(q0)} to ${cover(q1)}. <span class="math">MC</span> does not move, because wealth when well is unchanged.`
+          : S.L4 < 50 ? `A smaller loss leaves more wealth when ill, so <span class="math">MB</span> shifts down and coverage falls to ${cover(q1)}.`
+            : 'This is the original $50,000 loss.', ['q', 'q']);
+    } else if (S.step === 5) {
+      const { s1, q0, q1 } = sceneShift({ W: S.W5, mode: S.m5 }, { qname: 'new q', pname: 'W' });
+      worksheet('ws5', s1, 5, `Insurance worksheet: $5,000 of coverage, ${money(S.W5)} starting wealth`);
+      $('m5-note').textContent = MODE_NOTE[S.m5];
+      const d = q1 - q0;
+      readout('Best coverage', cover(q1), `was ${cover(q0)}`, 'Loss if ill', money(s1.L), '',
+        'Coverage at $100,000', 100 * q0 / 80, cover(q0),
+        `Coverage at ${money(S.W5)}`, 100 * q1 / 80, cover(q1),
+        Math.abs(d) < 0.05 ? 'Both curves shift down, and here they shift by the same proportion: coverage does not change.'
+          : d < 0 ? `Both curves shift down, but <span class="math">MB</span> falls by more: coverage falls to ${cover(q1)}.`
+            : `<span class="math">MB</span> falls by less than <span class="math">MC</span>: coverage rises to ${cover(q1)}.`, ['q', 'q']);
+    } else Quiz.render();
+  }
+
+  // ---------- setters ----------
+  function syncPresets(attr, val) {
+    document.querySelectorAll(`[data-${attr}]`).forEach(b => { const d = b.dataset[attr]; b.setAttribute('aria-pressed', String(isNaN(+d) ? d === val : Math.abs(+d - Number(val)) < 1e-9)); });
+  }
+  function setQ1(v) { S.q1 = clamp(Math.round(v), 0, 50); $('q1').value = S.q1; $('q1-out').textContent = money(S.q1); render(); }
+  function setQ2(v) { S.q2 = clamp(Math.round(v), 0, 50); $('q2').value = S.q2; $('q2-out').textContent = money(S.q2); render(); }
+  function setR3(r) { const pc = clamp(Math.round(r * 100), 10, 35); S.r3 = pc / 100; $('r3').value = pc; $('r3-out').textContent = pc + '%'; syncPresets('r3', pc); render(); }
+  function setL4(v) { S.L4 = clamp(Math.round(v), 50, 80); $('l4').value = S.L4; $('l4-out').textContent = money(S.L4); syncPresets('l4', S.L4); render(); }
+  function setW5(v) { S.W5 = clamp(Math.round(v / 5) * 5, 100, 130); $('w5').value = S.W5; $('w5-out').textContent = money(S.W5); render(); }
+  function setM5(m) { S.m5 = m; syncPresets('m5', m); render(); }
+
+  $('q1').addEventListener('input', e => setQ1(+e.target.value));
+  $('q2').addEventListener('input', e => setQ2(+e.target.value));
+  $('r3').addEventListener('input', e => setR3(+e.target.value / 100));
+  $('l4').addEventListener('input', e => setL4(+e.target.value));
+  $('w5').addEventListener('input', e => setW5(+e.target.value));
+  document.querySelectorAll('[data-r3]').forEach(b => b.addEventListener('click', () => setR3(+b.dataset.r3 / 100)));
+  document.querySelectorAll('[data-l4]').forEach(b => b.addEventListener('click', () => setL4(+b.dataset.l4)));
+  document.querySelectorAll('[data-m5]').forEach(b => b.addEventListener('click', () => setM5(b.dataset.m5)));
+
+  // ---------- pointer: drag the coverage line in steps 1 and 2 ----------
+  function svgPoint(evt) {
+    const pt = svg.createSVGPoint(); pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  const dragFor = () => S.step === 1 ? x => setQ1(ixq(x)) : S.step === 2 ? x => setQ2(ixq(x)) : null;
+  let dragging = false;
+  svg.addEventListener('pointerdown', e => {
+    dragTo = dragFor();
+    if (!dragTo) return;
+    const p = svgPoint(e);
+    if (p.x < X0 || p.x > X1 || p.y < Y0 || p.y > Y1) return;
+    dragging = true; svg.setPointerCapture(e.pointerId); dragTo(p.x); e.preventDefault();
+  });
+  svg.addEventListener('pointermove', e => { if (dragging && dragTo) dragTo(svgPoint(e).x); });
+  const stop = () => { dragging = false; };
+  svg.addEventListener('pointerup', stop); svg.addEventListener('pointercancel', stop);
+
+  // ---------- tabs ----------
+  const tabs = Array.from(document.querySelectorAll('.step'));
+  function goStep(n, focus) {
+    S.step = n;
+    tabs.forEach((t, i) => {
+      const on = i + 1 === n;
+      t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1;
+      $('panel-' + (i + 1)).hidden = !on;
+    });
+    svg.style.touchAction = n <= 2 ? 'none' : 'auto';
+    if (focus) tabs[n - 1].focus();
+    render();
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => goStep(i + 1));
+    t.addEventListener('keydown', e => {
+      const cur = tabs.indexOf(document.activeElement);
+      const from = cur >= 0 ? cur : i;
+      let to = null;
+      if (e.key === 'ArrowRight') to = (from + 1) % tabs.length;
+      else if (e.key === 'ArrowLeft') to = (from - 1 + tabs.length) % tabs.length;
+      else if (e.key === 'Home') to = 0;
+      else if (e.key === 'End') to = tabs.length - 1;
+      if (to !== null) { e.preventDefault(); goStep(to + 1, true); }
+    });
+  });
+  document.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => {
+    goStep(+b.dataset.goto);
+    document.querySelector('.steps').scrollIntoView({ block: 'nearest' });
+  }));
+
+  // ---------- quiz ----------
+  const SET = 'a person with $100,000 who faces a 0.10 chance of an illness costing $50,000';
+  const QUESTIONS = [
+    { q: `The graph shows ${SET}. They buy $5,000 of coverage at a premium of 20 cents per dollar of coverage. What is their wealth if they fall ill?`,
+      opts: ['$50,000', '$54,000', '$55,000', '$99,000'], a: 1,
+      why: '$100,000 − $50,000 loss + $5,000 insurance − $1,000 premium = $54,000. If they stay well, they have $99,000.',
+      before: () => sceneBase(5, {}), after: () => sceneBase(5, { pair: true }) },
+    { q: `The graph shows ${SET}, buying coverage at 20 cents per dollar. At $5,000 of coverage, the marginal benefit (A) is above the marginal cost (A′). What should they do?`,
+      opts: ['Buy more coverage', 'Buy less coverage', 'Keep $5,000', 'Drop insurance altogether'], a: 0,
+      why: 'Another dollar of coverage adds more expected utility (when ill) than its premium takes away (when well), so they gain by buying more.',
+      before: () => sceneBase(5, { pair: true }), after: () => sceneBase(5, { pair: true, X: true, arrow: false }) },
+    { q: `The graph shows ${SET}, buying coverage at 20 cents per dollar. Using the graph, how much coverage do they buy?`,
+      opts: ['$5,000', 'About $30,000', '$50,000, the whole loss', 'None'], a: 1,
+      why: 'They buy until marginal benefit equals marginal cost, at X: about $30,000. They stop short of the full $50,000 because the premium (20%) is above the chance of loss (10%).',
+      before: () => sceneBase(30, { fixed: true }), after: () => sceneBase(30, { fixed: true, X: true }) },
+    { q: `The graph shows ${SET}. If the premium were actuarially fair, 10 cents per dollar of coverage, how much coverage would they buy?`,
+      opts: ['About $30,000, as before', 'About $15,000', 'The full $50,000', 'None'], a: 2,
+      why: 'At a fair premium, MB and MC meet exactly at the full loss: a risk-averse person fully insures when insurance is priced fairly.',
+      before: () => sceneShift({ r: 0.10 }, { qname: 'q', pname: 'Y', hideNew: true }), after: () => sceneShift({ r: 0.10 }, { qname: 'q', pname: 'Y' }) },
+    { q: `The graph shows ${SET}. The premium rises from 20 to 25 cents per dollar of coverage. Using the graph, what happens?`,
+      opts: ['MB shifts down, MC shifts up, and coverage falls to about $23,000', 'Both curves shift up and coverage rises', 'Only MC shifts, and coverage stays at $30,000', 'Coverage rises to protect against the higher cost'], a: 0,
+      why: 'Each dollar of coverage nets less when ill (MB down) and costs more when well (MC up). They now cross at Y, about $23,000: people buy less insurance when it costs more.',
+      before: () => sceneShift({ r: 0.25 }, { qname: 'q**', pname: 'Y', hideNew: true }), after: () => sceneShift({ r: 0.25 }, { qname: 'q**', pname: 'Y', C: true }) },
+    { q: 'The graph shows a person with $100,000 buying coverage at 20 cents per dollar. Their loss if ill rises from $50,000 to $75,000. Using the graph, what happens?',
+      opts: ['MC shifts up and coverage falls', 'MB shifts up, MC stays, and coverage rises', 'Both curves shift down', 'Nothing, since the premium is the same'], a: 1,
+      why: 'Wealth when ill is lower, where each dollar of coverage matters more, so MB shifts up. Wealth when well is unchanged, so MC stays. Coverage rises.',
+      before: () => sceneShift({ L: 75 }, { qname: 'q***', pname: 'Z', hideNew: true }), after: () => sceneShift({ L: 75 }, { qname: 'q***', pname: 'Z' }) },
+    { q: 'The graph shows a person facing a $50,000 loss with chance 0.10, buying coverage at 20 cents per dollar. Their starting wealth rises from $100,000 to $125,000. What happens to the coverage they choose?',
+      opts: ['It must rise', 'It must fall', 'It could rise, fall or stay the same, because MB and MC both shift down', 'It falls to zero'], a: 2,
+      why: 'Coverage pays off at a higher wealth (MB down) and the premium comes out of a higher wealth (MC down). Which shift is larger depends on the person; here they offset exactly, so coverage stays at about $30,000.',
+      before: () => sceneShift({ W: 125, mode: 'same' }, { qname: 'q', pname: 'W', hideNew: true }), after: () => sceneShift({ W: 125, mode: 'same' }, { qname: 'new q', pname: 'W' }) }
+  ];
+
+  const Quiz = {
+    i: 0, score: 0, checked: false, done: false,
+    render() {
+      const box = $('quiz');
+      dragTo = null;
+      if (this.done) {
+        sceneBase(30, { fixed: true, X: true });
+        box.innerHTML = `<p class="score">You got ${this.score} of ${QUESTIONS.length}.</p>
+          <p>${this.score === QUESTIONS.length ? 'Every one. You can find the best amount of coverage and predict how it responds to prices, losses and wealth.' : 'Revisit the steps for any you missed; each question points back to one of them.'}</p>
+          <div class="actions"><button class="btn btn-primary" id="q-again">Try again</button></div>`;
+        $('q-again').addEventListener('click', () => { this.i = 0; this.score = 0; this.checked = false; this.done = false; this.render(); });
+        return;
+      }
+      const Q = QUESTIONS[this.i];
+      (this.checked ? Q.after : Q.before)();
+      const name = 'q' + this.i;
+      box.innerHTML = `<p class="progress">Question ${this.i + 1} of ${QUESTIONS.length}</p>
+        <fieldset class="quiz"><legend tabindex="-1">${Q.q}</legend>
+        <div class="opts">${Q.opts.map((o, k) => `<label class="opt"><input type="radio" name="${name}" value="${k}"><span>${o}</span></label>`).join('')}</div></fieldset>
+        <p class="error" id="q-err" hidden>Choose an answer first.</p>
+        <div id="q-fb" aria-live="polite"></div>
+        <div class="actions"><button class="btn btn-primary" id="q-check">Check answer</button></div>`;
+      box.querySelectorAll('input').forEach(inp => inp.addEventListener('change', () => { $('q-err').hidden = true; }));
+      $('q-check').addEventListener('click', () => this.check());
+    },
+    check() {
+      const Q = QUESTIONS[this.i];
+      const sel = $('quiz').querySelector('input:checked');
+      if (!sel) { $('q-err').hidden = false; return; }
+      const pick = +sel.value, right = pick === Q.a;
+      if (right) this.score++;
+      this.checked = true;
+      Q.after();
+      const opts = $('quiz').querySelectorAll('.opt');
+      opts[Q.a].classList.add('is-correct');
+      if (!right) opts[pick].classList.add('is-wrong');
+      $('quiz').querySelectorAll('input').forEach(inp => { inp.disabled = true; });
+      $('q-fb').innerHTML = `<p><span class="verdict ${right ? 'ok' : 'no'}">${right ? 'Correct.' : 'Not quite.'}</span> ${Q.why}</p>`;
+      const last = this.i === QUESTIONS.length - 1;
+      $('quiz').querySelector('.actions').innerHTML = `<button class="btn btn-primary" id="q-next">${last ? 'See your score' : 'Next question'}</button>`;
+      $('q-next').addEventListener('click', () => {
+        if (last) this.done = true; else { this.i++; this.checked = false; }
+        this.render();
+        const lg = $('quiz').querySelector('legend'); if (lg) lg.focus();
+      });
+      $('q-next').focus();
+    }
+  };
+
+  let rz = null;
+  window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(render, 120); });
+
+  window.__hm = { S, M, goStep, setQ1, setQ2, setR3, setL4, setW5, setM5, Quiz, QUESTIONS, geom: { gx, gy, X0, X1, Y0, Y1 } };
+  setQ1(5); setQ2(20); setR3(0.25); setL4(75); setW5(125); setM5('same');
+  goStep(1);
+})();
+
+</script>
+</body>
+</html>

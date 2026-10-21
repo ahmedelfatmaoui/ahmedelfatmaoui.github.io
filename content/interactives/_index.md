@@ -130,6 +130,26 @@ margin: 0;
 </div>
 </div>
 
+<div class="interactive-item">
+<a class="interactive-title" href="/how-much-insurance.html" target="_blank" rel="noopener noreferrer">How Much Insurance?</a><br>
+<i>The marginal benefit, marginal cost, and optimal amount of insurance coverage</i><br>
+<strong>Launch:</strong> <a href="/how-much-insurance.html" target="_blank" rel="noopener noreferrer">Open Insurance Demand Interactive</a>
+<button class="accordion">Description</button>
+<div class="panel">
+<p>Find the optimal amount of insurance by comparing the marginal benefit and marginal cost of additional coverage. Then explore how the chosen coverage responds to changes in the premium, expected loss, and wealth, and check your understanding with guided questions.</p>
+</div>
+</div>
+
+<div class="interactive-item">
+<a class="interactive-title" href="/why-people-buy-insurance.html" target="_blank" rel="noopener noreferrer">Why People Buy Insurance: Risk Aversion</a><br>
+<i>Diminishing marginal utility, expected utility, and willingness to pay for coverage</i><br>
+<strong>Launch:</strong> <a href="/why-people-buy-insurance.html" target="_blank" rel="noopener noreferrer">Open Risk Aversion Interactive</a>
+<button class="accordion">Description</button>
+<div class="panel">
+<p>Explore why diminishing marginal utility makes a risk-averse person prefer certain wealth to a gamble with the same expected value. Compare expected value and expected utility, identify an actuarially fair premium, and determine the most someone would pay for full insurance.</p>
+</div>
+</div>
+
 <script>
 var acc = document.getElementsByClassName("accordion");
 var i;
