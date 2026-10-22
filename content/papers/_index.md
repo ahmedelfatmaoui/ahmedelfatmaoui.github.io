@@ -48,9 +48,8 @@ display: block !important;
 <p style="margin:0">
   <a style="margin:0; font-size:100%; font-weight:bold" href="https://doi.org/10.1162/EDFP.a.491">Dollars and Degrees: The Asymmetric Impact of State Appropriations on STEM and Non-STEM Fields</a><br>
   Ahmed El Fatmaoui<br>
-  <i>Education Finance and Policy</i>, 2026 &nbsp; <button class="accordion">Abstract</button>
-</p>
-<div class="panel" style="background-color: #F1F1F1; color: #666; padding: 10px;"><p>This study examines the differential impact of state appropriations on STEM and non-STEM degree completion at U.S. public four-year institutions. Using a panel dataset from 2003 to 2019 and a Bartik-style instrumental variables approach, I find that state funding disproportionately affects STEM degree completion, with little to no impact on Non-STEM degrees. A 10% increase in state appropriations leads to a 3.4% increase in STEM degrees conferred, primarily four years after the funding change. This effect is concentrated among male students, science STEM majors, and non-selective institutions. Increased state support leads to higher institutional spending, and more STEM programs–factors that impact STEM degree completion more than non-STEM fields.</p></div><br>
+  <i>Education Finance and Policy</i>, 2026
+</p><br>
 
 <p style="margin:0">
   <a style="margin:0; font-size:100%; font-weight:bold" href="https://doi.org/10.1080/13504851.2026.2750971">Hepatitis B vaccination and neonatal mortality in the United States</a><br>
