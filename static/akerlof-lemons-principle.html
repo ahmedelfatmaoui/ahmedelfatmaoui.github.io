@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Lemons Principle</title>
+<meta name="description" content="An interactive lesson on Akerlof's lemons principle: how asymmetric information unravels the used-car market and how the same logic drives adverse selection in health insurance.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=STIX+Two+Text:ital,wght@0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --paper:#EEF3F7; --sheet:#FBFDFF; --ink:#14233B; --ink-2:#4B5B71; --rule:#C3D1DE; --chip:#E1E9F1;
+  --grid-minor:#E3EBF3; --grid-major:#C9D7E5;
+  --health:#1C7F66; --sick:#B23F2A; --bread:#C28A1E; --pref:#5B4BCF;
+  --better:rgba(37,99,235,.14); --better-edge:#2563EB; --focus:#2563EB;
+  --ok:#17735C; --ok-bg:#E1F2EB; --no:#A83A26; --no-bg:#F7E4DF;
+  --cost:#C07A12; --cost-ink:#8A5300; --gain:rgba(28,127,102,.18); --gain-edge:#1C7F66; --loss:rgba(178,63,42,.16); --loss-edge:#B23F2A;
+  --sans:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --math:"STIX Two Text","Cambria Math",Cambria,"Times New Roman",Times,serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D1522; --sheet:#121C2C; --ink:#E6EDF6; --ink-2:#A4B3C6; --rule:#2A3A53; --chip:#1A2638;
+    --grid-minor:#172335; --grid-major:#23334B;
+    --health:#43BD97; --sick:#E0775E; --bread:#E3B24C; --pref:#A399FF;
+    --better:rgba(96,150,255,.18); --better-edge:#7AA7FF; --focus:#7AA7FF;
+    --ok:#5ED1AC; --ok-bg:#12302A; --no:#F08E77; --no-bg:#3A1F19;
+    --cost:#E7B04A; --cost-ink:#F0C46A; --gain:rgba(67,189,151,.2); --gain-edge:#43BD97; --loss:rgba(224,119,94,.2); --loss-edge:#E0775E;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0D1522; --sheet:#121C2C; --ink:#E6EDF6; --ink-2:#A4B3C6; --rule:#2A3A53; --chip:#1A2638;
+  --grid-minor:#172335; --grid-major:#23334B;
+  --health:#43BD97; --sick:#E0775E; --bread:#E3B24C; --pref:#A399FF;
+  --better:rgba(96,150,255,.18); --better-edge:#7AA7FF; --focus:#7AA7FF;
+  --ok:#5ED1AC; --ok-bg:#12302A; --no:#F08E77; --no-bg:#3A1F19;
+  --cost:#E7B04A; --cost-ink:#F0C46A; --gain:rgba(67,189,151,.2); --gain-edge:#43BD97; --loss:rgba(224,119,94,.2); --loss-edge:#E0775E;
+  color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none !important}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:1.0625rem;line-height:1.55;-webkit-font-smoothing:antialiased}
+.page{max-width:1220px;margin:0 auto;padding:clamp(18px,3vw,36px) clamp(16px,3vw,32px) 40px}
+h1,h2,h3{line-height:1.15;margin:0}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.masthead h1{font-size:clamp(1.8rem,1.2rem + 2vw,2.6rem);font-weight:700;letter-spacing:-.018em;max-width:21ch}
+.masthead .lede{margin:.75rem 0 0;max-width:64ch;color:var(--ink-2);font-size:1.08rem}
+@media (min-width:961px){.masthead{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:end}.masthead .lede{margin:0}}
+
+.steps{display:flex;gap:2px;margin:clamp(18px,2.6vw,28px) 0 clamp(16px,2.4vw,24px);border-bottom:2px solid var(--rule);overflow-x:auto;scrollbar-width:thin}
+.step{flex:0 0 auto;font:inherit;font-weight:700;font-size:1rem;color:var(--ink-2);background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:.65rem .9rem;cursor:pointer;display:flex;align-items:center;gap:.55rem;min-height:48px}
+.step .n{display:inline-grid;place-items:center;width:1.65rem;height:1.65rem;border-radius:50%;border:1.5px solid currentColor;font-size:.85rem;line-height:1}
+.step:hover{color:var(--ink)}
+.step[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.step[aria-selected="true"] .n{background:var(--ink);border-color:var(--ink);color:var(--sheet)}
+.step:focus-visible{outline-offset:-3px}
+.step .short{display:none}
+@media (max-width:600px){
+  .steps{gap:0;overflow-x:visible}
+  .step{flex:1 1 0;min-width:0;flex-direction:column;gap:3px;padding:.45rem .15rem .5rem;font-size:.82rem}
+  .step .long{display:none}
+  .step .short{display:inline}
+}
+
+.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:start}
+@media (max-width:960px){.layout{grid-template-columns:minmax(0,1fr)}}
+.figure{margin:0}
+@media (min-width:961px){.figure{position:sticky;top:calc(env(safe-area-inset-top,0px) + 14px)}#graph{max-height:max(300px,calc(100vh - 96px))}}
+.side{display:flex;flex-direction:column;gap:22px;min-width:0}
+.sheet{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:8px 8px 12px}
+#graph{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none}
+
+.plot-bg{fill:var(--sheet)}
+.grid .minor{stroke:var(--grid-minor);stroke-width:1}
+.grid .major{stroke:var(--grid-major);stroke-width:1}
+.axis{stroke:var(--ink);stroke-width:1.6}
+.tick{fill:var(--ink-2);font-family:var(--sans);font-size:15px}
+.math{font-family:var(--math);font-style:italic}
+.tick .sub{font-size:11px}
+.axis-title{fill:var(--ink);font-family:var(--sans);font-size:16px;font-weight:700}
+.axis-title .math{font-weight:500;font-size:18px}
+.curve{fill:none;stroke:var(--ink);stroke-width:3.2;stroke-linejoin:round;stroke-linecap:round}
+.curve-base{fill:none;stroke:var(--ink-2);stroke-width:2;stroke-dasharray:7 6}
+.guide{stroke:var(--ink-2);stroke-width:1.2;stroke-dasharray:5 5}
+.pt{pointer-events:none}
+.pt.clickable{pointer-events:auto;cursor:pointer}
+.pt circle{fill:var(--sheet);stroke:var(--ink);stroke-width:2}
+.pt-label{fill:var(--ink);font-family:var(--math);font-style:italic;font-size:23px;paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+.dot{fill:var(--ink);stroke:var(--sheet);stroke-width:3}
+.dot-hit{fill:transparent;pointer-events:all;cursor:grab;touch-action:none}
+.dot-hit:active{cursor:grabbing}
+
+.graph-legend{list-style:none;margin:4px 8px 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.92rem;color:var(--ink-2)}
+.graph-legend li{display:flex;align-items:center;gap:8px}
+.graph-legend i{display:inline-block;flex:none}
+.k-dot{width:12px;height:12px;border-radius:50%;background:var(--ink)}
+.k-base{width:26px;border-top:2px dashed var(--ink-2)}
+
+.readout{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:14px 16px 16px}
+.figures{display:flex;flex-wrap:wrap;gap:6px 30px;align-items:baseline}
+.figures p{margin:0;display:flex;align-items:baseline;gap:.45rem}
+.figures .lbl{font-weight:700;color:var(--ink-2);font-size:.95rem}
+.figures .num{font-size:2rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.figures .unit{color:var(--ink-2);font-size:.95rem}
+.readout.is-empty .num{color:var(--ink-2)}
+.margin{margin:12px 0 0;padding:.65rem .85rem;background:var(--chip);border-radius:8px}
+
+.panel h2{font-size:clamp(1.3rem,1.1rem + .8vw,1.6rem);margin-bottom:.6rem}
+.panel p{margin:0 0 .9rem;max-width:62ch}
+.ctl-label{display:block;font-weight:700;margin:1.1rem 0 .3rem}
+.ctl-label output{font-variant-numeric:tabular-nums}
+input[type=range]{display:block;width:100%;height:36px;margin:0;accent-color:var(--ink);cursor:pointer}
+input[type=range]:focus-visible{outline-offset:4px}
+.scale-ends{display:flex;justify-content:space-between;color:var(--ink-2);font-size:.9rem}
+.scale-ends .math{font-size:1.05rem}
+.note{margin:1.1rem 0;padding:.85rem 1rem;border-left:4px solid var(--ink);background:var(--sheet)}
+.note h3{font-size:1.12rem;margin-bottom:.35rem}
+.note p{margin:0}
+.try{color:var(--ink-2)}
+.try strong{color:var(--ink)}
+.btn{font:inherit;font-weight:700;font-size:1rem;line-height:1.2;color:var(--ink);background:transparent;border:1.5px solid var(--ink);border-radius:8px;padding:.6rem 1rem;min-height:44px;cursor:pointer}
+.btn:hover{background:var(--chip)}
+.btn[aria-pressed="true"],.btn-primary{background:var(--ink);color:var(--sheet)}
+.btn[aria-pressed="true"]:hover,.btn-primary:hover{background:var(--ink);opacity:.88}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin:.3rem 0 .4rem}
+.pick{display:flex;flex-wrap:wrap;gap:10px;margin:.2rem 0 .3rem}
+.pick-btn{width:56px;height:56px;padding:0;border-radius:10px;font-family:var(--math);font-style:italic;font-weight:500;font-size:1.7rem}
+
+.progress{font-weight:700;color:var(--ink-2);margin:0 0 .5rem}
+fieldset.quiz{border:0;margin:0;padding:0;min-width:0}
+fieldset.quiz legend{font-size:1.15rem;font-weight:700;line-height:1.35;margin:0 0 .75rem;padding:0}
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:.7rem;padding:.7rem .85rem;border:1.5px solid var(--rule);border-radius:8px;background:var(--sheet);cursor:pointer}
+.opt input{flex:none;width:1.15rem;height:1.15rem;margin:.2rem 0 0;accent-color:var(--ink)}
+.opt:has(input:checked){border-color:var(--ink)}
+.opt:has(input:disabled){cursor:default}
+.opt.is-correct{border-color:var(--ok);background:var(--ok-bg)}
+.opt.is-wrong{border-color:var(--no);background:var(--no-bg)}
+.opt.is-correct::after,.opt.is-wrong::after{margin-left:auto;padding-left:.6rem;font-size:.85rem;font-weight:700;white-space:nowrap}
+.opt.is-correct::after{content:"Correct answer";color:var(--ok)}
+.opt.is-wrong::after{content:"Your answer";color:var(--no)}
+.error{color:var(--no);font-weight:700;margin:.7rem 0 0}
+.verdict{font-weight:700}
+.verdict.ok{color:var(--ok)}
+.verdict.no{color:var(--no)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:1rem}
+.score{font-size:1.45rem;font-weight:700}
+
+.table-wrap{overflow-x:auto;margin:1rem 0}
+.compare{border-collapse:collapse;width:100%;min-width:320px;font-variant-numeric:tabular-nums}
+.compare th,.compare td{padding:.5rem .6rem;border-bottom:1px solid var(--rule);text-align:right}
+.compare th[scope="row"]{text-align:left;font-weight:400}
+.compare thead th{font-size:.9rem;color:var(--ink-2)}
+.compare td:last-child{font-weight:700}
+
+.foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);color:var(--ink-2);font-size:.92rem}
+.foot p{margin:0;max-width:72ch}
+
+@media (max-width:600px){
+  body{font-size:1rem}
+  .figures .num{font-size:1.7rem}
+  .sheet{padding:6px 4px 10px}
+  .tick{font-size:22px}
+  .tick .sub{font-size:15px}
+  .axis-title{font-size:20px}
+  .pt-label{font-size:30px;stroke-width:6px}
+  .graph-legend{font-size:.88rem}
+}
+
+
+/* insurance lesson */
+:root{--chord:#B23F2A;--eff:#C07A12;--eff-ink:#8A5300;--gain:#1C7F66;--buy:#17735C;--skip:#A83A26;--fair:#4B5B71}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--chord:#E0775E;--eff:#E7B04A;--eff-ink:#F0C46A;--gain:#43BD97;--buy:#5ED1AC;--skip:#F08E77;--fair:#A4B3C6}}
+:root[data-theme="dark"]{--chord:#E0775E;--eff:#E7B04A;--eff-ink:#F0C46A;--gain:#43BD97;--buy:#5ED1AC;--skip:#F08E77;--fair:#A4B3C6}
+.ucurve{fill:none;stroke:var(--ink);stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+.ucurve.neutral{stroke-dasharray:none}
+.chord{stroke:var(--chord);stroke-width:2.8;stroke-linecap:round}
+.tangent{stroke:var(--eff);stroke-width:2.4;stroke-linecap:round}
+.double{stroke:var(--ink-2);stroke-width:1.4;stroke-dasharray:3 4}
+.gainline{stroke:var(--gain);stroke-width:3.4;stroke-linecap:round}
+.fc{stroke:var(--eff);stroke-width:3.2;stroke-linecap:round}
+.ruler-risk{stroke:var(--eff);stroke-width:8}
+.ruler-fair{stroke:var(--fair);stroke-width:8;opacity:.55}
+.prem-mark{stroke:var(--ink);stroke-width:2.4}
+.break{stroke:var(--ink);stroke-width:1.6;fill:none}
+.dot.buy{fill:var(--buy)} .dot.skip{fill:var(--skip)} .dot.indiff{fill:var(--eff)}
+.mdot{fill:var(--sheet);stroke:var(--ink);stroke-width:2.2}
+.mdot.chordpt{stroke:var(--chord)}
+.curve-label{fill:var(--ink);font-family:var(--sans);font-size:15px;font-weight:700;paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+.curve-label.cl{fill:var(--chord)}
+.curve-label.gl{fill:var(--gain)}
+.curve-label.fl{fill:var(--eff-ink)}
+.tag rect{fill:var(--sheet);stroke:var(--ink);stroke-width:1.2}
+.tag text{fill:var(--ink);font-family:var(--sans);font-size:14px;font-weight:700}
+.tag.eff rect{stroke:var(--eff)} .tag.eff text{fill:var(--eff-ink)}
+.tag.chordt rect{stroke:var(--chord)} .tag.chordt text{fill:var(--chord)}
+.tag.gaint rect{stroke:var(--gain)} .tag.gaint text{fill:var(--gain)}
+.tag.faint rect{stroke:var(--ink-2)} .tag.faint text{fill:var(--ink-2)}
+.k-u{width:26px;border-top:3px solid var(--ink)}
+.k-chord{width:26px;border-top:3px solid var(--chord)}
+.k-tan{width:26px;border-top:2.4px solid var(--eff)}
+.k-gain{width:26px;border-top:3px solid var(--gain)}
+.k-fc{width:26px;border-top:3px solid var(--eff)}
+.k-risk{width:22px;height:8px;background:var(--eff)}
+.k-fair{width:22px;height:8px;background:var(--fair);opacity:.55}
+.k-buy{width:12px;height:12px;border-radius:50%;background:var(--buy)}
+.bars{display:grid;gap:9px;margin:14px 0 4px}
+.bar-row{display:grid;grid-template-columns:minmax(0,12.5rem) minmax(0,1fr) 4.8rem;align-items:center;gap:6px 10px;font-size:.95rem}
+.bar-lbl{color:var(--ink-2)}
+.bar{height:14px;background:var(--grid-minor);border-radius:3px;overflow:hidden}
+.fill{display:block;height:100%;width:0;border-radius:3px}
+.fill.a{background:var(--ink)} .fill.b{background:var(--chord)} .fill.g{background:var(--gain)} .fill.e{background:var(--eff)}
+.bar-row b{text-align:right;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:no-preference){.fill{transition:width .15s ease}}
+.figures .was{color:var(--ink-2);font-size:.95rem;font-weight:400}
+.formula{font-family:var(--math);font-size:1.08rem;margin:.2rem 0 .9rem;padding:.55rem .8rem;background:var(--chip);border-radius:8px;display:block;max-width:62ch;line-height:1.6}
+.formula i{font-style:italic}
+.formula output{font-variant-numeric:tabular-nums}
+.aside{font-size:.95rem;color:var(--ink-2);border-top:1px solid var(--rule);padding-top:.8rem}
+.toggle{display:flex;align-items:center;gap:.6rem;margin:.9rem 0;font-weight:700;cursor:pointer}
+.toggle input{width:1.2rem;height:1.2rem;accent-color:var(--ink);margin:0}
+.facts{margin:0 0 .9rem;padding-left:1.3rem;max-width:62ch}
+.facts li{margin:.3rem 0}
+.verdict-buy{color:var(--buy);font-weight:700} .verdict-skip{color:var(--skip);font-weight:700}
+@media (max-width:600px){
+  .curve-label{font-size:20px}
+  .tag text{font-size:19px}
+  .bar-row{grid-template-columns:minmax(0,1fr) 4.8rem}
+  .bar-row .bar-lbl{grid-column:1 / -1}
+}
+@media (max-width:600px){ .pt-label{font-size:25px} }
+.lossline{stroke:var(--skip);stroke-width:3.4;stroke-linecap:round}
+.prem-bracket{stroke:var(--ink-2);stroke-width:1.8}
+.note-label{font-family:var(--sans);font-size:14px;font-weight:700;paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+.note-label.gain{fill:var(--gain)} .note-label.loss{fill:var(--skip)} .note-label.even{fill:var(--eff-ink)} .note-label.prem{fill:var(--ink-2)}
+@media (max-width:600px){ .note-label{font-size:19px} }
+.fc-glow{stroke:var(--eff);stroke-width:14;stroke-linecap:round;opacity:.22}
+.note-label.fcl{fill:var(--eff-ink)}
+.ruler-neg{stroke:var(--skip);stroke-width:8;opacity:.75}
+.k-neg{width:22px;height:8px;background:var(--skip);opacity:.75}
+.ucurve.loving{stroke-dasharray:none}
+.foot .cite{margin-bottom:.6rem}
+
+.key-terms{margin:1.1rem 0;padding:.8rem 1rem .6rem;background:var(--chip);border-radius:8px;border-top:4px solid var(--eff)}
+.key-terms h3{font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;color:var(--eff-ink);margin:0 0 .5rem}
+.key-terms dl{margin:0;display:grid;gap:.5rem}
+.key-terms dt{font-weight:700}
+.key-terms dd{margin:0;color:var(--ink);font-size:.97rem;max-width:62ch}
+
+.masthead h1 .h1-sub{font-weight:400;color:var(--ink-2);font-size:.62em;white-space:nowrap}
+/* lemons lesson */
+:root{--lemon:#8B5A2B;--plum:#2563EB;--out:#A4B3C6}
+.car-body{stroke:var(--ink);stroke-width:1.2}
+.car-win{fill:#DCEBFA;stroke:var(--ink);stroke-width:.8}
+.car-wheel{fill:#1F2937;stroke:var(--sheet);stroke-width:1.5}
+.car-smoke{fill:none;stroke:#9CA3AF;stroke-width:2;stroke-linecap:round}
+.car-crack{fill:none;stroke:var(--ink);stroke-width:1}
+.car-shine{fill:#F9D448;stroke:none}
+.car{cursor:default}
+.car.out{opacity:.25}
+.car-q{fill:#fff;font-family:var(--sans);font-weight:700;font-size:12px}
+.pick-ring{fill:none;stroke:var(--eff);stroke-width:2.4;stroke-dasharray:4 3}
+.end-label{fill:var(--ink-2);font-family:var(--sans);font-size:14px;font-weight:700;font-style:italic}
+.stem{stroke:var(--ink);stroke-width:2}
+.stem.out{stroke:var(--out);stroke-dasharray:3 3}
+.pt-in{fill:var(--ink);stroke:var(--sheet);stroke-width:2}
+.pt-out{fill:var(--sheet);stroke:var(--out);stroke-width:2}
+.zone-out{fill:var(--grid-minor);opacity:.8}
+.zone-label{fill:var(--ink-2);font-family:var(--sans);font-size:15px;font-weight:700}
+.zone-label.stay{fill:var(--skip)}
+.cutoff{stroke:var(--skip);stroke-width:2;stroke-dasharray:6 4}
+.tag.cut rect{stroke:var(--skip)} .tag.cut text{fill:var(--skip)}
+.tag.red rect{stroke:var(--skip)} .tag.red text{fill:var(--skip)}
+.diag{fill:none;stroke:var(--ink);stroke-width:3}
+.wtp{fill:none;stroke:var(--skip);stroke-width:3;stroke-linejoin:round}
+.gap-area{fill:var(--skip);opacity:.12}
+.curve-label.wl{fill:var(--skip)}
+.shortfall{stroke:var(--skip);stroke-width:4}
+.dot.red{fill:var(--skip)}
+.zone-leave{fill:var(--grid-major);opacity:.9}
+.zone-stay{fill:var(--skip);opacity:.22}
+.zone-stay-sym{fill:var(--plum);opacity:.18}
+.density{stroke:var(--ink);stroke-width:2.4}
+.premium{stroke:var(--skip);stroke-width:2.6;stroke-dasharray:7 4}
+.avgline{stroke:var(--eff);stroke-width:2.2;stroke-dasharray:4 4}
+.move{stroke:var(--eff);stroke-width:2.6;fill:none}
+.moveh{fill:var(--eff)}
+.k-in{width:12px;height:12px;border-radius:50%;background:var(--ink)}
+.k-out{width:12px;height:12px;border-radius:50%;border:2px solid var(--out)}
+.k-unk{width:18px;height:12px;background:#8A97A8;border-radius:3px}
+.k-diag{width:26px;border-top:3px solid var(--ink)}
+.k-wtp{width:26px;border-top:3px solid var(--skip)}
+.k-gap{width:18px;height:12px;background:var(--skip);opacity:.2}
+.k-leave{width:18px;height:12px;background:var(--grid-major)}
+.k-stay{width:18px;height:12px;background:var(--skip);opacity:.3}
+.k-stay-sym{width:18px;height:12px;background:var(--plum);opacity:.3}
+.k-avg{width:26px;border-top:2px dashed var(--eff)}
+.rounds{margin:.6rem 0 .9rem;padding-left:1.3rem;font-size:.95rem;font-variant-numeric:tabular-nums}
+.rounds li{margin:.2rem 0}
+.rounds:empty{display:none}
+.fill.a{background:var(--ink)} .fill.b{background:var(--skip)}
+.compare td,.compare th{text-align:left!important}
+.rounds-table tbody tr{cursor:pointer}
+.rounds-table tbody tr:hover td,.rounds-table tbody tr:hover th{background:var(--wash,rgba(127,127,127,.08))}
+.rounds-table tbody tr.on td,.rounds-table tbody tr.on th{background:var(--wash-strong,rgba(127,127,127,.16));font-weight:700}
+.rounds-table tbody tr:focus-visible{outline:2px solid currentColor;outline-offset:-2px}
+.rounds-table{font-size:.88rem}
+.rounds-table th,.rounds-table td{padding:.4rem .45rem}
+@media (max-width:520px){.rounds-table{font-size:.76rem;min-width:0}.rounds-table th,.rounds-table td{padding:.35rem .25rem}.rounds-table thead th{font-size:.72rem}}
+
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <h1>The lemons principle</h1>
+    <p class="lede">When one side of a market knows more than the other, the best units leave at every price. Sellers who know more drive good cars out of the used-car market; buyers who know more drive low risks out of health insurance.</p>
+  </header>
+
+  <main>
+    <div class="steps" role="tablist" aria-label="Lesson steps">
+      <button class="step" role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true"><span class="n" aria-hidden="true">1</span><span class="long">Who knows</span><span class="short">Cars</span></button>
+      <button class="step" role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">2</span><span class="long">Lower price</span><span class="short">Price</span></button>
+      <button class="step" role="tab" id="tab-3" aria-controls="panel-3" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">3</span><span class="long">No price works</span><span class="short">No sale</span></button>
+      <button class="step" role="tab" id="tab-4" aria-controls="panel-4" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">4</span><span class="long">Insurance</span><span class="short">Health</span></button>
+      <button class="step" role="tab" id="tab-5" aria-controls="panel-5" aria-selected="false" tabindex="-1"><span class="n" aria-hidden="true">5</span><span class="long">Check yourself</span><span class="short">Quiz</span></button>
+    </div>
+    <div class="layout">
+      <figure class="figure">
+        <div class="sheet">
+          <svg id="graph" viewBox="0 0 640 540" role="img" aria-labelledby="g-title g-desc">
+            <title id="g-title">The lemons principle</title>
+            <desc id="g-desc"></desc>
+          </svg>
+          <ul class="graph-legend" id="legend" aria-label="Graph key"></ul>
+        </div>
+      </figure>
+
+      <div class="side">
+        <div class="readout" id="readout" aria-live="polite">
+          <div class="figures">
+            <p><span class="lbl" id="ro-k1"></span><span class="num" id="ro-v1"></span><span class="was" id="ro-w1"></span></p>
+            <p><span class="lbl" id="ro-k2"></span><span class="num" id="ro-v2"></span><span class="was" id="ro-w2"></span></p>
+          </div>
+          <div class="bars">
+            <div class="bar-row"><span class="bar-lbl" id="ro-b1-lbl"></span><span class="bar" aria-hidden="true"><i class="fill a" id="ro-b1"></i></span><b id="ro-b1-v"></b></div>
+            <div class="bar-row"><span class="bar-lbl" id="ro-b2-lbl"></span><span class="bar" aria-hidden="true"><i class="fill b" id="ro-b2"></i></span><b id="ro-b2-v"></b></div>
+          </div>
+          <p class="margin" id="ro-verdict"></p>
+        </div>
+
+        <div class="panels">
+          <section class="panel" role="tabpanel" id="panel-1" aria-labelledby="tab-1">
+            <h2>Who knows what?</h2>
+            <p>Nine used cars are for sale, each equally likely. Their quality <span class="math">Q</span> runs from 0, a <strong>lemon</strong>, to 2, a <strong>plum</strong>, in steps of ¼. Each owner knows their own car’s quality. Buyers know only that every quality is equally likely.</p>
+            <p class="formula">Owner’s value = $5,000 × <i>Q</i>      Buyer’s value = $7,500 × <i>Q</i></p>
+            <p>Every buyer values every car (with <span class="math">Q</span> above 0) more than its owner does. If buyers could see quality, every one of these cars would sell.</p>
+            <label class="ctl-label" for="c1">Pick a car: quality <span class="math">Q</span> = <output id="c1-out" for="c1">1</output></label>
+            <input type="range" id="c1" min="0" max="8" step="1" value="4">
+            <div class="scale-ends" aria-hidden="true"><span>0 (lemon)</span><span>2 (plum)</span></div>
+            <aside class="key-terms" aria-label="Key terms">
+              <h3>Key terms</h3>
+              <dl>
+                <dt>Asymmetric information</dt><dd>One side of a market knows more than the other. Here the seller knows the car’s quality; the buyer does not.</dd>
+                <dt>Cardinal quality index</dt><dd><span class="math">Q</span> measures how much quality, not just rank: a car with <span class="math">Q</span> = 2 has twice the quality of one with <span class="math">Q</span> = 1.</dd>
+              </dl>
+            </aside>
+            <p class="try"><strong>Try this:</strong> click any car on the graph. How much more is it worth to a buyer than to its owner?</p>
+            <button class="btn" data-goto="2">Next: lower the price</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-2" aria-labelledby="tab-2" hidden>
+            <h2>The auctioneer lowers the price</h2>
+            <p>An auctioneer calls out a price, <span class="math">P</span>. An owner offers a car only if it is worth less to them than the price: 5,000 <span class="math">Q</span> ≤ <span class="math">P</span>. Better cars stay home. Buyers cannot tell the offered cars apart, so they will pay for the <em>average</em> car offered.</p>
+            <div class="presets" role="group" aria-label="Price presets">
+              <button class="btn" data-p2="10000" aria-pressed="true">$10,000</button>
+              <button class="btn" data-p2="7500" aria-pressed="false">$7,500</button>
+              <button class="btn" data-p2="5625" aria-pressed="false">$5,625</button>
+              <button class="btn" data-p2="3750" aria-pressed="false">$3,750</button>
+            </div>
+            <label class="ctl-label" for="p2">Asking price, <span class="math">P</span>: <output id="p2-out" for="p2">$10,000</output></label>
+            <input type="range" id="p2" min="0" max="10000" step="125" value="10000">
+            <div class="scale-ends" aria-hidden="true"><span>$0</span><span>$10,000</span></div>
+            <div class="actions"><button class="btn btn-primary" id="round2">Next round: try the buyers’ offer</button><button class="btn" id="reset2">Start over at $10,000</button></div>
+            <ol class="rounds" id="log2" aria-label="Rounds so far"></ol>
+            <aside class="key-terms" aria-label="Key terms">
+              <h3>Key terms</h3>
+              <dl>
+                <dt>Lemons principle</dt><dd>Under asymmetric information, the bad drives out the good: at every price the best units are withdrawn, which lowers what buyers will pay, which drives out the next best.</dd>
+              </dl>
+            </aside>
+            <p class="try"><strong>Try this:</strong> press “Next round” several times. Which cars leave each time, and does the market ever settle?</p>
+            <button class="btn" data-goto="3">Next: why no price works</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-3" aria-labelledby="tab-3" hidden>
+            <h2>Why no price works</h2>
+            <p>Each round, the auctioneer tries what buyers offered last time. Follow the rounds down the table. Select a row to see that round on the graph.</p>
+            <div class="table-wrap"><table class="compare rounds-table" id="t3" aria-label="Rounds of the auction"></table></div>
+            <p>At price <span class="math">P</span>, only cars with <span class="math">Q</span> ≤ <span class="math">P</span>/5,000 are offered. Quality is spread evenly from 0, so the average car offered is about half the cutoff:</p>
+            <p class="formula">average <i>Q</i> ≈ <i>P</i> / 10,000   ⇒   buyers pay at most 7,500 × <i>P</i> / 10,000 ≈ 0.75 <i>P</i></p>
+            <div class="note">
+              <h3>The bad drives out the good</h3>
+              <p>Buyers always offer about three quarters of the asking price, so no price satisfies both sides, even though buyers value every car (with <span class="math">Q</span> above 0) more than its owner does. The market unravels.</p>
+            </div>
+            <aside class="key-terms" aria-label="Key terms">
+              <h3>Key terms</h3>
+              <dl>
+                <dt>Market unraveling</dt><dd>Mutually beneficial trades fail to happen because the information gap pushes good units out of the market one round after another.</dd>
+              </dl>
+            </aside>
+            <p class="try"><strong>Try this:</strong> compare the last two columns in each row. Is there any round where buyers offer as much as the asking price?</p>
+            <button class="btn" data-goto="4">Next: health insurance</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-4" aria-labelledby="tab-4" hidden>
+            <h2>Health insurance: the mirror image</h2>
+            <p>People with the same demographics expect different health spending, spread evenly from $0 to $<span class="math">M</span>. The insurer must break even, so the premium must cover the pool’s average spending. Now the <strong>buyer</strong> knows more: each person knows their own expected spending, while the insurer knows only the spread.</p>
+            <p>Anyone who expects to spend less than the premium won’t pay it. They leave, the pool gets costlier, and the premium must rise.</p>
+            <div class="actions"><button class="btn btn-primary" id="round5">Next round: raise the premium to the pool average</button><button class="btn" id="reset5">Start over at ½M</button></div>
+            <ol class="rounds" id="log5" aria-label="Rounds so far"></ol>
+            <aside class="key-terms" aria-label="Key terms">
+              <h3>Key terms</h3>
+              <dl>
+                <dt>Adverse selection</dt><dd>When buyers know their own risk better than the insurer, high risks are the most eager to buy, so the insured pool is riskier than average.</dd>
+                <dt>Death spiral</dt><dd>Low risks leave, the premium rises to cover the costlier pool, more people leave, and so on, until the market may disappear.</dd>
+              </dl>
+            </aside>
+            <p class="aside">Simplifications: people know their spending only roughly, and risk aversion makes some low risks willing to pay a bit more than their expected loss (Chapter 13). The tendency is still real, and it shapes how insurance markets are regulated.</p>
+            <p class="try"><strong>Try this:</strong> run four rounds. What share of people is still insured, and who are they?</p>
+            <button class="btn" data-goto="5">Next: check yourself</button>
+          </section>
+
+          <section class="panel" role="tabpanel" id="panel-5" aria-labelledby="tab-5" hidden>
+            <h2>Check yourself</h2>
+            <div id="quiz"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <p class="cite"><strong>Source.</strong> Akerlof, G. A. (1970). The market for “lemons”: Quality uncertainty and the market mechanism. <i>Quarterly Journal of Economics, 84</i>(3), 488–500. Folland, S., Goodman, A. C., Stano, M., &amp; Danagoulian, S. (2024). <i>The economics of health and health care</i> (9th ed.). Routledge. Chapter 12, Figures 12.1 and 12.2.</p>
+    <p>A stylized teaching model following the textbook’s nine-car example and its uniform spread of expected health spending.</p>
+  </footer>
+</div>
+<script>
+// The Lemons Principle (Akerlof) and adverse selection in health insurance (textbook Figures 12.1-12.2).
+// Cars: nine equally likely qualities Q = 0, 1/4, ..., 2. A seller values a car at 5,000 Q; a buyer at 7,500 Q.
+// Insurance: expected spending is spread evenly from 0 to M (written here as a share of M, 0..1).
+(function (root) {
+  const SELL = 5000, BUY = 7500;
+  const CARS = Array.from({ length: 9 }, (_, i) => i / 4);
+  const mean = a => a.length ? a.reduce((s, x) => s + x, 0) / a.length : 0;
+  // asymmetric: owners know Q and sell only if SELL*Q <= P; buyers know only the average of what is offered
+  function carMarket(P, symmetric) {
+    if (symmetric) {
+      // no one knows Q: owners value their car as average (Q = 1), buyers pay for an average car
+      const offered = P >= SELL * mean(CARS) ? CARS.slice() : [];
+      const avgQ = offered.length ? mean(offered) : 0;
+      const wtp = BUY * mean(CARS);
+      return { P, offered, avgQ, wtp, cutoff: null, sale: offered.length > 0 && wtp >= P };
+    }
+    const cutoff = P / SELL;
+    const offered = CARS.filter(q => SELL * q <= P + 1e-9);
+    const avgQ = mean(offered);
+    const wtp = BUY * avgQ;
+    return { P, offered, avgQ, wtp, cutoff, sale: offered.length > 0 && P > 0 && wtp >= P - 1e-9 };
+  }
+  // the auctioneer's next price: what buyers will pay for the cars now offered
+  const nextPrice = P => carMarket(P).wtp;
+  // insurance pool with premium pi (share of M): asymmetric -> only people expecting to spend at least pi buy
+  function pool(pi, symmetric) {
+    if (symmetric) {
+      const buy = pi <= 0.5 + 1e-9;   // everyone sees themselves as average (M/2)
+      return { pi, share: buy ? 1 : 0, avg: 0.5, breakEven: buy && pi >= 0.5 - 1e-9 };
+    }
+    const share = Math.max(0, 1 - pi), avg = (Math.min(pi, 1) + 1) / 2;
+    return { pi, share, avg, breakEven: pi >= avg - 1e-9 };
+  }
+  const nextPremium = pi => pool(pi).avg;
+  const api = { SELL, BUY, CARS, mean, carMarket, nextPrice, pool, nextPremium };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  else root.Model = api;
+})(this);
+
+</script>
+<script>
+(function () {
+  'use strict';
+  const M = window.Model;
+  const NS = 'http://www.w3.org/2000/svg';
+  const $ = id => document.getElementById(id);
+  const svg = $('graph');
+  const X0 = 74, X1 = 600, Y0 = 34, Y1 = 440;
+
+  // ---------- formatting ----------
+  const money = v => '$' + Math.round(v).toLocaleString('en-US');
+  const money2 = v => (Math.abs(v - Math.round(v)) < 0.005 ? money(v) : '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+  const QF = { 0: '0', 0.25: '¼', 0.5: '½', 0.75: '¾', 1: '1', 1.25: '1¼', 1.5: '1½', 1.75: '1¾', 2: '2' };
+  const qfmt = q => QF[q] !== undefined ? QF[q] : (Math.round(q * 1000) / 1000).toString();
+  const MF = { 0.25: '¼', 0.5: '½', 0.75: '¾', 0.875: '⅞', 0.9375: '15⁄16', 0.96875: '31⁄32', 0.984375: '63⁄64', 1: '' };
+  const mfmt = x => (MF[x] !== undefined ? MF[x] : x.toFixed(3)) + 'M';
+  const pct = x => Math.round(x * 100) + '%';
+  const clamp = (x, lo, hi) => Math.min(hi, Math.max(lo, x));
+
+  // ---------- state ----------
+  const S = { step: 1, c1: 4, p2: 10000, log2: [10000], r3: 1, pi5: 0.5, log5: [0.5] };
+  // the auction rounds for the table in step 3
+  const ROUNDS = (() => { const r = [10000]; for (let i = 0; i < 6; i++) r.push(M.nextPrice(r[r.length - 1])); return r; })();
+
+  // ---------- svg helpers ----------
+  function el(name, attrs, parent) {
+    const e = document.createElementNS(NS, name);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    (parent || svg).appendChild(e);
+    return e;
+  }
+  const line = (x1, y1, x2, y2, cls, parent) => el('line', { x1, y1, x2, y2, class: cls }, parent);
+  function text(x, y, s, cls, anchor, parent) {
+    const t = el('text', { x, y, class: cls, 'text-anchor': anchor || 'start' }, parent);
+    t.textContent = s;
+    return t;
+  }
+  function tag(x, y, label, cls, anchor) {
+    const g = el('g', { class: 'tag ' + (cls || '') });
+    const t = text(x, y, label, '', anchor || 'middle', g);
+    const b = t.getBBox();
+    g.insertBefore(el('rect', { x: b.x - 6, y: b.y - 3, width: b.width + 12, height: b.height + 6, rx: 5 }, g), t);
+    // keep inside the drawing
+    const bb = g.getBBox(), over = bb.x + bb.width - 636, under = 4 - bb.x;
+    if (over > 0 || under > 0) g.querySelectorAll('text, rect').forEach(e => e.setAttribute('x', +e.getAttribute('x') - Math.max(over, 0) + Math.max(under, 0)));
+    return g;
+  }
+  function clear() { svg.querySelectorAll(':scope > :not(title):not(desc)').forEach(n => n.remove()); }
+  function frame(xTitle, yTitle) {
+    clear();
+    el('rect', { x: X0, y: Y0, width: X1 - X0, height: Y1 - Y0, class: 'plot-bg' });
+    line(X0, Y1, X1, Y1, 'axis'); line(X0, Y0, X0, Y1, 'axis');
+    text(14, 20, yTitle, 'axis-title');
+    text((X0 + X1) / 2, 532, xTitle, 'axis-title', 'middle');
+  }
+  function untick() {
+    const tb = [...svg.querySelectorAll('.tag')].map(t => t.getBBox());
+    svg.querySelectorAll('text.tick').forEach(t => { const b = t.getBBox(); if (tb.some(r => b.x < r.x + r.width + 2 && r.x < b.x + b.width + 2 && b.y < r.y + r.height && r.y < b.y + b.height)) t.remove(); });
+  }
+  function setLegend(items) {
+    untick();
+    $('legend').innerHTML = items.map(([k, html]) => `<li><i class="${k}"></i><span>${html}</span></li>`).join('');
+  }
+
+  // ---------- the car picture ----------
+  // colour runs from rusty brown (lemon) to bright blue (plum)
+  function carColor(q) {
+    const a = [139, 90, 43], b = [37, 99, 235], t = q / 2;
+    return `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * t)).join(',')})`;
+  }
+  function car(cx, cy, q, o) {
+    o = o || {};
+    const g = el('g', { class: 'car' + (o.out ? ' out' : '') + (o.unknown ? ' unknown' : '') + (o.pick ? ' pick' : ''), 'data-q': q, transform: `translate(${cx},${cy}) scale(1.12) translate(${-cx},${-cy})` });
+    const col = o.unknown ? '#8A97A8' : carColor(q);
+    el('path', { d: `M${cx - 22},${cy} l0,-9 q2,-4 7,-5 l5,-9 q2,-3 6,-3 l14,0 q4,0 6,3 l6,9 q6,1 8,5 l0,9 z`, fill: col, class: 'car-body' }, g);
+    el('path', { d: `M${cx - 8},${cy - 15} l4,-7 l7,0 l0,7 z M${cx + 5},${cy - 15} l0,-7 l5,0 l5,7 z`, class: 'car-win' }, g);
+    el('circle', { cx: cx - 12, cy, r: 5, class: 'car-wheel' }, g);
+    el('circle', { cx: cx + 12, cy, r: 5, class: 'car-wheel' }, g);
+    if (q === 0 && !o.unknown) {           // the lemon: smoke and a crack
+      el('path', { d: `M${cx - 26},${cy - 6} q-6,-4 -2,-9 q-5,-4 0,-8`, class: 'car-smoke' }, g);
+      el('path', { d: `M${cx + 1},${cy - 21} l3,4 l-2,2`, class: 'car-crack' }, g);
+    }
+    if (q === 2 && !o.unknown) el('path', { d: `M${cx + 14},${cy - 30} l2,-5 l2,5 l5,2 l-5,2 l-2,5 l-2,-5 l-5,-2 z`, class: 'car-shine' }, g);
+    if (o.unknown) text(cx, cy - 9, '?', 'car-q', 'middle', g);
+    return g;
+  }
+
+  // ---------- scene: the nine cars (Figure 12.1) ----------
+  const qx = q => X0 + 44 + (X1 - X0 - 88) * q / 2;
+  const PY = 0.2;                          // probability axis top
+  const py = v => Y1 - (Y1 - Y0) * v / PY;
+  function sceneCars(o) {
+    o = o || {};
+    frame('Quality, Q', 'Probability');
+    const sym = !!o.symmetric;
+    const mkt = o.P !== undefined ? M.carMarket(o.P, sym) : null;
+    const offeredSet = new Set(mkt ? mkt.offered : M.CARS);
+    // grid and ticks
+    const g = el('g', { class: 'grid' });
+    M.CARS.forEach(q => { line(qx(q), Y0, qx(q), Y1, 'minor', g); text(qx(q), Y1 + 24, qfmt(q), 'tick', 'middle'); });
+    line(X0, py(1 / 9), X1, py(1 / 9), 'major', g);
+    text(X0 - 10, py(1 / 9) + 5, '1/9', 'tick', 'end');
+    text(X0 - 10, Y1 + 5, '0', 'tick', 'end');
+    // cutoff and the withdrawn zone
+    if (mkt && !sym) {
+      // the cutoff: owners of cars above it keep them (at $10,000 it sits at Q = 2, so every car is offered)
+      const c = Math.min(Math.max(0, mkt.cutoff), 2), xc = qx(c);
+      if (mkt.cutoff < 2) {
+        el('rect', { x: xc, y: Y0, width: X1 - xc, height: Y1 - Y0, class: 'zone-out' });
+        text((xc + X1) / 2, Y1 - 14, 'withdrawn', 'zone-label', 'middle');
+      }
+      line(xc, Y0, xc, Y1, 'cutoff');
+      tag(xc, Y0 + 16, mkt.cutoff >= 2 ? `cutoff Q = ${qfmt(Math.round(mkt.cutoff * 1000) / 1000)}: all offered` : `cutoff Q = ${qfmt(mkt.cutoff)}`, 'cut');
+    }
+    // lollipops and cars
+    M.CARS.forEach((q, i) => {
+      const out = !offeredSet.has(q);
+      line(qx(q), Y1, qx(q), py(1 / 9), 'stem' + (out ? ' out' : ''));
+      el('circle', { cx: qx(q), cy: py(1 / 9), r: 6, class: out ? 'pt-out' : 'pt-in' });
+      const c = car(qx(q), py(1 / 9) - 22, q, { out, unknown: sym, pick: o.pick === i });
+      c.addEventListener('click', () => { if (S.step === 1) setC1(i); });
+    });
+    text(qx(0), py(1 / 9) - 80, 'lemon', 'end-label', 'middle');
+    text(qx(2), py(1 / 9) - 80, 'plum', 'end-label', 'middle');
+    if (o.pick !== undefined) {
+      const q = M.CARS[o.pick];
+      el('circle', { cx: qx(q), cy: py(1 / 9) - 40, r: 32, class: 'pick-ring' });
+      tag(qx(q), py(1 / 9) + 40, `owner ${money(M.SELL * q)} · buyer ${money(M.BUY * q)}`, 'faint');
+    }
+    if (mkt) {
+      tag(X0 + 12, Y1 - 60, `average Q offered = ${mkt.offered.length ? (Math.round(mkt.avgQ * 1000) / 1000) : '—'}`, '', 'start');
+    }
+    const leg = [['k-in', 'Car offered for sale'], ['k-out', 'Car withdrawn (owner keeps it)']];
+    if (sym) leg.splice(1, 1, ['k-unk', 'Quality unknown to everyone']);
+    setLegend(o.P === undefined ? [['k-in', 'Each car is equally likely, probability 1/9']] : leg);
+    $('g-desc').textContent = o.P === undefined
+      ? 'Nine used cars with quality 0 to 2 in steps of one quarter, each with probability one ninth.'
+      : sym ? `No one knows quality. At ${money(o.P)} ${mkt.offered.length ? 'all nine cars are offered' : 'no car is offered'}.`
+        : `At an asking price of ${money(o.P)}, owners of cars with quality above ${qfmt(mkt.cutoff)} withdraw them; ${mkt.offered.length} cars are offered with average quality ${Math.round(mkt.avgQ * 1000) / 1000}, so buyers will pay at most ${money2(mkt.wtp)}.`;
+    return mkt;
+  }
+
+  // ---------- scene: insurance pool ----------
+  const DEN = 0.6; // height of the uniform density
+  const sx = v => X0 + (X1 - X0) * v, sy = d => Y1 - (Y1 - Y0) * d;
+  function sceneIns(pi, sym, o) {
+    o = o || {};
+    frame('Expected health spending (from $0 to $M)', 'Probability');
+    const g = el('g', { class: 'grid' });
+    [0.25, 0.5, 0.75].forEach(v => line(sx(v), Y0, sx(v), Y1, 'minor', g));
+    [[0, '0'], [0.25, '¼M'], [0.5, '½M'], [0.75, '¾M'], [1, 'M']].forEach(([v, s]) => text(sx(v), Y1 + 24, s, 'tick', 'middle'));
+    text(X0 - 10, sy(DEN) + 5, '1/n', 'tick', 'end');
+    const P = M.pool(pi, sym);
+    if (sym) {
+      el('rect', { x: sx(0), y: sy(DEN), width: sx(1) - sx(0), height: Y1 - sy(DEN), class: P.share ? 'zone-stay-sym' : 'zone-leave' });
+      text(sx(0.5), sy(DEN) + 40, P.share ? 'everyone buys: each sees themselves as average' : 'no one buys', 'zone-label', 'middle');
+    } else {
+      if (pi > 0) el('rect', { x: sx(0), y: sy(DEN), width: sx(Math.min(pi, 1)) - sx(0), height: Y1 - sy(DEN), class: 'zone-leave' });
+      if (pi < 1) el('rect', { x: sx(pi), y: sy(DEN), width: sx(1) - sx(pi), height: Y1 - sy(DEN), class: 'zone-stay' });
+      if (pi > 0.12) text(sx(pi / 2), sy(DEN) + 40, 'leave', 'zone-label', 'middle');
+      if (pi < 0.9) text(sx((pi + 1) / 2), sy(DEN) + 40, 'stay', 'zone-label stay', 'middle');
+    }
+    line(sx(0), sy(DEN), sx(1), sy(DEN), 'density');
+    // premium and pool average
+    line(sx(pi), Y0 + 26, sx(pi), Y1, 'premium');
+    tag(sx(pi), Y0 + 16, 'premium ' + mfmt(pi), 'red');
+    if (!o.hideAvg && !sym && pi < 0.999) {
+      line(sx(P.avg), sy(DEN) - 30, sx(P.avg), Y1, 'avgline');
+      tag(sx(P.avg), sy(DEN) - 40, 'pool average ' + mfmt(P.avg), 'eff');
+      const ya = sy(DEN) + 80;
+      line(sx(pi) + 4, ya, sx(P.avg) - 10, ya, 'move');
+      el('path', { d: `M${sx(P.avg)},${ya} l-10,-6 l0,12 Z`, class: 'moveh' });
+      if (sx(P.avg) - sx(pi) > 70) text((sx(pi) + sx(P.avg)) / 2, ya - 8, 'next premium', 'zone-label', 'middle');
+    }
+    tag(sx(pi), Y1 + 26, mfmt(pi), 'red');
+    // ticks under the premium tag give way
+    const tb = [...svg.querySelectorAll('.tag')].map(t => t.getBBox());
+    svg.querySelectorAll('text.tick').forEach(t => { const b = t.getBBox(); if (tb.some(r => b.x < r.x + r.width + 2 && r.x < b.x + b.width + 2 && b.y < r.y + r.height && r.y < b.y + b.height)) t.remove(); });
+    setLegend(sym ? [['k-stay-sym', 'Everyone insured']] : [['k-leave', 'Expect to spend less than the premium: leave'], ['k-stay', 'Expect to spend more: stay insured'], ['k-avg', 'Average spending of those who stay']]);
+    $('g-desc').textContent = sym
+      ? `No one can predict their own spending, so everyone sees themselves as average and buys at ${mfmt(pi)}.`
+      : `Expected spending is spread evenly from 0 to M. At a premium of ${mfmt(pi)}, everyone expecting to spend less leaves; the ${pct(P.share)} who stay average ${mfmt(P.avg)}.`;
+    return P;
+  }
+
+  // ---------- readout ----------
+  function readout(k1, v1, w1, k2, v2, w2, b1l, b1, b1v, b2l, b2, b2v, verdict, fills) {
+    $('ro-k1').innerHTML = k1; $('ro-v1').textContent = v1; $('ro-w1').textContent = w1 || '';
+    $('ro-k2').innerHTML = k2; $('ro-v2').textContent = v2; $('ro-w2').textContent = w2 || '';
+    $('ro-b1-lbl').innerHTML = b1l; $('ro-b1').style.width = clamp(b1, 0, 100) + '%'; $('ro-b1-v').textContent = b1v;
+    $('ro-b2-lbl').innerHTML = b2l; $('ro-b2').style.width = clamp(b2, 0, 100) + '%'; $('ro-b2-v').textContent = b2v;
+    $('ro-b1').className = 'fill ' + fills[0]; $('ro-b2').className = 'fill ' + fills[1];
+    $('ro-verdict').innerHTML = verdict;
+  }
+  function renderTable3() {
+    const rows = ROUNDS.map((P, i) => {
+      const m = M.carMarket(P);
+      return `<tr class="${i === S.r3 ? 'on' : ''}" data-r="${i}" tabindex="0" aria-selected="${i === S.r3}"><th scope="row">${i + 1}</th><td>${money2(P)}</td><td>${m.offered.length} of 9</td><td>${Math.round(m.avgQ * 1000) / 1000}</td><td>${money2(m.wtp)}</td><td>${Math.round(100 * m.wtp / P)}%</td></tr>`;
+    }).join('');
+    $('t3').innerHTML = `<thead><tr><th scope="col">Round</th><th scope="col">Asking price</th><th scope="col">Cars offered</th><th scope="col">Average Q</th><th scope="col">Buyers pay at most</th><th scope="col">Offer ÷ price</th></tr></thead><tbody>${rows}</tbody>`;
+    $('t3').querySelectorAll('tbody tr').forEach(tr => {
+      const pick = () => setR3(+tr.dataset.r);
+      tr.addEventListener('click', pick);
+      tr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
+    });
+  }
+  function logList(id, items) {
+    $(id).innerHTML = items.map(x => `<li>${x}</li>`).join('');
+  }
+
+  function render() {
+    $('readout').hidden = S.step === 5;
+    if (S.step === 1) {
+      const q = M.CARS[S.c1];
+      sceneCars({ pick: S.c1 });
+      readout('Owner values it at', money(M.SELL * q), `Q = ${qfmt(q)}`, 'A buyer would pay up to', money(M.BUY * q), '',
+        'Owner’s value', 100 * M.SELL * q / 15000, money(M.SELL * q),
+        'Buyer’s value', 100 * M.BUY * q / 15000, money(M.BUY * q),
+        q === 0 ? 'The lemon is worthless to both sides.'
+          : `If buyers could see the quality, this car would sell somewhere between ${money(M.SELL * q)} and ${money(M.BUY * q)}, and both sides would gain. The trouble is that buyers can’t see it.`, ['a', 'b']);
+    } else if (S.step === 2) {
+      const m = sceneCars({ P: S.p2 });
+      logList('log2', S.log2.map((p, i) => { const mm = M.carMarket(p); return `Round ${i + 1}: asking ${money2(p)} → ${mm.offered.length} cars offered → buyers offer ${money2(mm.wtp)}`; }));
+      readout('Cars offered', `${m.offered.length} of 9`, `average Q ${Math.round(m.avgQ * 1000) / 1000}`, 'Buyers’ max offer', money2(m.wtp), '',
+        'Asking price', 100 * S.p2 / 10000, money(S.p2),
+        'Most buyers will pay', 100 * m.wtp / 10000, money2(m.wtp),
+        S.p2 <= 0 ? 'Only the worthless lemon is left, at $0: no market remains.'
+          : m.sale ? 'Buyers will pay the asking price.'
+            : `<strong>No sale.</strong> Buyers will pay only ${money2(m.wtp)} for the average car offered, below the ${money(S.p2)} asking price. If the auctioneer tries ${money2(m.wtp)}, the best remaining cars leave too.`, ['a', 'b']);
+    } else if (S.step === 3) {
+      const P = ROUNDS[S.r3], m = sceneCars({ P });
+      renderTable3();
+      readout('Asking price', money2(P), `round ${S.r3 + 1}`, 'Buyers pay at most', money2(m.wtp), `${Math.round(100 * m.wtp / P)}% of the price`,
+        'Asking price', 100 * P / 10000, money2(P),
+        'Most buyers will pay', 100 * m.wtp / 10000, money2(m.wtp),
+        `At ${money2(P)}, the ${m.offered.length} cars offered average Q = ${Math.round(m.avgQ * 1000) / 1000}, so buyers pay at most ${money2(m.wtp)}. Every round, buyers offer about three quarters of the price: <strong>no price clears the market.</strong>`, ['a', 'b']);
+    } else if (S.step === 4) {
+      const P = sceneIns(S.pi5, false);
+      logList('log5', S.log5.map((p, i) => `Round ${i + 1}: premium ${mfmt(p)} → ${pct(1 - p)} stay insured → their average spending is ${mfmt(M.pool(p).avg)}`));
+      readout('Premium', mfmt(S.pi5), '', 'Still insured', pct(P.share), '',
+        'Premium', 100 * S.pi5, mfmt(S.pi5),
+        'Average spending of the insured', 100 * P.avg, mfmt(P.avg),
+        S.pi5 >= 0.98 ? 'Almost no one is left: the premium has spiralled up to nearly M. High risks have driven out low risks, and the market may not form at all.'
+            : `The people who stay average ${mfmt(P.avg)}, more than the ${mfmt(S.pi5)} premium. To break even the insurer must raise the premium, and the next group of low risks leaves: a <strong>death spiral</strong>.`, ['a', 'b']);
+    } else Quiz.render();
+  }
+
+  // ---------- setters ----------
+  function syncPresets(attr, val) {
+    document.querySelectorAll(`[data-${attr}]`).forEach(b => { const d = b.dataset[attr]; b.setAttribute('aria-pressed', String(isNaN(+d) ? d === val : Math.abs(+d - Number(val)) < 1e-9)); });
+  }
+  function setC1(i) { S.c1 = clamp(Math.round(i), 0, 8); $('c1').value = S.c1; $('c1-out').textContent = qfmt(M.CARS[S.c1]); render(); }
+  function setP2(v, fromRound) {
+    S.p2 = clamp(v, 0, 10000);
+    if (!fromRound) S.log2 = [S.p2];
+    $('p2').value = Math.round(S.p2 / 125) * 125; $('p2-out').textContent = money2(S.p2); syncPresets('p2', S.p2); render();
+  }
+  function round2() { const next = M.nextPrice(S.p2); S.log2.push(next); setP2(next, true); }
+  function setR3(i) { S.r3 = clamp(i, 0, ROUNDS.length - 1); render(); const tr = $('t3').querySelector(`tr[data-r="${S.r3}"]`); if (tr && document.activeElement && document.activeElement.closest && document.activeElement.closest('#t3')) tr.focus(); }
+  function setPi5(p, fromRound) { S.pi5 = clamp(p, 0, 1); if (!fromRound) S.log5 = [S.pi5]; render(); }
+  function round5() { const next = M.nextPremium(S.pi5); S.log5.push(next); setPi5(next, true); }
+
+  $('c1').addEventListener('input', e => setC1(+e.target.value));
+  $('p2').addEventListener('input', e => setP2(+e.target.value));
+  $('round2').addEventListener('click', round2);
+  $('reset2').addEventListener('click', () => setP2(10000));
+  $('round5').addEventListener('click', round5);
+  $('reset5').addEventListener('click', () => setPi5(0.5));
+  document.querySelectorAll('[data-p2]').forEach(b => b.addEventListener('click', () => setP2(+b.dataset.p2)));
+
+  // ---------- pointer ----------
+  function svgPoint(evt) {
+    const pt = svg.createSVGPoint(); pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  const dragFor = () => ({
+    2: x => setP2(Math.round(clamp(5000 * 2 * (x - qx(0)) / (qx(2) - qx(0)), 0, 10000) / 125) * 125),
+    4: x => setPi5(Math.round(clamp((x - X0) / (X1 - X0), 0, 1) * 100) / 100)
+  })[S.step] || null;
+  let dragging = false, dragTo = null;
+  svg.addEventListener('pointerdown', e => {
+    dragTo = dragFor();
+    if (!dragTo) return;
+    const p = svgPoint(e);
+    if (p.x < X0 || p.x > X1 || p.y < Y0 || p.y > Y1) return;
+    dragging = true; svg.setPointerCapture(e.pointerId); dragTo(p.x); e.preventDefault();
+  });
+  svg.addEventListener('pointermove', e => { if (dragging && dragTo) dragTo(svgPoint(e).x); });
+  const stop = () => { dragging = false; };
+  svg.addEventListener('pointerup', stop); svg.addEventListener('pointercancel', stop);
+
+  // ---------- tabs ----------
+  const tabs = Array.from(document.querySelectorAll('.step'));
+  function goStep(n, focus) {
+    S.step = n;
+    tabs.forEach((t, i) => {
+      const on = i + 1 === n;
+      t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1;
+      $('panel-' + (i + 1)).hidden = !on;
+    });
+    svg.style.touchAction = [2, 4].includes(n) ? 'none' : 'auto';
+    if (focus) tabs[n - 1].focus();
+    render();
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => goStep(i + 1));
+    t.addEventListener('keydown', e => {
+      const cur = tabs.indexOf(document.activeElement);
+      const from = cur >= 0 ? cur : i;
+      let to = null;
+      if (e.key === 'ArrowRight') to = (from + 1) % tabs.length;
+      else if (e.key === 'ArrowLeft') to = (from - 1 + tabs.length) % tabs.length;
+      else if (e.key === 'Home') to = 0;
+      else if (e.key === 'End') to = tabs.length - 1;
+      if (to !== null) { e.preventDefault(); goStep(to + 1, true); }
+    });
+  });
+  document.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => {
+    goStep(+b.dataset.goto);
+    document.querySelector('.steps').scrollIntoView({ block: 'nearest' });
+  }));
+
+  // ---------- quiz ----------
+  const CARSET = 'The graph shows nine used cars, quality 0 to 2. Owners value a car at $5,000 × Q and buyers at $7,500 × Q; only owners know Q.';
+  const QUESTIONS = [
+    { q: `${CARSET} At an asking price of $7,500, which cars are offered?`,
+      opts: ['All nine', 'Only cars with Q ≤ 1.5 (seven cars)', 'Only cars with Q ≥ 1.5', 'Only the lemon'], a: 1,
+      why: 'An owner sells only if $5,000 × Q ≤ $7,500, so Q ≤ 1.5. The two best cars (Q = 1¾ and 2) are withdrawn.',
+      before: () => sceneCars({ P: 10000 }), after: () => sceneCars({ P: 7500 }) },
+    { q: `${CARSET} At $7,500 the cars offered average Q = 0.75. Using the graph, what is the most buyers will pay?`,
+      opts: ['$7,500', '$5,625', '$3,750', '$10,000'], a: 1,
+      why: 'Buyers pay for the average car offered: $7,500 × 0.75 = $5,625, less than the $7,500 asking price, so there is no sale.',
+      before: () => sceneCars({ P: 7500 }), after: () => sceneCars({ P: 7500 }) },
+    { q: `${CARSET} The table in step 3 shows that buyers always offer about 75% of the asking price. Using the graph at $5,625, why does the market unravel?`,
+      opts: ['Buyers value the cars less than owners do', 'At every price the best cars are withdrawn, so the average car offered is worth less than the price to buyers', 'The auctioneer sets the price too high', 'There are too few buyers'], a: 1,
+      why: 'Buyers value every car more than its owner, yet at any price only cars worth less than it to owners are offered. The average offered is about half the cutoff, so buyers offer about 0.75 P. No price satisfies both sides.',
+      before: () => sceneCars({ P: 5625 }), after: () => sceneCars({ P: 5625 }) },
+    { q: `${CARSET} If the asking price drops to $3,750, what happens?`,
+      opts: ['All nine cars sell', 'Only cars with Q ≤ ¾ are offered and buyers offer about $2,800, so there is still no sale', 'The plums come back', 'Buyers pay $3,750 for the average car'], a: 1,
+      why: 'Owners sell only if $5,000 × Q ≤ $3,750, so Q ≤ ¾. The four cars left average Q = 0.375, worth $2,812.50 to buyers: still below the price. The bad has driven out the good.',
+      before: () => sceneCars({ P: 5625 }), after: () => sceneCars({ P: 3750 }) },
+    { q: 'The graph shows people whose expected health spending is spread evenly from $0 to $M. Each person knows their own expected spending; the insurer knows only the spread. The premium is ½M. Who leaves?',
+      opts: ['People expecting to spend more than ½M', 'People expecting to spend less than ½M', 'No one', 'Everyone'], a: 1,
+      why: 'Anyone expecting to spend less than the premium won’t pay it. In insurance, the buyer is the better-informed side, so the low risks leave.',
+      before: () => sceneIns(0.5, false, { hideAvg: true }), after: () => sceneIns(0.5, false) },
+    { q: 'The graph shows the insurance pool after the low risks (below ½M) leave. To break even, what must the premium become?',
+      opts: ['½M, as before', '¾M, the average of those who stay', 'M', '¼M'], a: 1,
+      why: 'Those who stay expect to spend between ½M and M, an average of ¾M. Raising the premium to ¾M drives out everyone below ¾M, and the cycle repeats: a death spiral.',
+      before: () => sceneIns(0.5, false, { hideAvg: true }), after: () => sceneIns(0.5, false) },
+    { q: 'The graph shows people whose expected health spending is spread evenly from $0 to $M. Compared with the used-car market, which side knows more here?',
+      opts: ['The seller (the insurer)', 'The buyer (the person buying insurance)', 'Neither side', 'Both know the same'], a: 1,
+      why: 'Each person knows their own expected spending; the insurer knows only the spread. In the car market the seller knows more; in insurance the buyer does, so the good risks are the ones who leave.',
+      before: () => sceneIns(0.5, false, { hideAvg: true }), after: () => sceneIns(0.75, false) }
+  ];
+
+  const Quiz = {
+    i: 0, score: 0, checked: false, done: false,
+    render() {
+      const box = $('quiz');
+      if (this.done) {
+        sceneCars({ P: 3750 });
+        box.innerHTML = `<p class="score">You got ${this.score} of ${QUESTIONS.length}.</p>
+          <p>${this.score === QUESTIONS.length ? 'Every one. You can explain how asymmetric information unravels markets, for cars and for insurance.' : 'Revisit the steps for any you missed; each question points back to one of them.'}</p>
+          <div class="actions"><button class="btn btn-primary" id="q-again">Try again</button></div>`;
+        $('q-again').addEventListener('click', () => { this.i = 0; this.score = 0; this.checked = false; this.done = false; this.render(); });
+        return;
+      }
+      const Q = QUESTIONS[this.i];
+      (this.checked ? Q.after : Q.before)();
+      const name = 'q' + this.i;
+      box.innerHTML = `<p class="progress">Question ${this.i + 1} of ${QUESTIONS.length}</p>
+        <fieldset class="quiz"><legend tabindex="-1">${Q.q}</legend>
+        <div class="opts">${Q.opts.map((o, k) => `<label class="opt"><input type="radio" name="${name}" value="${k}"><span>${o}</span></label>`).join('')}</div></fieldset>
+        <p class="error" id="q-err" hidden>Choose an answer first.</p>
+        <div id="q-fb" aria-live="polite"></div>
+        <div class="actions"><button class="btn btn-primary" id="q-check">Check answer</button></div>`;
+      box.querySelectorAll('input').forEach(inp => inp.addEventListener('change', () => { $('q-err').hidden = true; }));
+      $('q-check').addEventListener('click', () => this.check());
+    },
+    check() {
+      const Q = QUESTIONS[this.i];
+      const sel = $('quiz').querySelector('input:checked');
+      if (!sel) { $('q-err').hidden = false; return; }
+      const pick = +sel.value, right = pick === Q.a;
+      if (right) this.score++;
+      this.checked = true;
+      Q.after();
+      const opts = $('quiz').querySelectorAll('.opt');
+      opts[Q.a].classList.add('is-correct');
+      if (!right) opts[pick].classList.add('is-wrong');
+      $('quiz').querySelectorAll('input').forEach(inp => { inp.disabled = true; });
+      $('q-fb').innerHTML = `<p><span class="verdict ${right ? 'ok' : 'no'}">${right ? 'Correct.' : 'Not quite.'}</span> ${Q.why}</p>`;
+      const last = this.i === QUESTIONS.length - 1;
+      $('quiz').querySelector('.actions').innerHTML = `<button class="btn btn-primary" id="q-next">${last ? 'See your score' : 'Next question'}</button>`;
+      $('q-next').addEventListener('click', () => {
+        if (last) this.done = true; else { this.i++; this.checked = false; }
+        this.render();
+        const lg = $('quiz').querySelector('legend'); if (lg) lg.focus();
+      });
+      $('q-next').focus();
+    }
+  };
+
+  let rz = null;
+  window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(render, 120); });
+  window.__lm = { S, M, ROUNDS, goStep, setC1, setP2, round2, setR3, setPi5, round5, Quiz, QUESTIONS };
+  setC1(4); setP2(10000); S.r3 = 1; setPi5(0.5);
+  goStep(1);
+})();
+
+</script>
+</body>
+</html>

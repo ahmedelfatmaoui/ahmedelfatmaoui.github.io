@@ -150,6 +150,16 @@ margin: 0;
 </div>
 </div>
 
+<div class="interactive-item">
+<a class="interactive-title" href="/akerlof-lemons-principle.html" target="_blank" rel="noopener noreferrer">The Lemons Principle</a><br>
+<i>Asymmetric information, market unraveling, and adverse selection</i><br>
+<strong>Launch:</strong> <a href="/akerlof-lemons-principle.html" target="_blank" rel="noopener noreferrer">Open Lemons Principle Interactive</a>
+<button class="accordion">Description</button>
+<div class="panel">
+<p>Explore Akerlof's lemons principle by tracing how asymmetric information can unravel the used-car market. Then apply the same logic to adverse selection in health insurance and check your understanding with guided questions.</p>
+</div>
+</div>
+
 <script>
 var acc = document.getElementsByClassName("accordion");
 var i;
